@@ -1,0 +1,183 @@
+#--------------------------------------------------------------------------------------------------
+# Integrated Development Environment (IDEs) and code editors
+#--------------------------------------------------------------------------------------------------
+
+# Apple Xcode
+xcuserdata/
+
+# JetBrains
+.idea_modules/
+.idea/.cache/.Apifox_Helper
+.idea/*.iml
+.idea/**/aws.xml
+.idea/**/contentModel.xml
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/dataSources/
+.idea/**/dbnavigator.xml
+.idea/**/dictionaries
+.idea/**/dynamic.xml
+.idea/**/gradle.xml
+.idea/**/libraries
+.idea/**/mongoSettings.xml
+.idea/**/shelf
+.idea/**/sqlDataSources.xml
+.idea/**/tasks.xml
+.idea/**/uiDesigner.xml
+.idea/**/usage.statistics.xml
+.idea/**/workspace.xml
+.idea/ApifoxUploaderProjectSetting.xml
+.idea/artifacts
+.idea/caches/build_file_checksums.ser
+.idea/compiler.xml
+.idea/httpRequests
+.idea/jarRepositories.xml
+.idea/modules
+.idea/modules.xml
+.idea/replstate.xml
+.idea/sonarlint.xml
+.idea/sonarlint/
+*.iml
+*.ipr
+*.iws
+atlassian-ide-plugin.xml
+cmake-build-*/
+com_crashlytics_export_strings.xml
+crashlytics-build.properties
+crashlytics.properties
+fabric.properties
+http-client.private.env.json
+out/
+
+# Microsoft Visual Studio Code
+.history/
+.vscode/
+*.vsix
+
+# Sublime Text
+*.stTheme.cache
+*.sublime-project
+*.sublime-workspace
+*.tmlanguage.cache
+*.tmPreferences.cache
+bh_unicode_properties.cache
+GitHub.sublime-settings
+oscrypto-ca-bundle.crt
+Package Control.ca-bundle
+Package Control.ca-certs/
+Package Control.ca-list
+Package Control.cache/
+Package Control.last-run
+Package Control.merged-ca-bundle
+Package Control.system-ca-bundle
+Package Control.user-ca-bundle
+sftp-config-alt*.json
+sftp-config.json
+
+#--------------------------------------------------------------------------------------------------
+# Operating System
+#--------------------------------------------------------------------------------------------------
+
+# Apple macOS
+__MACOSX/
+._*
+.apdisk
+.AppleDB
+.AppleDesktop
+.AppleDouble
+.com.apple.timemachine.donotpresent
+.DocumentRevisions-V100
+.DS_Store
+.fseventsd
+.LSOverride
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+Network Trash Folder
+Temporary Items
+
+# Linux
+.directory
+.fuse_hidden*
+.nfs*
+.Trash-*
+*~
+nohup.out
+
+# Microsoft Windows
+[Dd]esktop.ini
+*.stackdump
+$RECYCLE.BIN/
+ehthumbs_vista.db
+ehthumbs.db
+Thumbs.db
+Thumbs.db:encryptable
+
+#--------------------------------------------------------------------------------------------------
+# Build and dependency management tools
+#--------------------------------------------------------------------------------------------------
+
+# Node.js
+.cache
+.cache/
+.docusaurus
+.dynamodb/
+.env
+.env.*
+.eslintcache
+.firebase/
+.fusebox/
+.grunt
+.lock-wscript
+.next
+.node_repl_history
+.npm
+.nuxt
+.nyc_output
+.output
+.parcel-cache
+.pnp.*
+.serverless/
+.stylelintcache
+.svelte-kit/
+.temp
+.tern-port
+.vite/
+.vscode-test
+.vuepress/dist
+.yarn-integrity
+.yarn/*
+*.lcov
+*.log
+*.pid
+*.pid.lock
+*.seed
+*.tgz
+*.tsbuildinfo
+**/.vitepress/cache
+**/.vitepress/dist
+bower_components
+build/Release
+coverage
+dist
+jspm_packages/
+lerna-debug.log*
+lib-cov
+logs
+node_modules/
+npm-debug.log*
+out
+pids
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+web_modules/
+yarn-debug.log*
+yarn-error.log*
+!.env.example
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
