@@ -3,10 +3,12 @@
     "version": "0.0.0",
     "scripts": {
         "ng": "ng",
-        "start": "ng serve",
-        "build": "ng build",
-        "watch": "ng build --watch --configuration development",
-        "test": "ng test"
+        "start": "ng serve --verbose",
+        "build:production": "ng build --verbose --clear-screen --configuration production --optimization --subresource-integrity",
+        "build:development": "ng build --verbose --clear-screen --configuration development --subresource-integrity",
+        "watch": "ng build --verbose --clear-screen --watch --configuration development",
+        "test:production": "ng test --configuration production --progress",
+        "test:development": "ng test --configuration development --progress"
     },
     "prettier": {
         "printWidth": 100,
