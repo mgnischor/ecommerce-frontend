@@ -25,6 +25,12 @@ importers:
             "@angular/router":
                 specifier: ^20.3.0
                 version: 20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(@angular/platform-browser@20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2)))(rxjs@7.8.2)
+            "@ng-bootstrap/ng-bootstrap":
+                specifier: 19.0.1
+                version: 19.0.1(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(@angular/forms@20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(@angular/platform-browser@20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2)))(rxjs@7.8.2))(@angular/localize@20.3.10(@angular/compiler-cli@20.3.10(@angular/compiler@20.3.10)(typescript@5.9.3))(@angular/compiler@20.3.10))(@popperjs/core@2.11.8)(rxjs@7.8.2)
+            bootstrap:
+                specifier: 5.3.8
+                version: 5.3.8(@popperjs/core@2.11.8)
             rxjs:
                 specifier: ~7.8.0
                 version: 7.8.2
@@ -34,7 +40,7 @@ importers:
         devDependencies:
             "@angular/build":
                 specifier: ^20.3.9
-                version: 20.3.9(@angular/compiler-cli@20.3.10(@angular/compiler@20.3.10)(typescript@5.9.3))(@angular/compiler@20.3.10)(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(@angular/platform-browser@20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2)))(@types/node@24.10.0)(chokidar@4.0.3)(karma@6.4.4)(postcss@8.5.6)(tslib@2.8.1)(typescript@5.9.3)
+                version: 20.3.9(@angular/compiler-cli@20.3.10(@angular/compiler@20.3.10)(typescript@5.9.3))(@angular/compiler@20.3.10)(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(@angular/localize@20.3.10(@angular/compiler-cli@20.3.10(@angular/compiler@20.3.10)(typescript@5.9.3))(@angular/compiler@20.3.10))(@angular/platform-browser@20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2)))(@types/node@24.10.0)(chokidar@4.0.3)(karma@6.4.4)(postcss@8.5.6)(tslib@2.8.1)(typescript@5.9.3)
             "@angular/cli":
                 specifier: ^20.3.9
                 version: 20.3.9(@types/node@24.10.0)(chokidar@4.0.3)
@@ -338,6 +344,17 @@ packages:
             "@angular/core": 20.3.10
             "@angular/platform-browser": 20.3.10
             rxjs: ^6.5.3 || ^7.4.0
+
+    "@angular/localize@20.3.10":
+        resolution:
+            {
+                integrity: sha512-kw9yypjUdZP2uEknpNJq8Dryj4xAjwK0aIun0Wz2ZlnP8J6yH0U56qqKRQaqusKjt7fe1OFmJ2XbFEb0LrNlMw==,
+            }
+        engines: { node: ^20.19.0 || ^22.12.0 || >=24.0.0 }
+        hasBin: true
+        peerDependencies:
+            "@angular/compiler": 20.3.10
+            "@angular/compiler-cli": 20.3.10
 
     "@angular/platform-browser@20.3.10":
         resolution:
@@ -1283,6 +1300,19 @@ packages:
             }
         engines: { node: ">= 10" }
 
+    "@ng-bootstrap/ng-bootstrap@19.0.1":
+        resolution:
+            {
+                integrity: sha512-1lErAkwh0F+gWkzpiddViY4GfA9LVXkwLpgBsV9Mb3IC0zo6WNkY8WxCC+LqajirBTu20DCkZSqeRzrwaVLpZw==,
+            }
+        peerDependencies:
+            "@angular/common": ^20.0.0
+            "@angular/core": ^20.0.0
+            "@angular/forms": ^20.0.0
+            "@angular/localize": ^20.0.0
+            "@popperjs/core": ^2.11.8
+            rxjs: ^6.5.3 || ^7.4.0
+
     "@npmcli/agent@3.0.0":
         resolution:
             {
@@ -1477,6 +1507,12 @@ packages:
                 integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==,
             }
         engines: { node: ">=14" }
+
+    "@popperjs/core@2.11.8":
+        resolution:
+            {
+                integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==,
+            }
 
     "@rollup/rollup-android-arm-eabi@4.52.3":
         resolution:
@@ -1728,6 +1764,30 @@ packages:
             }
         engines: { node: ^18.17.0 || >=20.5.0 }
 
+    "@types/babel__core@7.20.5":
+        resolution:
+            {
+                integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==,
+            }
+
+    "@types/babel__generator@7.27.0":
+        resolution:
+            {
+                integrity: sha512-ufFd2Xi92OAVPYsy+P4n7/U7e68fex0+Ee8gSG9KX7eo084CWiQ4sdxktvdl0bOPupXtVJPY19zk6EwWqUQ8lg==,
+            }
+
+    "@types/babel__template@7.4.4":
+        resolution:
+            {
+                integrity: sha512-h/NUaSyG5EyxBIp8YRxo4RMe2/qQgvyowRwVMzhYhBCONbW8PUsg4lkFMrhgZhUe5z3L3MiLDuvyJ/CaPa2A8A==,
+            }
+
+    "@types/babel__traverse@7.28.0":
+        resolution:
+            {
+                integrity: sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==,
+            }
+
     "@types/cors@2.8.19":
         resolution:
             {
@@ -1920,6 +1980,14 @@ packages:
             {
                 integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==,
             }
+
+    bootstrap@5.3.8:
+        resolution:
+            {
+                integrity: sha512-HP1SZDqaLDPwsNiqRqi5NcP0SSXciX2s9E+RyqJIIqGo+vJeN5AJVM98CXmW/Wux0nQ5L7jeWUdplCEf0Ee+tg==,
+            }
+        peerDependencies:
+            "@popperjs/core": ^2.11.8
 
     brace-expansion@1.1.12:
         resolution:
@@ -4761,7 +4829,7 @@ snapshots:
         transitivePeerDependencies:
             - chokidar
 
-    "@angular/build@20.3.9(@angular/compiler-cli@20.3.10(@angular/compiler@20.3.10)(typescript@5.9.3))(@angular/compiler@20.3.10)(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(@angular/platform-browser@20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2)))(@types/node@24.10.0)(chokidar@4.0.3)(karma@6.4.4)(postcss@8.5.6)(tslib@2.8.1)(typescript@5.9.3)":
+    "@angular/build@20.3.9(@angular/compiler-cli@20.3.10(@angular/compiler@20.3.10)(typescript@5.9.3))(@angular/compiler@20.3.10)(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(@angular/localize@20.3.10(@angular/compiler-cli@20.3.10(@angular/compiler@20.3.10)(typescript@5.9.3))(@angular/compiler@20.3.10))(@angular/platform-browser@20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2)))(@types/node@24.10.0)(chokidar@4.0.3)(karma@6.4.4)(postcss@8.5.6)(tslib@2.8.1)(typescript@5.9.3)":
         dependencies:
             "@ampproject/remapping": 2.3.0
             "@angular-devkit/architect": 0.2003.9(chokidar@4.0.3)
@@ -4795,6 +4863,7 @@ snapshots:
             watchpack: 2.4.4
         optionalDependencies:
             "@angular/core": 20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2)
+            "@angular/localize": 20.3.10(@angular/compiler-cli@20.3.10(@angular/compiler@20.3.10)(typescript@5.9.3))(@angular/compiler@20.3.10)
             "@angular/platform-browser": 20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))
             karma: 6.4.4
             lmdb: 3.4.2
@@ -4877,6 +4946,17 @@ snapshots:
             "@angular/platform-browser": 20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))
             rxjs: 7.8.2
             tslib: 2.8.1
+
+    "@angular/localize@20.3.10(@angular/compiler-cli@20.3.10(@angular/compiler@20.3.10)(typescript@5.9.3))(@angular/compiler@20.3.10)":
+        dependencies:
+            "@angular/compiler": 20.3.10
+            "@angular/compiler-cli": 20.3.10(@angular/compiler@20.3.10)(typescript@5.9.3)
+            "@babel/core": 7.28.3
+            "@types/babel__core": 7.20.5
+            tinyglobby: 0.2.15
+            yargs: 18.0.0
+        transitivePeerDependencies:
+            - supports-color
 
     "@angular/platform-browser@20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))":
         dependencies:
@@ -5417,6 +5497,16 @@ snapshots:
             "@napi-rs/nice-win32-x64-msvc": 1.1.1
         optional: true
 
+    "@ng-bootstrap/ng-bootstrap@19.0.1(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(@angular/forms@20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(@angular/platform-browser@20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2)))(rxjs@7.8.2))(@angular/localize@20.3.10(@angular/compiler-cli@20.3.10(@angular/compiler@20.3.10)(typescript@5.9.3))(@angular/compiler@20.3.10))(@popperjs/core@2.11.8)(rxjs@7.8.2)":
+        dependencies:
+            "@angular/common": 20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2)
+            "@angular/core": 20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2)
+            "@angular/forms": 20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(@angular/platform-browser@20.3.10(@angular/common@20.3.10(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@20.3.10(@angular/compiler@20.3.10)(rxjs@7.8.2)))(rxjs@7.8.2)
+            "@angular/localize": 20.3.10(@angular/compiler-cli@20.3.10(@angular/compiler@20.3.10)(typescript@5.9.3))(@angular/compiler@20.3.10)
+            "@popperjs/core": 2.11.8
+            rxjs: 7.8.2
+            tslib: 2.8.1
+
     "@npmcli/agent@3.0.0":
         dependencies:
             agent-base: 7.1.4
@@ -5540,6 +5630,8 @@ snapshots:
     "@pkgjs/parseargs@0.11.0":
         optional: true
 
+    "@popperjs/core@2.11.8": {}
+
     "@rollup/rollup-android-arm-eabi@4.52.3":
         optional: true
 
@@ -5654,6 +5746,27 @@ snapshots:
         dependencies:
             "@tufjs/canonical-json": 2.0.0
             minimatch: 9.0.5
+
+    "@types/babel__core@7.20.5":
+        dependencies:
+            "@babel/parser": 7.28.5
+            "@babel/types": 7.28.5
+            "@types/babel__generator": 7.27.0
+            "@types/babel__template": 7.4.4
+            "@types/babel__traverse": 7.28.0
+
+    "@types/babel__generator@7.27.0":
+        dependencies:
+            "@babel/types": 7.28.5
+
+    "@types/babel__template@7.4.4":
+        dependencies:
+            "@babel/parser": 7.28.5
+            "@babel/types": 7.28.5
+
+    "@types/babel__traverse@7.28.0":
+        dependencies:
+            "@babel/types": 7.28.5
 
     "@types/cors@2.8.19":
         dependencies:
@@ -5792,6 +5905,10 @@ snapshots:
             - supports-color
 
     boolbase@1.0.0: {}
+
+    bootstrap@5.3.8(@popperjs/core@2.11.8):
+        dependencies:
+            "@popperjs/core": 2.11.8
 
     brace-expansion@1.1.12:
         dependencies:
