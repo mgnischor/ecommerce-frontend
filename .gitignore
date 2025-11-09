@@ -118,6 +118,9 @@ Thumbs.db:encryptable
 # Build and dependency management tools
 #--------------------------------------------------------------------------------------------------
 
+# Angular
+.angular/
+
 # Node.js
 .cache
 .cache/
