@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
  * Displays and manages user account information and settings.
  */
 @Component({
-    selector: 'page-account',
+    selector: 'app-account',
     imports: [CommonModule],
     templateUrl: './account.html',
     styleUrl: './account.scss',
