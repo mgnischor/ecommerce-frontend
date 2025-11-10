@@ -1,0 +1,22 @@
+<div class="app-layout">
+    <app-header (toggleSidebar)="toggleSidebar()" />
+
+    <div class="app-body">
+        <app-sidebar [class.show]="isSidebarVisible()" />
+
+        <main class="app-main">
+            <router-outlet />
+        </main>
+    </div>
+
+    <app-footer />
+</div>
+
+@if (isSidebarVisible()) {
+    <button
+        class="sidebar-overlay d-lg-none"
+        type="button"
+        (click)="toggleSidebar()"
+        aria-label="Close sidebar"
+    ></button>
+}
