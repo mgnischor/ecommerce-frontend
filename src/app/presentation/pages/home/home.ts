@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
  * Displays the main landing page of the e-commerce application.
  */
 @Component({
-    selector: 'page-home',
+    selector: 'app-home',
     imports: [CommonModule],
     templateUrl: './home.html',
     styleUrl: './home.scss',
