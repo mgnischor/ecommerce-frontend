@@ -1,0 +1,13 @@
+footer {
+    font-size: 0.875rem;
+}
+
+.list-inline-item {
+    a {
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: #007bff !important;
+        }
+    }
+}
