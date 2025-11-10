@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
  * Handles user authentication and login functionality.
  */
 @Component({
-    selector: 'page-login',
+    selector: 'app-login',
     imports: [CommonModule],
     templateUrl: './login.html',
     styleUrl: './login.scss',
