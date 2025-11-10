@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
  * Displays detailed information about a specific product.
  */
 @Component({
-    selector: 'page-product-detail',
+    selector: 'app-product-detail',
     imports: [CommonModule],
     templateUrl: './product-detail.html',
     styleUrl: './product-detail.scss',
