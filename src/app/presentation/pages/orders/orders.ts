@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
  * Displays the user's order history and order details.
  */
 @Component({
-    selector: 'page-orders',
+    selector: 'app-orders',
     imports: [CommonModule],
     templateUrl: './orders.html',
     styleUrl: './orders.scss',
