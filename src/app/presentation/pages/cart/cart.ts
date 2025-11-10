@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
  * Displays the user's shopping cart with selected items.
  */
 @Component({
-    selector: 'page-cart',
+    selector: 'app-cart',
     imports: [CommonModule],
     templateUrl: './cart.html',
     styleUrl: './cart.scss',
