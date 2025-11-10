@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
  * Handles the order completion and payment process.
  */
 @Component({
-    selector: 'page-checkout',
+    selector: 'app-checkout',
     imports: [CommonModule],
     templateUrl: './checkout.html',
     styleUrl: './checkout.scss',
