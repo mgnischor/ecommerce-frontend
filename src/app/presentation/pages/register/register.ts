@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
  * Handles new user registration and account creation.
  */
 @Component({
-    selector: 'page-register',
+    selector: 'app-register',
     imports: [CommonModule],
     templateUrl: './register.html',
     styleUrl: './register.scss',
