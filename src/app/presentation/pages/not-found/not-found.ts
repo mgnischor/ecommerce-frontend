@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
  * Displays when users navigate to non-existent routes.
  */
 @Component({
-    selector: 'page-not-found',
+    selector: 'app-not-found',
     imports: [CommonModule],
     templateUrl: './not-found.html',
     styleUrl: './not-found.scss',
