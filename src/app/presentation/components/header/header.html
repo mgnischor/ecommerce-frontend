@@ -1,0 +1,62 @@
+<header class="app-header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container-fluid">
+            <button
+                class="btn btn-link d-lg-none me-2"
+                type="button"
+                (click)="onToggleSidebar()"
+                aria-label="Toggle sidebar"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand fw-bold" routerLink="/">E-Commerce Store</a>
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                (click)="toggleMenu()"
+                [attr.aria-expanded]="!menuCollapsed()"
+                aria-controls="navbarNav"
+                aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div [ngbCollapse]="menuCollapsed()" class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            routerLink="/cart"
+                            routerLinkActive="active"
+                            (click)="isMenuCollapsed.set(true)"
+                        >
+                            <i class="bi bi-cart"></i> Cart
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            routerLink="/account"
+                            routerLinkActive="active"
+                            (click)="isMenuCollapsed.set(true)"
+                        >
+                            <i class="bi bi-person"></i> Account
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            routerLink="/login"
+                            routerLinkActive="active"
+                            (click)="isMenuCollapsed.set(true)"
+                        >
+                            Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
