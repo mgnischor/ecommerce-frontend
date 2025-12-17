@@ -1,4 +1,160 @@
 <div class="page page-product-detail">
-    <h1>Product Detail</h1>
-    <p>Product details page (blank).</p>
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a routerLink="/">Home</a>
+            <span class="separator">/</span>
+            <a routerLink="/products">Produtos</a>
+            @if (product()) {
+                <span class="separator">/</span>
+                <span class="current">{{ product()!.name }}</span>
+            }
+        </div>
+
+        <!-- Loading State -->
+        @if (isLoading()) {
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Carregando produto...</p>
+            </div>
+        }
+
+        <!-- Error State -->
+        @if (error()) {
+            <div class="error-container">
+                <h2>{{ error() }}</h2>
+                <a routerLink="/products" class="btn btn-primary">Voltar para Produtos</a>
+            </div>
+        }
+
+        <!-- Product Details -->
+        @if (!isLoading() && product()) {
+            <div class="product-container">
+                <!-- Product Image -->
+                <div class="product-image-section">
+                    @if (selectedVariant()?.imageUrl || product()!.imageUrl) {
+                        <img
+                            [src]="selectedVariant()?.imageUrl || product()!.imageUrl"
+                            [alt]="product()!.name"
+                            class="main-image"
+                        />
+                    } @else {
+                        <div class="image-placeholder">
+                            <span>Sem imagem disponível</span>
+                        </div>
+                    }
+
+                    @if (product()!.isOnSale) {
+                        <div class="sale-badge">EM PROMOÇÃO</div>
+                    }
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info-section">
+                    <h1 class="product-title">{{ product()!.name }}</h1>
+
+                    @if (product()!.description) {
+                        <p class="product-description">{{ product()!.description }}</p>
+                    }
+
+                    <!-- Price -->
+                    <div class="price-section">
+                        @if (originalPrice > 0) {
+                            <span class="original-price">{{ formatPrice(originalPrice) }}</span>
+                        }
+                        <span class="current-price">{{ formatPrice(currentPrice) }}</span>
+                    </div>
+
+                    <!-- Stock Status -->
+                    <div class="stock-status">
+                        @if (isInStock) {
+                            @if (currentStock < 10) {
+                                <span class="stock-badge low-stock"> Apenas {{ currentStock }} em estoque </span>
+                            } @else {
+                                <span class="stock-badge in-stock">Em estoque</span>
+                            }
+                        } @else {
+                            <span class="stock-badge out-of-stock">Fora de estoque</span>
+                        }
+                    </div>
+
+                    <!-- Variants Selection -->
+                    @if (variants().length > 0) {
+                        <div class="variants-section">
+                            <h3>Variantes disponíveis:</h3>
+                            <div class="variants-grid">
+                                @for (variant of variants(); track variant.id) {
+                                    <button
+                                        class="variant-option"
+                                        [class.selected]="selectedVariant()?.id === variant.id"
+                                        [disabled]="!variant.isActive || variant.stockQuantity === 0"
+                                        (click)="selectVariant(variant)"
+                                    >
+                                        {{ variant.name || variant.sku }}
+                                        @if (variant.stockQuantity === 0) {
+                                            <span class="unavailable">(Esgotado)</span>
+                                        }
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Quantity Selector -->
+                    @if (isInStock) {
+                        <div class="quantity-section">
+                            <label>Quantidade:</label>
+                            <div class="quantity-controls">
+                                <button class="btn-quantity" (click)="decreaseQuantity()" [disabled]="quantity() <= 1">
+                                    -
+                                </button>
+                                <span class="quantity-value">{{ quantity() }}</span>
+                                <button
+                                    class="btn-quantity"
+                                    (click)="increaseQuantity()"
+                                    [disabled]="quantity() >= currentStock"
+                                >
+                                    +
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Add to Cart Button -->
+                        <button class="btn btn-primary btn-large btn-add-cart" (click)="addToCart()">
+                            Adicionar ao Carrinho
+                        </button>
+
+                        @if (addedToCart()) {
+                            <div class="success-message">
+                                ✓ Produto adicionado ao carrinho!
+                                <a routerLink="/cart" class="link-cart">Ver carrinho</a>
+                            </div>
+                        }
+                    }
+
+                    <!-- Product Details -->
+                    <div class="product-details">
+                        <h3>Informações do Produto</h3>
+                        <dl>
+                            <dt>SKU:</dt>
+                            <dd>{{ selectedVariant()?.sku || product()!.sku }}</dd>
+
+                            <dt>Categoria:</dt>
+                            <dd>{{ product()!.category }}</dd>
+
+                            @if (product()!.weight) {
+                                <dt>Peso:</dt>
+                                <dd>{{ product()!.weight }} kg</dd>
+                            }
+
+                            @if (product()!.dimensions) {
+                                <dt>Dimensões:</dt>
+                                <dd>{{ product()!.dimensions }}</dd>
+                            }
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
