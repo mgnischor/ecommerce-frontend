@@ -41,20 +41,20 @@ export class AuthService {
     }
 
     getToken(): string | null {
-        if (typeof window !== 'undefined') {
+        if (globalThis.window !== undefined) {
             return localStorage.getItem(this.tokenKey);
         }
         return null;
     }
 
     private setToken(token: string): void {
-        if (typeof window !== 'undefined') {
+        if (globalThis.window !== undefined) {
             localStorage.setItem(this.tokenKey, token);
         }
     }
 
     private removeToken(): void {
-        if (typeof window !== 'undefined') {
+        if (globalThis.window !== undefined) {
             localStorage.removeItem(this.tokenKey);
         }
     }
