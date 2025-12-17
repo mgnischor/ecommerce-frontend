@@ -1,4 +1,136 @@
 <div class="page page-product-list">
-    <h1>Product List</h1>
-    <p>Product catalog page (blank).</p>
+    <div class="container">
+        <h1 class="page-title">Produtos</h1>
+
+        <!-- Search and Filters -->
+        <div class="filters-section">
+            <div class="search-box">
+                <input
+                    type="text"
+                    [(ngModel)]="searchTerm"
+                    (keyup.enter)="onSearch()"
+                    placeholder="Buscar produtos..."
+                    class="search-input"
+                />
+                <button class="btn btn-primary" (click)="onSearch()">Buscar</button>
+            </div>
+
+            <div class="filter-group">
+                <label>Categoria:</label>
+                <select
+                    [value]="selectedCategory() ?? ''"
+                    (change)="onCategoryChange($any($event.target).value ? +$any($event.target).value : null)"
+                    class="category-select"
+                >
+                    <option value="">Todas as Categorias</option>
+                    @for (category of categories; track category.value) {
+                        <option [value]="category.value">{{ category.label }}</option>
+                    }
+                </select>
+            </div>
+
+            @if (searchTerm() || selectedCategory() !== null) {
+                <button class="btn btn-secondary" (click)="clearFilters()">Limpar Filtros</button>
+            }
+        </div>
+
+        <!-- Loading State -->
+        @if (isLoading()) {
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Carregando produtos...</p>
+            </div>
+        }
+
+        <!-- Error State -->
+        @if (error()) {
+            <div class="error-container">
+                <p>{{ error() }}</p>
+                <button class="btn btn-primary" (click)="loadProducts()">Tentar Novamente</button>
+            </div>
+        }
+
+        <!-- Products Grid -->
+        @if (!isLoading() && !error()) {
+            @if (products().length > 0) {
+                <div class="products-grid">
+                    @for (product of products(); track product.id) {
+                        <div class="product-card">
+                            @if (product.isOnSale) {
+                                <div class="sale-badge">PROMOÇÃO</div>
+                            }
+                            <a [routerLink]="['/products', product.id]">
+                                @if (product.imageUrl) {
+                                    <img [src]="product.imageUrl" [alt]="product.name" class="product-image" />
+                                } @else {
+                                    <div class="product-image-placeholder">
+                                        <span>Sem imagem</span>
+                                    </div>
+                                }
+                                <div class="product-info">
+                                    <h3 class="product-name">{{ product.name }}</h3>
+                                    @if (product.description) {
+                                        <p class="product-description">{{ product.description }}</p>
+                                    }
+                                    <div class="product-footer">
+                                        <div class="product-price">
+                                            @if (product.isOnSale && product.salePrice) {
+                                                <span class="original-price">{{ formatPrice(product.price) }}</span>
+                                                <span class="sale-price">{{ formatPrice(product.salePrice) }}</span>
+                                            } @else {
+                                                <span class="current-price">{{ formatPrice(product.price) }}</span>
+                                            }
+                                        </div>
+                                        @if (product.stockQuantity <= 0) {
+                                            <span class="stock-badge out-of-stock">Esgotado</span>
+                                        } @else if (product.stockQuantity < 10) {
+                                            <span class="stock-badge low-stock">Últimas unidades</span>
+                                        }
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+
+                <!-- Pagination -->
+                @if (totalPages() > 1) {
+                    <div class="pagination">
+                        <button
+                            class="btn btn-page"
+                            [disabled]="currentPage() === 1"
+                            (click)="onPageChange(currentPage() - 1)"
+                        >
+                            Anterior
+                        </button>
+
+                        @for (page of pageNumbers; track page) {
+                            <button
+                                class="btn btn-page"
+                                [class.active]="page === currentPage()"
+                                (click)="onPageChange(page)"
+                            >
+                                {{ page }}
+                            </button>
+                        }
+
+                        <button
+                            class="btn btn-page"
+                            [disabled]="currentPage() === totalPages()"
+                            (click)="onPageChange(currentPage() + 1)"
+                        >
+                            Próxima
+                        </button>
+                    </div>
+                }
+            } @else {
+                <div class="empty-state">
+                    <p>Nenhum produto encontrado</p>
+                    @if (searchTerm() || selectedCategory() !== null) {
+                        <button class="btn btn-primary" (click)="clearFilters()">Ver Todos os Produtos</button>
+                    }
+                </div>
+            }
+        }
+    </div>
 </div>
