@@ -1,4 +1,120 @@
 <div class="page page-home">
-    <h1>Home</h1>
-    <p>E-commerce home page (blank).</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Bem-vindo à Nossa Loja</h1>
+            <p>Encontre os melhores produtos com os melhores preços</p>
+            <a routerLink="/products" class="btn btn-primary btn-large">Ver Produtos</a>
+        </div>
+    </section>
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Carregando produtos...</p>
+        </div>
+    }
+
+    <!-- Error State -->
+    @if (error()) {
+        <div class="error-container">
+            <p>{{ error() }}</p>
+            <button class="btn btn-primary" (click)="loadData()">Tentar Novamente</button>
+        </div>
+    }
+
+    <!-- Featured Promotions -->
+    @if (!isLoading() && featuredPromotions().length > 0) {
+        <section class="promotions-section">
+            <div class="container">
+                <h2 class="section-title">Promoções em Destaque</h2>
+                <div class="promotions-grid">
+                    @for (promotion of featuredPromotions(); track promotion.id) {
+                        <div class="promotion-card">
+                            <div class="promotion-badge">PROMOÇÃO</div>
+                            <h3>{{ promotion.name }}</h3>
+                            <p>{{ promotion.description }}</p>
+                            <div class="promotion-code">
+                                Código: <strong>{{ promotion.code }}</strong>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+    }
+
+    <!-- Featured Products -->
+    @if (!isLoading() && featuredProducts().length > 0) {
+        <section class="products-section">
+            <div class="container">
+                <h2 class="section-title">Produtos em Destaque</h2>
+                <div class="products-grid">
+                    @for (product of featuredProducts(); track product.id) {
+                        <div class="product-card">
+                            <a [routerLink]="['/products', product.id]">
+                                @if (product.imageUrl) {
+                                    <img [src]="product.imageUrl" [alt]="product.name" class="product-image" />
+                                } @else {
+                                    <div class="product-image-placeholder">
+                                        <span>Sem imagem</span>
+                                    </div>
+                                }
+                                <div class="product-info">
+                                    <h3 class="product-name">{{ product.name }}</h3>
+                                    @if (product.description) {
+                                        <p class="product-description">{{ product.description }}</p>
+                                    }
+                                    <div class="product-price">
+                                        @if (product.isOnSale && product.salePrice) {
+                                            <span class="original-price">{{ formatPrice(product.price) }}</span>
+                                            <span class="sale-price">{{ formatPrice(product.salePrice) }}</span>
+                                        } @else {
+                                            <span class="current-price">{{ formatPrice(product.price) }}</span>
+                                        }
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+                <div class="text-center">
+                    <a routerLink="/products" class="btn btn-secondary">Ver Todos os Produtos</a>
+                </div>
+            </div>
+        </section>
+    }
+
+    <!-- On Sale Products -->
+    @if (!isLoading() && onSaleProducts().length > 0) {
+        <section class="products-section sale-section">
+            <div class="container">
+                <h2 class="section-title">Produtos em Promoção</h2>
+                <div class="products-grid">
+                    @for (product of onSaleProducts(); track product.id) {
+                        <div class="product-card">
+                            <div class="sale-badge">PROMOÇÃO</div>
+                            <a [routerLink]="['/products', product.id]">
+                                @if (product.imageUrl) {
+                                    <img [src]="product.imageUrl" [alt]="product.name" class="product-image" />
+                                } @else {
+                                    <div class="product-image-placeholder">
+                                        <span>Sem imagem</span>
+                                    </div>
+                                }
+                                <div class="product-info">
+                                    <h3 class="product-name">{{ product.name }}</h3>
+                                    <div class="product-price">
+                                        <span class="original-price">{{ formatPrice(product.price) }}</span>
+                                        <span class="sale-price">{{ formatPrice(product.salePrice!) }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+    }
 </div>
