@@ -10,3 +10,4 @@ export * from './user.service';
 export * from './vendor.service';
 export * from './promotion.service';
 export * from './inventory.service';
+export * from './cart.service';
