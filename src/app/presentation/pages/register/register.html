@@ -1,4 +1,128 @@
 <div class="page page-register">
-    <h1>Register</h1>
-    <p>Registration form (blank).</p>
+    <div class="register-container">
+        <div class="register-card">
+            <h1>Criar Conta</h1>
+            <p class="subtitle">Preencha os dados para criar sua conta</p>
+
+            @if (errorMessage()) {
+                <div class="error-message">
+                    {{ errorMessage() }}
+                </div>
+            }
+
+            @if (successMessage()) {
+                <div class="success-message">
+                    {{ successMessage() }}
+                </div>
+            }
+
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">Nome</label>
+                        <input
+                            type="text"
+                            id="firstName"
+                            formControlName="firstName"
+                            [class.invalid]="firstNameControl?.invalid && firstNameControl?.touched"
+                            placeholder="João"
+                        />
+                        @if (firstNameControl?.invalid && firstNameControl?.touched) {
+                            <div class="field-error">Nome é obrigatório</div>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Sobrenome</label>
+                        <input
+                            type="text"
+                            id="lastName"
+                            formControlName="lastName"
+                            [class.invalid]="lastNameControl?.invalid && lastNameControl?.touched"
+                            placeholder="Silva"
+                        />
+                        @if (lastNameControl?.invalid && lastNameControl?.touched) {
+                            <div class="field-error">Sobrenome é obrigatório</div>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        formControlName="email"
+                        [class.invalid]="emailControl?.invalid && emailControl?.touched"
+                        placeholder="seu@email.com"
+                    />
+                    @if (emailControl?.invalid && emailControl?.touched) {
+                        <div class="field-error">
+                            @if (emailControl?.hasError('required')) {
+                                Email é obrigatório
+                            }
+                            @if (emailControl?.hasError('email')) {
+                                Email inválido
+                            }
+                        </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">Telefone (opcional)</label>
+                    <input type="tel" id="phoneNumber" formControlName="phoneNumber" placeholder="(11) 99999-9999" />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input
+                        type="password"
+                        id="password"
+                        formControlName="password"
+                        [class.invalid]="passwordControl?.invalid && passwordControl?.touched"
+                        placeholder="••••••••"
+                    />
+                    @if (passwordControl?.invalid && passwordControl?.touched) {
+                        <div class="field-error">
+                            @if (passwordControl?.hasError('required')) {
+                                Senha é obrigatória
+                            }
+                            @if (passwordControl?.hasError('minlength')) {
+                                Senha deve ter no mínimo 6 caracteres
+                            }
+                        </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Senha</label>
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        formControlName="confirmPassword"
+                        [class.invalid]="confirmPasswordControl?.invalid && confirmPasswordControl?.touched"
+                        placeholder="••••••••"
+                    />
+                    @if (confirmPasswordControl?.invalid && confirmPasswordControl?.touched) {
+                        <div class="field-error">Confirmação de senha é obrigatória</div>
+                    }
+                    @if (registerForm.hasError('passwordMismatch') && confirmPasswordControl?.touched) {
+                        <div class="field-error">As senhas não coincidem</div>
+                    }
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" [disabled]="isLoading()">
+                    @if (isLoading()) {
+                        Criando conta...
+                    } @else {
+                        Criar Conta
+                    }
+                </button>
+            </form>
+
+            <div class="footer-links">
+                <p>Já tem uma conta? <a routerLink="/login">Faça login</a></p>
+            </div>
+        </div>
+    </div>
 </div>
