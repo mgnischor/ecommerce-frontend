@@ -1,0 +1,32 @@
+export interface Supplier {
+    id: string;
+    companyName: string;
+    supplierCode: string;
+    contactName: string;
+    email: string;
+    phoneNumber: string;
+    alternatePhone?: string;
+    faxNumber?: string;
+    website?: string;
+    address: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+    taxId?: string;
+    registrationNumber?: string;
+    bankAccountNumber?: string;
+    bankName?: string;
+    bankRoutingNumber?: string;
+    paymentTerms?: string;
+    creditLimit?: number;
+    currentBalance: number;
+    rating: number;
+    leadTimeDays: number;
+    minimumOrderAmount?: number;
+    notes?: string;
+    isActive: boolean;
+    isPreferred: boolean;
+    createdAt: string;
+    updatedAt: string;
+}
