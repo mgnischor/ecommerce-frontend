@@ -1,0 +1,211 @@
+<div class="page page-admin">
+    <div class="container">
+        <h1 class="page-title">Gerenciar Promoções</h1>
+
+        @if (successMessage()) {
+        <div class="success-message">{{ successMessage() }}</div>
+        } @if (error()) {
+        <div class="error-message">{{ error() }}</div>
+        }
+
+        <div class="toolbar">
+            <div class="search-box">
+                <input
+                    type="text"
+                    [(ngModel)]="searchCode"
+                    (keyup.enter)="searchByCode()"
+                    placeholder="Buscar por código..."
+                    class="search-input"
+                />
+                <button class="btn btn-primary" (click)="searchByCode()">Buscar</button>
+            </div>
+            <button
+                class="btn btn-sm"
+                [class]="showFeaturedOnly() ? 'btn-primary' : 'btn-secondary'"
+                (click)="toggleFeatured()"
+            >
+                Destaques
+            </button>
+            <button class="btn btn-success" (click)="openCreateModal()">Nova Promoção</button>
+        </div>
+
+        @if (isLoading()) {
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Carregando...</p>
+        </div>
+        } @if (!isLoading() && !error()) { @if (promotions().length > 0) {
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Desconto</th>
+                        <th>Período</th>
+                        <th>Uso</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (promo of promotions(); track promo.id) {
+                    <tr>
+                        <td><strong>{{ promo.code }}</strong></td>
+                        <td>{{ promo.name }}</td>
+                        <td>{{ getTypeLabel(promo.type) }}</td>
+                        <td>
+                            @if (promo.type === 0) { {{ promo.discountValue }}% } @else { {{
+                            formatCurrency(promo.discountValue) }} }
+                        </td>
+                        <td>{{ formatDate(promo.startDate) }} - {{ formatDate(promo.endDate) }}</td>
+                        <td>{{ promo.usageCount }}{{ promo.usageLimit ? ' / ' + promo.usageLimit : '' }}</td>
+                        <td>
+                            <span class="status-badge" [class]="promo.isActive ? 'status-active' : 'status-inactive'">
+                                {{ promo.isActive ? 'Ativa' : 'Inativa' }}
+                            </span>
+                        </td>
+                        <td class="actions-cell">
+                            <button class="btn btn-primary btn-sm" (click)="openEditModal(promo)">Editar</button>
+                            <button class="btn btn-danger btn-sm" (click)="deletePromotion(promo.id)">Excluir</button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        } @else {
+        <div class="empty-state"><p>Nenhuma promoção encontrada</p></div>
+        } } @if (showFormModal()) {
+        <div class="modal-overlay" (click)="closeFormModal()">
+            <div class="modal-content" (click)="$event.stopPropagation()">
+                <div class="modal-header">
+                    <h2>{{ editingPromotion() ? 'Editar' : 'Nova' }} Promoção</h2>
+                    <button class="btn-close" (click)="closeFormModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Código</label>
+                            <input
+                                type="text"
+                                class="search-input"
+                                [ngModel]="formData().code"
+                                (ngModelChange)="updateFormField('code', $event)"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Nome</label>
+                            <input
+                                type="text"
+                                class="search-input"
+                                [ngModel]="formData().name"
+                                (ngModelChange)="updateFormField('name', $event)"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo</label>
+                            <select
+                                class="search-input"
+                                [ngModel]="formData().type"
+                                (ngModelChange)="updateFormField('type', +$event)"
+                            >
+                                <option [value]="0">Percentual</option>
+                                <option [value]="1">Valor Fixo</option>
+                                <option [value]="2">Compre 1, Leve 2</option>
+                                <option [value]="3">Frete Grátis</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor do Desconto</label>
+                            <input
+                                type="number"
+                                class="search-input"
+                                [ngModel]="formData().discountValue"
+                                (ngModelChange)="updateFormField('discountValue', $event)"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Compra Mínima</label>
+                            <input
+                                type="number"
+                                class="search-input"
+                                [ngModel]="formData().minimumPurchase"
+                                (ngModelChange)="updateFormField('minimumPurchase', $event)"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Desconto Máximo</label>
+                            <input
+                                type="number"
+                                class="search-input"
+                                [ngModel]="formData().maximumDiscount"
+                                (ngModelChange)="updateFormField('maximumDiscount', $event)"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Data Início</label>
+                            <input
+                                type="date"
+                                class="search-input"
+                                [ngModel]="formData().startDate"
+                                (ngModelChange)="updateFormField('startDate', $event)"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Data Fim</label>
+                            <input
+                                type="date"
+                                class="search-input"
+                                [ngModel]="formData().endDate"
+                                (ngModelChange)="updateFormField('endDate', $event)"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Limite de Uso</label>
+                            <input
+                                type="number"
+                                class="search-input"
+                                [ngModel]="formData().usageLimit"
+                                (ngModelChange)="updateFormField('usageLimit', $event)"
+                            />
+                        </div>
+                        <div class="form-group form-check-group">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    [ngModel]="formData().isActive"
+                                    (ngModelChange)="updateFormField('isActive', $event)"
+                                />
+                                Ativa
+                            </label>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    [ngModel]="formData().isFeatured"
+                                    (ngModelChange)="updateFormField('isFeatured', $event)"
+                                />
+                                Destaque
+                            </label>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Descrição</label>
+                            <textarea
+                                class="search-input"
+                                style="width: 100%; min-height: 80px"
+                                [ngModel]="formData().description"
+                                (ngModelChange)="updateFormField('description', $event)"
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div class="actions-cell" style="justify-content: flex-end; margin-top: 1rem">
+                        <button class="btn btn-secondary btn-sm" (click)="closeFormModal()">Cancelar</button>
+                        <button class="btn btn-primary btn-sm" (click)="savePromotion()">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
