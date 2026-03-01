@@ -1,4 +1,193 @@
 <div class="page page-checkout">
-    <h1>Checkout</h1>
-    <p>Checkout page (blank).</p>
+    <div class="container">
+        <h1 class="page-title">Finalizar Compra</h1>
+
+        @if (cartService.cartItems().length === 0) {
+        <div class="empty-state">
+            <h2>Carrinho vazio</h2>
+            <p>Adicione produtos antes de finalizar a compra</p>
+            <a routerLink="/products" class="btn btn-primary">Ver Produtos</a>
+        </div>
+        } @else {
+        <!-- Steps Indicator -->
+        <div class="steps">
+            <div
+                class="step"
+                [class.active]="currentStep() === 'address'"
+                [class.completed]="currentStep() !== 'address'"
+            >
+                <span class="step-number">1</span>
+                <span class="step-label">Endereço</span>
+            </div>
+            <div class="step-line"></div>
+            <div
+                class="step"
+                [class.active]="currentStep() === 'payment'"
+                [class.completed]="currentStep() === 'review'"
+            >
+                <span class="step-number">2</span>
+                <span class="step-label">Pagamento</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" [class.active]="currentStep() === 'review'">
+                <span class="step-number">3</span>
+                <span class="step-label">Revisão</span>
+            </div>
+        </div>
+
+        @if (error()) {
+        <div class="error-message">{{ error() }}</div>
+        }
+
+        <div class="checkout-layout">
+            <div class="checkout-form">
+                <!-- Step 1: Address -->
+                @if (currentStep() === 'address') {
+                <div class="card">
+                    <h2>Endereço de Entrega</h2>
+                    <form [formGroup]="addressForm" (ngSubmit)="goToPayment()">
+                        <div class="form-group">
+                            <label for="street">Rua / Endereço</label>
+                            <input
+                                type="text"
+                                id="street"
+                                formControlName="street"
+                                placeholder="Rua, número, complemento"
+                            />
+                            @if (addressForm.get('street')?.invalid && addressForm.get('street')?.touched) {
+                            <div class="field-error">Endereço é obrigatório</div>
+                            }
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">Cidade</label>
+                                <input type="text" id="city" formControlName="city" />
+                                @if (addressForm.get('city')?.invalid && addressForm.get('city')?.touched) {
+                                <div class="field-error">Cidade é obrigatória</div>
+                                }
+                            </div>
+                            <div class="form-group">
+                                <label for="state">Estado</label>
+                                <input type="text" id="state" formControlName="state" />
+                                @if (addressForm.get('state')?.invalid && addressForm.get('state')?.touched) {
+                                <div class="field-error">Estado é obrigatório</div>
+                                }
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="postalCode">CEP</label>
+                                <input
+                                    type="text"
+                                    id="postalCode"
+                                    formControlName="postalCode"
+                                    placeholder="00000-000"
+                                />
+                                @if (addressForm.get('postalCode')?.invalid && addressForm.get('postalCode')?.touched) {
+                                <div class="field-error">CEP é obrigatório</div>
+                                }
+                            </div>
+                            <div class="form-group">
+                                <label for="country">País</label>
+                                <input type="text" id="country" formControlName="country" />
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Continuar para Pagamento</button>
+                    </form>
+                </div>
+                }
+
+                <!-- Step 2: Payment -->
+                @if (currentStep() === 'payment') {
+                <div class="card">
+                    <h2>Método de Pagamento</h2>
+                    <form [formGroup]="paymentForm" (ngSubmit)="goToReview()">
+                        <div class="payment-options">
+                            @for (method of paymentMethods; track method.value) {
+                            <label
+                                class="payment-option"
+                                [class.selected]="paymentForm.value.paymentMethod === method.value"
+                            >
+                                <input type="radio" formControlName="paymentMethod" [value]="method.value" />
+                                <span>{{ method.label }}</span>
+                            </label>
+                            }
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" (click)="goBack('address')">Voltar</button>
+                            <button type="submit" class="btn btn-primary">Revisar Pedido</button>
+                        </div>
+                    </form>
+                </div>
+                }
+
+                <!-- Step 3: Review -->
+                @if (currentStep() === 'review') {
+                <div class="card">
+                    <h2>Revisão do Pedido</h2>
+
+                    <div class="review-section">
+                        <h3>Endereço de Entrega</h3>
+                        <p>{{ addressForm.value.street }}</p>
+                        <p>
+                            {{ addressForm.value.city }}, {{ addressForm.value.state }} - {{
+                            addressForm.value.postalCode }}
+                        </p>
+                        <p>{{ addressForm.value.country }}</p>
+                    </div>
+
+                    <div class="review-section">
+                        <h3>Pagamento</h3>
+                        <p>{{ getPaymentLabel(paymentForm.value.paymentMethod!) }}</p>
+                    </div>
+
+                    <div class="review-section">
+                        <h3>Itens</h3>
+                        @for (item of cartService.cartItems(); track item.productId + (item.productVariantId || '')) {
+                        <div class="review-item">
+                            <span>{{ item.name }} (x{{ item.quantity }})</span>
+                            <span>{{ formatPrice(item.price * item.quantity) }}</span>
+                        </div>
+                        }
+                    </div>
+
+                    <div class="review-total">
+                        <span>Total:</span>
+                        <span>{{ formatPrice(cartService.subtotal()) }}</span>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" (click)="goBack('payment')">Voltar</button>
+                        <button
+                            type="button"
+                            class="btn btn-primary btn-large"
+                            [disabled]="isLoading()"
+                            (click)="placeOrder()"
+                        >
+                            @if (isLoading()) { Finalizando... } @else { Finalizar Pedido }
+                        </button>
+                    </div>
+                </div>
+                }
+            </div>
+
+            <!-- Order Summary Sidebar -->
+            <div class="order-summary">
+                <div class="card">
+                    <h3>Resumo</h3>
+                    @for (item of cartService.cartItems(); track item.productId + (item.productVariantId || '')) {
+                    <div class="summary-item">
+                        <span>{{ item.name }} (x{{ item.quantity }})</span>
+                        <span>{{ formatPrice(item.price * item.quantity) }}</span>
+                    </div>
+                    }
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <span>{{ formatPrice(cartService.subtotal()) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
 </div>
