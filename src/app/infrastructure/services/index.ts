@@ -11,3 +11,8 @@ export * from './vendor.service';
 export * from './promotion.service';
 export * from './inventory.service';
 export * from './cart.service';
+export * from './accounting.service';
+export * from './finance.service';
+export * from './store.service';
+export * from './supplier.service';
+export * from './shipping-zone.service';
