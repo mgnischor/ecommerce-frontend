@@ -1,4 +1,104 @@
 <div class="page page-orders">
-    <h1>Orders</h1>
-    <p>User order history (blank).</p>
+    <div class="container">
+        <h1 class="page-title">Meus Pedidos</h1>
+
+        @if (error()) {
+        <div class="error-container">
+            <p>{{ error() }}</p>
+            <a routerLink="/login" class="btn btn-primary">Fazer Login</a>
+        </div>
+        } @if (isLoading()) {
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Carregando pedidos...</p>
+        </div>
+        } @if (!isLoading() && !error()) { @if (orders().length === 0) {
+        <div class="empty-state">
+            <div class="empty-icon">📦</div>
+            <h2>Nenhum pedido encontrado</h2>
+            <p>Você ainda não fez nenhum pedido</p>
+            <a routerLink="/products" class="btn btn-primary">Começar a Comprar</a>
+        </div>
+        } @else {
+        <div class="orders-list">
+            @for (order of orders(); track order.id) {
+            <div class="order-card" (click)="viewOrder(order)">
+                <div class="order-header">
+                    <div class="order-number">
+                        <strong>Pedido #{{ order.orderNumber || order.id.slice(0, 8) }}</strong>
+                    </div>
+                    <span class="status-badge" [class]="getStatusClass(order.status)">
+                        {{ getStatusLabel(order.status) }}
+                    </span>
+                </div>
+                <div class="order-body">
+                    <div class="order-info">
+                        <span>Data: {{ formatDate(order.createdAt) }}</span>
+                        <span>Itens: {{ order.items?.length || 0 }}</span>
+                    </div>
+                    <div class="order-total">{{ formatPrice(order.total) }}</div>
+                </div>
+            </div>
+            }
+        </div>
+        } }
+
+        <!-- Order Detail Modal -->
+        @if (selectedOrder()) {
+        <div class="modal-overlay" (click)="closeDetail()">
+            <div class="modal-content" (click)="$event.stopPropagation()">
+                <div class="modal-header">
+                    <h2>Pedido #{{ selectedOrder()!.orderNumber || selectedOrder()!.id.slice(0, 8) }}</h2>
+                    <button class="btn-close" (click)="closeDetail()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="detail-row">
+                        <span>Status:</span>
+                        <span class="status-badge" [class]="getStatusClass(selectedOrder()!.status)">
+                            {{ getStatusLabel(selectedOrder()!.status) }}
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Data:</span>
+                        <span>{{ formatDate(selectedOrder()!.createdAt) }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Subtotal:</span>
+                        <span>{{ formatPrice(selectedOrder()!.subtotal) }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Impostos:</span>
+                        <span>{{ formatPrice(selectedOrder()!.tax) }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Frete:</span>
+                        <span>{{ formatPrice(selectedOrder()!.shippingCost) }}</span>
+                    </div>
+                    <div class="detail-row total">
+                        <span>Total:</span>
+                        <span>{{ formatPrice(selectedOrder()!.total) }}</span>
+                    </div>
+
+                    @if (selectedOrder()!.items && selectedOrder()!.items!.length > 0) {
+                    <h3>Itens do Pedido</h3>
+                    <div class="order-items">
+                        @for (item of selectedOrder()!.items; track item.id) {
+                        <div class="order-item">
+                            <div class="item-info">
+                                <strong>{{ item.productName }}</strong>
+                                <span class="item-sku">SKU: {{ item.sku }}</span>
+                            </div>
+                            <div class="item-qty">Qtd: {{ item.quantity }}</div>
+                            <div class="item-price">{{ formatPrice(item.total) }}</div>
+                        </div>
+                        }
+                    </div>
+                    } @if (selectedOrder()!.status === 0) {
+                    <button class="btn btn-danger" (click)="cancelOrder(selectedOrder()!.id)">Cancelar Pedido</button>
+                    }
+                </div>
+            </div>
+        </div>
+        }
+    </div>
 </div>
