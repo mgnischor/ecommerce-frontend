@@ -9,3 +9,8 @@ export * from './promotion.model';
 export * from './user.model';
 export * from './vendor.model';
 export * from './inventory.model';
+export * from './accounting.model';
+export * from './finance.model';
+export * from './store.model';
+export * from './supplier.model';
+export * from './shipping-zone.model';
