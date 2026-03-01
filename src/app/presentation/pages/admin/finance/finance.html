@@ -1,0 +1,228 @@
+<div class="page page-admin">
+    <div class="container">
+        <h1 class="page-title">Dashboard Financeiro</h1>
+
+        @if (successMessage()) {
+        <div class="success-message">{{ successMessage() }}</div>
+        } @if (error()) {
+        <div class="error-message">{{ error() }}</div>
+        }
+
+        <div class="tabs">
+            <button class="tab" [class.active]="activeTab() === 'dashboard'" (click)="switchTab('dashboard')">
+                Visão Geral
+            </button>
+            <button class="tab" [class.active]="activeTab() === 'transactions'" (click)="switchTab('transactions')">
+                Transações
+            </button>
+            <button class="tab" [class.active]="activeTab() === 'unreconciled'" (click)="switchTab('unreconciled')">
+                Não Conciliadas
+            </button>
+        </div>
+
+        @if (activeTab() !== 'unreconciled') {
+        <div class="toolbar">
+            <div class="search-box">
+                <input type="date" class="search-input" [(ngModel)]="startDate" />
+                <input type="date" class="search-input" [(ngModel)]="endDate" />
+                <button class="btn btn-primary" (click)="applyPeriodFilter()">Filtrar</button>
+            </div>
+        </div>
+        } @if (isLoading()) {
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Carregando...</p>
+        </div>
+        } @if (!isLoading() && activeTab() === 'dashboard') { @if (dashboard(); as dash) {
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <p class="card-label">Entradas</p>
+                <p class="card-value positive">{{ formatCurrency(dash.cashFlow.totalInflows) }}</p>
+            </div>
+            <div class="dashboard-card">
+                <p class="card-label">Saídas</p>
+                <p class="card-value negative">{{ formatCurrency(dash.cashFlow.totalOutflows) }}</p>
+            </div>
+            <div class="dashboard-card">
+                <p class="card-label">Fluxo de Caixa</p>
+                <p class="card-value" [class]="dash.cashFlow.netCashFlow >= 0 ? 'positive' : 'negative'">
+                    {{ formatCurrency(dash.cashFlow.netCashFlow) }}
+                </p>
+            </div>
+            <div class="dashboard-card">
+                <p class="card-label">Total Transações</p>
+                <p class="card-value primary">{{ dash.totalTransactions }}</p>
+            </div>
+        </div>
+
+        <div class="section-grid">
+            <div class="section-card">
+                <h3>Contas a Receber</h3>
+                <table class="data-table">
+                    <tbody>
+                        <tr>
+                            <td>Total</td>
+                            <td><strong>{{ formatCurrency(dash.accountsReceivable.totalReceivable) }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>0-30 dias</td>
+                            <td>{{ formatCurrency(dash.accountsReceivable.current_0_30) }}</td>
+                        </tr>
+                        <tr>
+                            <td>31-60 dias</td>
+                            <td>{{ formatCurrency(dash.accountsReceivable.aging_31_60) }}</td>
+                        </tr>
+                        <tr>
+                            <td>61-90 dias</td>
+                            <td>{{ formatCurrency(dash.accountsReceivable.aging_61_90) }}</td>
+                        </tr>
+                        <tr>
+                            <td>90+ dias</td>
+                            <td>{{ formatCurrency(dash.accountsReceivable.aging_Over90) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="section-card">
+                <h3>Contas a Pagar</h3>
+                <table class="data-table">
+                    <tbody>
+                        <tr>
+                            <td>Total</td>
+                            <td><strong>{{ formatCurrency(dash.accountsPayable.totalPayable) }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>0-30 dias</td>
+                            <td>{{ formatCurrency(dash.accountsPayable.current_0_30) }}</td>
+                        </tr>
+                        <tr>
+                            <td>31-60 dias</td>
+                            <td>{{ formatCurrency(dash.accountsPayable.aging_31_60) }}</td>
+                        </tr>
+                        <tr>
+                            <td>61-90 dias</td>
+                            <td>{{ formatCurrency(dash.accountsPayable.aging_61_90) }}</td>
+                        </tr>
+                        <tr>
+                            <td>90+ dias</td>
+                            <td>{{ formatCurrency(dash.accountsPayable.aging_Over90) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section-card" style="margin-top: 1.5rem">
+            <h3>Detalhes do Fluxo de Caixa</h3>
+            <table class="data-table">
+                <tbody>
+                    <tr>
+                        <td>Pagamentos de Clientes</td>
+                        <td>{{ formatCurrency(dash.cashFlow.customerPayments) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Receita de Vendas</td>
+                        <td>{{ formatCurrency(dash.cashFlow.salesRevenue) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Pagamentos a Fornecedores</td>
+                        <td>{{ formatCurrency(dash.cashFlow.supplierPayments) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Despesas com Compras</td>
+                        <td>{{ formatCurrency(dash.cashFlow.purchaseExpenses) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Reembolsos</td>
+                        <td>{{ formatCurrency(dash.cashFlow.refunds) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Despesas Operacionais</td>
+                        <td>{{ formatCurrency(dash.cashFlow.operatingExpenses) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Taxas de Pagamento</td>
+                        <td>{{ formatCurrency(dash.cashFlow.paymentFees) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Custos de Envio</td>
+                        <td>{{ formatCurrency(dash.cashFlow.shippingCosts) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Impostos</td>
+                        <td>{{ formatCurrency(dash.cashFlow.taxes) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        } } @if (!isLoading() && activeTab() === 'transactions') { @if (transactions().length > 0) {
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Tipo</th>
+                        <th>Valor</th>
+                        <th>Líquido</th>
+                        <th>Data</th>
+                        <th>Contraparte</th>
+                        <th>Conciliado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (tx of transactions(); track tx.id) {
+                    <tr>
+                        <td><strong>{{ tx.transactionNumber }}</strong></td>
+                        <td>{{ tx.transactionType }}</td>
+                        <td>{{ formatCurrency(tx.amount) }}</td>
+                        <td>{{ formatCurrency(tx.netAmount) }}</td>
+                        <td>{{ formatDate(tx.transactionDate) }}</td>
+                        <td>{{ tx.counterparty ?? '—' }}</td>
+                        <td>
+                            <span class="status-badge" [class]="tx.isReconciled ? 'status-active' : 'status-pending'">
+                                {{ tx.isReconciled ? 'Sim' : 'Não' }}
+                            </span>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        } @else {
+        <div class="empty-state"><p>Nenhuma transação encontrada no período</p></div>
+        } } @if (!isLoading() && activeTab() === 'unreconciled') { @if (unreconciledTransactions().length > 0) {
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Tipo</th>
+                        <th>Valor</th>
+                        <th>Data</th>
+                        <th>Descrição</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (tx of unreconciledTransactions(); track tx.id) {
+                    <tr>
+                        <td><strong>{{ tx.transactionNumber }}</strong></td>
+                        <td>{{ tx.transactionType }}</td>
+                        <td>{{ formatCurrency(tx.amount) }}</td>
+                        <td>{{ formatDate(tx.transactionDate) }}</td>
+                        <td>{{ tx.description }}</td>
+                        <td>
+                            <button class="btn btn-success btn-sm" (click)="reconcileTransaction(tx.id)">
+                                Conciliar
+                            </button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        } @else {
+        <div class="empty-state"><p>Nenhuma transação pendente de conciliação</p></div>
+        } }
+    </div>
+</div>
