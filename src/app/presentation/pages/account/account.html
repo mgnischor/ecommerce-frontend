@@ -1,4 +1,103 @@
 <div class="page page-account">
-    <h1>My Account</h1>
-    <p>User account page (blank).</p>
+    <div class="container">
+        <h1 class="page-title">Minha Conta</h1>
+
+        @if (isLoading()) {
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Carregando...</p>
+        </div>
+        } @if (!isLoading() && user()) {
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab" [class.active]="activeTab() === 'profile'" (click)="switchTab('profile')">
+                Perfil
+            </button>
+            <button class="tab" [class.active]="activeTab() === 'notifications'" (click)="switchTab('notifications')">
+                Notificações @if (notifications().length > 0) {
+                <span class="badge">{{ notifications().length }}</span>
+                }
+            </button>
+        </div>
+
+        <!-- Profile Tab -->
+        @if (activeTab() === 'profile') {
+        <div class="tab-content">
+            @if (successMessage()) {
+            <div class="success-message">{{ successMessage() }}</div>
+            } @if (error()) {
+            <div class="error-message">{{ error() }}</div>
+            }
+
+            <form [formGroup]="profileForm" (ngSubmit)="onSaveProfile()">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">Nome</label>
+                        <input type="text" id="firstName" formControlName="firstName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Sobrenome</label>
+                        <input type="text" id="lastName" formControlName="lastName" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" formControlName="email" />
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">Telefone</label>
+                    <input type="tel" id="phoneNumber" formControlName="phoneNumber" placeholder="(11) 99999-9999" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+                        @if (isSaving()) { Salvando... } @else { Salvar Alterações }
+                    </button>
+                    <button type="button" class="btn btn-danger" (click)="logout()">Sair da Conta</button>
+                </div>
+            </form>
+
+            <div class="account-info">
+                <h3>Informações da Conta</h3>
+                <dl>
+                    <dt>Nível de Acesso:</dt>
+                    <dd>{{ user()!.accessLevel }}</dd>
+                    <dt>Conta Ativa:</dt>
+                    <dd>{{ user()!.isActive ? 'Sim' : 'Não' }}</dd>
+                    <dt>Membro desde:</dt>
+                    <dd>{{ formatDate(user()!.createdAt) }}</dd>
+                </dl>
+            </div>
+        </div>
+        }
+
+        <!-- Notifications Tab -->
+        @if (activeTab() === 'notifications') {
+        <div class="tab-content">
+            @if (notifications().length > 0) {
+            <div class="notifications-header">
+                <button class="btn btn-secondary" (click)="markAllAsRead()">Marcar Todas como Lidas</button>
+            </div>
+            <div class="notifications-list">
+                @for (notif of notifications(); track notif.id) {
+                <div class="notification-card" [class.unread]="!notif.isRead">
+                    <div class="notif-content" (click)="markNotificationAsRead(notif.id)">
+                        <strong>{{ notif.title }}</strong>
+                        <p>{{ notif.message }}</p>
+                        <span class="notif-date">{{ formatDate(notif.createdAt) }}</span>
+                    </div>
+                    <button class="btn-remove" (click)="deleteNotification(notif.id)">×</button>
+                </div>
+                }
+            </div>
+            } @else {
+            <div class="empty-state">
+                <p>Nenhuma notificação</p>
+            </div>
+            }
+        </div>
+        } }
+    </div>
 </div>
