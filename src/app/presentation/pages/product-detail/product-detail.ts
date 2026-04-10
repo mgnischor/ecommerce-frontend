@@ -1,7 +1,11 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
 
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ProductService, ProductVariantService, CartService } from '../../../infrastructure/services';
+import {
+    ProductService,
+    ProductVariantService,
+    CartService,
+} from '../../../infrastructure/services';
 import { Product, ProductVariant } from '../../../domain/models';
 
 /**
@@ -107,7 +111,7 @@ export class ProductDetail implements OnInit {
                 imageUrl: variant?.imageUrl || product.imageUrl,
                 sku: variant?.sku || product.sku,
             },
-            this.quantity()
+            this.quantity(),
         );
 
         this.addedToCart.set(true);
