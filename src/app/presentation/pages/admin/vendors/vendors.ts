@@ -1,18 +1,18 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { VendorService } from '../../../../infrastructure/services';
 import { Vendor, VendorStatus } from '../../../../domain/models';
 
 @Component({
     selector: 'app-admin-vendors',
-    imports: [CommonModule, FormsModule],
+    imports: [FormsModule],
     templateUrl: './vendors.html',
     styleUrl: './vendors.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminVendors implements OnInit {
-    private vendorService = inject(VendorService);
+    private readonly vendorService = inject(VendorService);
 
     vendors = signal<Vendor[]>([]);
     isLoading = signal(false);
