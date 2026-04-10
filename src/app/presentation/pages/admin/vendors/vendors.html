@@ -3,9 +3,10 @@
         <h1 class="page-title">Gerenciar Fornecedores</h1>
 
         @if (successMessage()) {
-        <div class="success-message">{{ successMessage() }}</div>
-        } @if (error()) {
-        <div class="error-message">{{ error() }}</div>
+            <div class="success-message">{{ successMessage() }}</div>
+        }
+        @if (error()) {
+            <div class="error-message">{{ error() }}</div>
         }
 
         <div class="toolbar">
@@ -30,132 +31,157 @@
         </div>
 
         @if (isLoading()) {
-        <div class="loading-container">
-            <div class="loading-spinner"></div>
-            <p>Carregando...</p>
-        </div>
-        } @if (!isLoading() && !error()) { @if (vendors().length > 0) {
-        <div class="table-container">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Telefone</th>
-                        <th>Status</th>
-                        <th>Avaliação</th>
-                        <th>Vendas</th>
-                        <th>Destaque</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (vendor of vendors(); track vendor.id) {
-                    <tr>
-                        <td><strong>{{ vendor.name }}</strong></td>
-                        <td>{{ vendor.email }}</td>
-                        <td>{{ vendor.phoneNumber ?? '—' }}</td>
-                        <td>
-                            <span class="status-badge" [class]="getStatusClass(vendor.status)">
-                                {{ getStatusLabel(vendor.status) }}
-                            </span>
-                        </td>
-                        <td>{{ vendor.rating != null ? vendor.rating + '/5' : '—' }}</td>
-                        <td>{{ vendor.totalSales ?? 0 }}</td>
-                        <td>{{ vendor.isFeatured ? 'Sim' : 'Não' }}</td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-
-        @if (totalPages() > 1) {
-        <div class="pagination">
-            <button class="btn btn-page" [disabled]="currentPage() === 1" (click)="onPageChange(currentPage() - 1)">
-                Anterior
-            </button>
-            <span class="page-info">Página {{ currentPage() }} de {{ totalPages() }}</span>
-            <button
-                class="btn btn-page"
-                [disabled]="currentPage() === totalPages()"
-                (click)="onPageChange(currentPage() + 1)"
-            >
-                Próxima
-            </button>
-        </div>
-        } } @else {
-        <div class="empty-state"><p>Nenhum fornecedor encontrado</p></div>
-        } } @if (showFormModal()) {
-        <div class="modal-overlay" (click)="closeFormModal()">
-            <div class="modal-content" (click)="$event.stopPropagation()">
-                <div class="modal-header">
-                    <h2>Novo Fornecedor</h2>
-                    <button class="btn-close" (click)="closeFormModal()">&times;</button>
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Carregando...</p>
+            </div>
+        }
+        @if (!isLoading() && !error()) {
+            @if (vendors().length > 0) {
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Telefone</th>
+                                <th>Status</th>
+                                <th>Avaliação</th>
+                                <th>Vendas</th>
+                                <th>Destaque</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (vendor of vendors(); track vendor.id) {
+                                <tr>
+                                    <td>
+                                        <strong>{{ vendor.name }}</strong>
+                                    </td>
+                                    <td>{{ vendor.email }}</td>
+                                    <td>{{ vendor.phoneNumber ?? '—' }}</td>
+                                    <td>
+                                        <span
+                                            class="status-badge"
+                                            [class]="getStatusClass(vendor.status)"
+                                        >
+                                            {{ getStatusLabel(vendor.status) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {{ vendor.rating != null ? vendor.rating + '/5' : '—' }}
+                                    </td>
+                                    <td>{{ vendor.totalSales ?? 0 }}</td>
+                                    <td>{{ vendor.isFeatured ? 'Sim' : 'Não' }}</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-                <div class="modal-body">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Nome</label>
-                            <input
-                                type="text"
-                                class="search-input"
-                                [ngModel]="formData().name"
-                                (ngModelChange)="updateFormField('name', $event)"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input
-                                type="email"
-                                class="search-input"
-                                [ngModel]="formData().email"
-                                (ngModelChange)="updateFormField('email', $event)"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label>Telefone</label>
-                            <input
-                                type="tel"
-                                class="search-input"
-                                [ngModel]="formData().phoneNumber"
-                                (ngModelChange)="updateFormField('phoneNumber', $event)"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label>Website</label>
-                            <input
-                                type="url"
-                                class="search-input"
-                                [ngModel]="formData().websiteUrl"
-                                (ngModelChange)="updateFormField('websiteUrl', $event)"
-                            />
-                        </div>
-                        <div class="form-group full-width">
-                            <label>Descrição</label>
-                            <textarea
-                                class="search-input"
-                                style="width: 100%; min-height: 80px"
-                                [ngModel]="formData().description"
-                                (ngModelChange)="updateFormField('description', $event)"
-                            ></textarea>
-                        </div>
-                        <div class="form-check-group">
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    [ngModel]="formData().isFeatured"
-                                    (ngModelChange)="updateFormField('isFeatured', $event)"
-                                />
-                                Destaque
-                            </label>
-                        </div>
+
+                @if (totalPages() > 1) {
+                    <div class="pagination">
+                        <button
+                            class="btn btn-page"
+                            [disabled]="currentPage() === 1"
+                            (click)="onPageChange(currentPage() - 1)"
+                        >
+                            Anterior
+                        </button>
+                        <span class="page-info"
+                            >Página {{ currentPage() }} de {{ totalPages() }}</span
+                        >
+                        <button
+                            class="btn btn-page"
+                            [disabled]="currentPage() === totalPages()"
+                            (click)="onPageChange(currentPage() + 1)"
+                        >
+                            Próxima
+                        </button>
                     </div>
-                    <div class="actions-cell" style="justify-content: flex-end; margin-top: 1rem">
-                        <button class="btn btn-secondary btn-sm" (click)="closeFormModal()">Cancelar</button>
-                        <button class="btn btn-primary btn-sm" (click)="saveVendor()">Salvar</button>
+                }
+            } @else {
+                <div class="empty-state"><p>Nenhum fornecedor encontrado</p></div>
+            }
+        }
+        @if (showFormModal()) {
+            <div class="modal-overlay" (click)="closeFormModal()">
+                <div class="modal-content" (click)="$event.stopPropagation()">
+                    <div class="modal-header">
+                        <h2>Novo Fornecedor</h2>
+                        <button class="btn-close" (click)="closeFormModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nome</label>
+                                <input
+                                    type="text"
+                                    class="search-input"
+                                    [ngModel]="formData().name"
+                                    (ngModelChange)="updateFormField('name', $event)"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input
+                                    type="email"
+                                    class="search-input"
+                                    [ngModel]="formData().email"
+                                    (ngModelChange)="updateFormField('email', $event)"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Telefone</label>
+                                <input
+                                    type="tel"
+                                    class="search-input"
+                                    [ngModel]="formData().phoneNumber"
+                                    (ngModelChange)="updateFormField('phoneNumber', $event)"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Website</label>
+                                <input
+                                    type="url"
+                                    class="search-input"
+                                    [ngModel]="formData().websiteUrl"
+                                    (ngModelChange)="updateFormField('websiteUrl', $event)"
+                                />
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Descrição</label>
+                                <textarea
+                                    class="search-input"
+                                    style="width: 100%; min-height: 80px"
+                                    [ngModel]="formData().description"
+                                    (ngModelChange)="updateFormField('description', $event)"
+                                ></textarea>
+                            </div>
+                            <div class="form-check-group">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        [ngModel]="formData().isFeatured"
+                                        (ngModelChange)="updateFormField('isFeatured', $event)"
+                                    />
+                                    Destaque
+                                </label>
+                            </div>
+                        </div>
+                        <div
+                            class="actions-cell"
+                            style="justify-content: flex-end; margin-top: 1rem"
+                        >
+                            <button class="btn btn-secondary btn-sm" (click)="closeFormModal()">
+                                Cancelar
+                            </button>
+                            <button class="btn btn-primary btn-sm" (click)="saveVendor()">
+                                Salvar
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         }
     </div>
 </div>
