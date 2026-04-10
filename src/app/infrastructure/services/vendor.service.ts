@@ -12,7 +12,9 @@ export class VendorService {
     private readonly baseUrl = `${environment.apiUrl}/vendors`;
 
     getVendors(pageNumber = 1, pageSize = 10): Observable<PaginatedVendors> {
-        const params = new HttpParams().set('pageNumber', pageNumber.toString()).set('pageSize', pageSize.toString());
+        const params = new HttpParams()
+            .set('pageNumber', pageNumber.toString())
+            .set('pageSize', pageSize.toString());
 
         return this.http.get<PaginatedVendors>(this.baseUrl, { params });
     }
