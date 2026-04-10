@@ -112,7 +112,7 @@ export class Account implements OnInit {
                                   lastName: lastName!,
                                   phoneNumber: phoneNumber || undefined,
                               }
-                            : u
+                            : u,
                     );
                 },
                 error: () => {
@@ -125,7 +125,9 @@ export class Account implements OnInit {
     markNotificationAsRead(id: string) {
         this.notificationService.markAsRead(id).subscribe({
             next: () => {
-                this.notifications.update((notifs) => notifs.map((n) => (n.id === id ? { ...n, isRead: true } : n)));
+                this.notifications.update((notifs) =>
+                    notifs.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
+                );
             },
         });
     }
