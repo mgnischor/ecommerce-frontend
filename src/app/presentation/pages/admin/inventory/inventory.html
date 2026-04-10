@@ -3,9 +3,10 @@
         <h1 class="page-title">Gerenciar Inventário</h1>
 
         @if (successMessage()) {
-        <div class="success-message">{{ successMessage() }}</div>
-        } @if (error()) {
-        <div class="error-message">{{ error() }}</div>
+            <div class="success-message">{{ successMessage() }}</div>
+        }
+        @if (error()) {
+            <div class="error-message">{{ error() }}</div>
         }
 
         <div class="toolbar">
@@ -28,140 +29,156 @@
         </div>
 
         @if (isLoading()) {
-        <div class="loading-container">
-            <div class="loading-spinner"></div>
-            <p>Carregando...</p>
-        </div>
-        } @if (!isLoading() && !error()) { @if (transactions().length > 0) {
-        <div class="table-container">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Produto</th>
-                        <th>Tipo</th>
-                        <th>Quantidade</th>
-                        <th>Origem</th>
-                        <th>Destino</th>
-                        <th>Referência</th>
-                        <th>Data</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (tx of transactions(); track tx.id) {
-                    <tr>
-                        <td><strong>{{ tx.productId | slice:0:8 }}...</strong></td>
-                        <td>
-                            <span class="status-badge" [class]="getTypeClass(tx.transactionType)">
-                                {{ getTypeLabel(tx.transactionType) }}
-                            </span>
-                        </td>
-                        <td>{{ tx.quantity }}</td>
-                        <td>{{ tx.fromLocation ?? '—' }}</td>
-                        <td>{{ tx.toLocation ?? '—' }}</td>
-                        <td>{{ tx.referenceNumber ?? '—' }}</td>
-                        <td>{{ formatDate(tx.createdAt) }}</td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        } @else {
-        <div class="empty-state"><p>Nenhuma transação de inventário encontrada</p></div>
-        } } @if (showCreateModal()) {
-        <div class="modal-overlay" (click)="closeCreateModal()">
-            <div class="modal-content" (click)="$event.stopPropagation()">
-                <div class="modal-header">
-                    <h2>Nova Transação de Inventário</h2>
-                    <button class="btn-close" (click)="closeCreateModal()">&times;</button>
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Carregando...</p>
+            </div>
+        }
+        @if (!isLoading() && !error()) {
+            @if (transactions().length > 0) {
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Tipo</th>
+                                <th>Quantidade</th>
+                                <th>Origem</th>
+                                <th>Destino</th>
+                                <th>Referência</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (tx of transactions(); track tx.id) {
+                                <tr>
+                                    <td>
+                                        <strong>{{ tx.productId | slice: 0 : 8 }}...</strong>
+                                    </td>
+                                    <td>
+                                        <span
+                                            class="status-badge"
+                                            [class]="getTypeClass(tx.transactionType)"
+                                        >
+                                            {{ getTypeLabel(tx.transactionType) }}
+                                        </span>
+                                    </td>
+                                    <td>{{ tx.quantity }}</td>
+                                    <td>{{ tx.fromLocation ?? '—' }}</td>
+                                    <td>{{ tx.toLocation ?? '—' }}</td>
+                                    <td>{{ tx.referenceNumber ?? '—' }}</td>
+                                    <td>{{ formatDate(tx.createdAt) }}</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-                <div class="modal-body">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>ID do Produto</label>
-                            <input
-                                type="text"
-                                class="search-input"
-                                [ngModel]="formData().productId"
-                                (ngModelChange)="updateFormField('productId', $event)"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label>ID da Variante (opcional)</label>
-                            <input
-                                type="text"
-                                class="search-input"
-                                [ngModel]="formData().productVariantId"
-                                (ngModelChange)="updateFormField('productVariantId', $event)"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label>Tipo</label>
-                            <select
-                                class="search-input"
-                                [ngModel]="formData().transactionType"
-                                (ngModelChange)="updateFormField('transactionType', +$event)"
-                            >
-                                <option [value]="0">Compra</option>
-                                <option [value]="1">Venda</option>
-                                <option [value]="2">Ajuste</option>
-                                <option [value]="3">Devolução</option>
-                                <option [value]="4">Transferência</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Quantidade</label>
-                            <input
-                                type="number"
-                                class="search-input"
-                                min="1"
-                                [ngModel]="formData().quantity"
-                                (ngModelChange)="updateFormField('quantity', $event)"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label>Local de Origem</label>
-                            <input
-                                type="text"
-                                class="search-input"
-                                [ngModel]="formData().fromLocation"
-                                (ngModelChange)="updateFormField('fromLocation', $event)"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label>Local de Destino</label>
-                            <input
-                                type="text"
-                                class="search-input"
-                                [ngModel]="formData().toLocation"
-                                (ngModelChange)="updateFormField('toLocation', $event)"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label>Nº de Referência</label>
-                            <input
-                                type="text"
-                                class="search-input"
-                                [ngModel]="formData().referenceNumber"
-                                (ngModelChange)="updateFormField('referenceNumber', $event)"
-                            />
-                        </div>
-                        <div class="form-group full-width">
-                            <label>Observações</label>
-                            <textarea
-                                class="search-input"
-                                style="width: 100%; min-height: 80px"
-                                [ngModel]="formData().notes"
-                                (ngModelChange)="updateFormField('notes', $event)"
-                            ></textarea>
-                        </div>
+            } @else {
+                <div class="empty-state"><p>Nenhuma transação de inventário encontrada</p></div>
+            }
+        }
+        @if (showCreateModal()) {
+            <div class="modal-overlay" (click)="closeCreateModal()">
+                <div class="modal-content" (click)="$event.stopPropagation()">
+                    <div class="modal-header">
+                        <h2>Nova Transação de Inventário</h2>
+                        <button class="btn-close" (click)="closeCreateModal()">&times;</button>
                     </div>
-                    <div class="actions-cell" style="justify-content: flex-end; margin-top: 1rem">
-                        <button class="btn btn-secondary btn-sm" (click)="closeCreateModal()">Cancelar</button>
-                        <button class="btn btn-primary btn-sm" (click)="createTransaction()">Registrar</button>
+                    <div class="modal-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>ID do Produto</label>
+                                <input
+                                    type="text"
+                                    class="search-input"
+                                    [ngModel]="formData().productId"
+                                    (ngModelChange)="updateFormField('productId', $event)"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>ID da Variante (opcional)</label>
+                                <input
+                                    type="text"
+                                    class="search-input"
+                                    [ngModel]="formData().productVariantId"
+                                    (ngModelChange)="updateFormField('productVariantId', $event)"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo</label>
+                                <select
+                                    class="search-input"
+                                    [ngModel]="formData().transactionType"
+                                    (ngModelChange)="updateFormField('transactionType', +$event)"
+                                >
+                                    <option [value]="0">Compra</option>
+                                    <option [value]="1">Venda</option>
+                                    <option [value]="2">Ajuste</option>
+                                    <option [value]="3">Devolução</option>
+                                    <option [value]="4">Transferência</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Quantidade</label>
+                                <input
+                                    type="number"
+                                    class="search-input"
+                                    min="1"
+                                    [ngModel]="formData().quantity"
+                                    (ngModelChange)="updateFormField('quantity', $event)"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Local de Origem</label>
+                                <input
+                                    type="text"
+                                    class="search-input"
+                                    [ngModel]="formData().fromLocation"
+                                    (ngModelChange)="updateFormField('fromLocation', $event)"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Local de Destino</label>
+                                <input
+                                    type="text"
+                                    class="search-input"
+                                    [ngModel]="formData().toLocation"
+                                    (ngModelChange)="updateFormField('toLocation', $event)"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Nº de Referência</label>
+                                <input
+                                    type="text"
+                                    class="search-input"
+                                    [ngModel]="formData().referenceNumber"
+                                    (ngModelChange)="updateFormField('referenceNumber', $event)"
+                                />
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Observações</label>
+                                <textarea
+                                    class="search-input"
+                                    style="width: 100%; min-height: 80px"
+                                    [ngModel]="formData().notes"
+                                    (ngModelChange)="updateFormField('notes', $event)"
+                                ></textarea>
+                            </div>
+                        </div>
+                        <div
+                            class="actions-cell"
+                            style="justify-content: flex-end; margin-top: 1rem"
+                        >
+                            <button class="btn btn-secondary btn-sm" (click)="closeCreateModal()">
+                                Cancelar
+                            </button>
+                            <button class="btn btn-primary btn-sm" (click)="createTransaction()">
+                                Registrar
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         }
     </div>
 </div>
