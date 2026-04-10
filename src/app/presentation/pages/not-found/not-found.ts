@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 /**
  * 404 Not Found page component.
@@ -7,7 +6,7 @@ import { CommonModule } from '@angular/common';
  */
 @Component({
     selector: 'app-not-found',
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './not-found.html',
     styleUrl: './not-found.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
