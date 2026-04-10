@@ -19,7 +19,9 @@ export class FinanceService {
     private readonly baseUrl = `${environment.apiUrl}/finance`;
 
     getTransactions(pageNumber = 1, pageSize = 10): Observable<FinancialTransaction[]> {
-        const params = new HttpParams().set('pageNumber', pageNumber.toString()).set('pageSize', pageSize.toString());
+        const params = new HttpParams()
+            .set('pageNumber', pageNumber.toString())
+            .set('pageSize', pageSize.toString());
         return this.http.get<FinancialTransaction[]>(`${this.baseUrl}/transactions`, { params });
     }
 
@@ -27,9 +29,14 @@ export class FinanceService {
         return this.http.get<FinancialTransaction>(`${this.baseUrl}/transactions/${id}`);
     }
 
-    getTransactionsByPeriod(startDate: string, endDate: string): Observable<FinancialTransaction[]> {
+    getTransactionsByPeriod(
+        startDate: string,
+        endDate: string,
+    ): Observable<FinancialTransaction[]> {
         const params = new HttpParams().set('startDate', startDate).set('endDate', endDate);
-        return this.http.get<FinancialTransaction[]>(`${this.baseUrl}/transactions/period`, { params });
+        return this.http.get<FinancialTransaction[]>(`${this.baseUrl}/transactions/period`, {
+            params,
+        });
     }
 
     getUnreconciledTransactions(): Observable<FinancialTransaction[]> {
@@ -37,7 +44,9 @@ export class FinanceService {
     }
 
     getTransactionsByOrderId(orderId: string): Observable<FinancialTransaction[]> {
-        return this.http.get<FinancialTransaction[]>(`${this.baseUrl}/transactions/order/${orderId}`);
+        return this.http.get<FinancialTransaction[]>(
+            `${this.baseUrl}/transactions/order/${orderId}`,
+        );
     }
 
     getCashFlowReport(startDate: string, endDate: string): Observable<CashFlowReport> {
