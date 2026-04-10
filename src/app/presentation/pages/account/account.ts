@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService, UserService, NotificationService } from '../../../infrastructure/services';
 import { User, Notification } from '../../../domain/models';
 
@@ -11,16 +11,16 @@ import { User, Notification } from '../../../domain/models';
  */
 @Component({
     selector: 'app-account',
-    imports: [CommonModule, ReactiveFormsModule, RouterLink],
+    imports: [ReactiveFormsModule],
     templateUrl: './account.html',
     styleUrl: './account.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Account implements OnInit {
-    private authService = inject(AuthService);
-    private userService = inject(UserService);
-    private notificationService = inject(NotificationService);
-    private router = inject(Router);
+    private readonly authService = inject(AuthService);
+    private readonly userService = inject(UserService);
+    private readonly notificationService = inject(NotificationService);
+    private readonly router = inject(Router);
 
     user = signal<User | null>(null);
     notifications = signal<Notification[]>([]);
