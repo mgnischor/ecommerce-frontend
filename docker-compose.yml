@@ -1,5 +1,71 @@
 services:
-    # ── Frontend (Angular + nginx) ───────────────────────────────────────────
+    # ── PostgreSQL Database ───────────────────────────────────────────────────
+    postgres:
+        image: postgres:16-alpine
+        container_name: ecommerce-postgres
+        environment:
+            POSTGRES_USER: ecommerce
+            POSTGRES_PASSWORD: ecommerce
+            POSTGRES_DB: ecommerce
+        ports:
+            - '5432:5432'
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        networks:
+            - ecommerce-net
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U ecommerce']
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        restart: unless-stopped
+
+    # ── Jaeger - Distributed Tracing ──────────────────────────────────────────
+    jaeger:
+        image: jaegertracing/all-in-one:latest
+        container_name: ecommerce-jaeger
+        environment:
+            - COLLECTOR_OTLP_ENABLED=true
+            - LOG_LEVEL=debug
+        ports:
+            - '16686:16686' # Jaeger UI
+            - '4317:4317'   # OTLP gRPC
+            - '4318:4318'   # OTLP HTTP
+            - '14250:14250' # Jaeger gRPC
+            - '14268:14268' # Jaeger HTTP
+        networks:
+            - ecommerce-net
+        restart: unless-stopped
+
+    # ── Backend (.NET API) ────────────────────────────────────────────────────
+    ecommerce-backend:
+        build:
+            context: ../ecommerce-backend
+            dockerfile: Dockerfile
+            target: production
+            args:
+                BUILD_DEVELOPMENT: 0
+        container_name: ecommerce-backend
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://+:80
+            - ASPNETCORE_HTTP_PORTS=80
+            - ConnectionStrings__DefaultConnection=Host=postgres;Database=ecommerce;Username=ecommerce;Password=ecommerce;Port=5432
+            - OpenTelemetry__ServiceName=ECommerce.Backend
+            - OpenTelemetry__EnableConsoleExporter=false
+            - OpenTelemetry__OtlpEndpoint=http://jaeger:4317
+        ports:
+            - '5049:80' # Exposto para acesso direto/debug; nginx usa a rota interna
+        depends_on:
+            postgres:
+                condition: service_healthy
+            jaeger:
+                condition: service_started
+        networks:
+            - ecommerce-net
+        restart: unless-stopped
+
+    # ── Frontend (Angular + nginx) ────────────────────────────────────────────
     ecommerce-frontend:
         build:
             context: .
@@ -14,23 +80,11 @@ services:
             - ecommerce-net
         restart: unless-stopped
 
-    # ── Backend (ecommerce-backend) ──────────────────────────────────────────
-    ecommerce-backend:
-        build:
-            context: ../ecommerce-backend
-            dockerfile: Dockerfile
-        container_name: ecommerce-backend
-        ports:
-            - '5049:5049'
-        environment:
-            - ASPNETCORE_ENVIRONMENT=Production
-            - ASPNETCORE_URLS=http://+:5049
-            # Add database connection strings and other secrets here,
-            # or reference an .env file with env_file: .env
-        networks:
-            - ecommerce-net
-        restart: unless-stopped
+volumes:
+    postgres-data:
+        name: ecommerce-postgres-data
 
 networks:
     ecommerce-net:
+        name: ecommerce-net
         driver: bridge
