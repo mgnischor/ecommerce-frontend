@@ -2,7 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Refund, PaginatedRefunds, CreateRefundRequest, RejectRefundRequest } from '../../domain/models';
+import {
+    Refund,
+    PaginatedRefunds,
+    CreateRefundRequest,
+    RejectRefundRequest,
+} from '../../domain/models';
 
 @Injectable({
     providedIn: 'root',
@@ -12,7 +17,9 @@ export class RefundService {
     private readonly baseUrl = `${environment.apiUrl}/refunds`;
 
     getRefunds(pageNumber = 1, pageSize = 10): Observable<PaginatedRefunds> {
-        const params = new HttpParams().set('pageNumber', pageNumber.toString()).set('pageSize', pageSize.toString());
+        const params = new HttpParams()
+            .set('pageNumber', pageNumber.toString())
+            .set('pageSize', pageSize.toString());
 
         return this.http.get<PaginatedRefunds>(this.baseUrl, { params });
     }
