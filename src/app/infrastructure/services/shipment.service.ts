@@ -12,7 +12,9 @@ export class ShipmentService {
     private readonly baseUrl = `${environment.apiUrl}/shipments`;
 
     getShipments(pageNumber = 1, pageSize = 10): Observable<PaginatedShipments> {
-        const params = new HttpParams().set('pageNumber', pageNumber.toString()).set('pageSize', pageSize.toString());
+        const params = new HttpParams()
+            .set('pageNumber', pageNumber.toString())
+            .set('pageSize', pageSize.toString());
 
         return this.http.get<PaginatedShipments>(this.baseUrl, { params });
     }
