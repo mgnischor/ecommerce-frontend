@@ -55,7 +55,11 @@
                         <div class="product-card">
                             <a [routerLink]="['/products', product.id]">
                                 @if (product.imageUrl) {
-                                    <img [src]="product.imageUrl" [alt]="product.name" class="product-image" />
+                                    <img
+                                        [src]="product.imageUrl"
+                                        [alt]="product.name"
+                                        class="product-image"
+                                    />
                                 } @else {
                                     <div class="product-image-placeholder">
                                         <span>Sem imagem</span>
@@ -68,10 +72,16 @@
                                     }
                                     <div class="product-price">
                                         @if (product.isOnSale && product.salePrice) {
-                                            <span class="original-price">{{ formatPrice(product.price) }}</span>
-                                            <span class="sale-price">{{ formatPrice(product.salePrice) }}</span>
+                                            <span class="original-price">{{
+                                                formatPrice(product.price)
+                                            }}</span>
+                                            <span class="sale-price">{{
+                                                formatPrice(product.salePrice)
+                                            }}</span>
                                         } @else {
-                                            <span class="current-price">{{ formatPrice(product.price) }}</span>
+                                            <span class="current-price">{{
+                                                formatPrice(product.price)
+                                            }}</span>
                                         }
                                     </div>
                                 </div>
@@ -97,7 +107,11 @@
                             <div class="sale-badge">PROMOÇÃO</div>
                             <a [routerLink]="['/products', product.id]">
                                 @if (product.imageUrl) {
-                                    <img [src]="product.imageUrl" [alt]="product.name" class="product-image" />
+                                    <img
+                                        [src]="product.imageUrl"
+                                        [alt]="product.name"
+                                        class="product-image"
+                                    />
                                 } @else {
                                     <div class="product-image-placeholder">
                                         <span>Sem imagem</span>
@@ -106,8 +120,12 @@
                                 <div class="product-info">
                                     <h3 class="product-name">{{ product.name }}</h3>
                                     <div class="product-price">
-                                        <span class="original-price">{{ formatPrice(product.price) }}</span>
-                                        <span class="sale-price">{{ formatPrice(product.salePrice!) }}</span>
+                                        <span class="original-price">{{
+                                            formatPrice(product.price)
+                                        }}</span>
+                                        <span class="sale-price">{{
+                                            formatPrice(product.salePrice!)
+                                        }}</span>
                                     </div>
                                 </div>
                             </a>
