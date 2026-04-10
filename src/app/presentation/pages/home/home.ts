@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 import { ProductService, PromotionService } from '../../../infrastructure/services';
 import { Product, Promotion } from '../../../domain/models';
@@ -10,14 +10,14 @@ import { Product, Promotion } from '../../../domain/models';
  */
 @Component({
     selector: 'app-home',
-    imports: [CommonModule, RouterLink],
+    imports: [RouterLink],
     templateUrl: './home.html',
     styleUrl: './home.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Home implements OnInit {
-    private productService = inject(ProductService);
-    private promotionService = inject(PromotionService);
+    private readonly productService = inject(ProductService);
+    private readonly promotionService = inject(PromotionService);
 
     featuredProducts = signal<Product[]>([]);
     onSaleProducts = signal<Product[]>([]);
