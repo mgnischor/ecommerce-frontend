@@ -18,6 +18,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
             // Retornar o erro para ser tratado pelos componentes
             return throwError(() => error);
-        })
+        }),
     );
 };
