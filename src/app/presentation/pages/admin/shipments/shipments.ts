@@ -1,18 +1,18 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { ShipmentService } from '../../../../infrastructure/services';
 import { Shipment, ShipmentStatus } from '../../../../domain/models';
 
 @Component({
     selector: 'app-admin-shipments',
-    imports: [CommonModule, FormsModule],
+    imports: [FormsModule],
     templateUrl: './shipments.html',
     styleUrl: './shipments.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminShipments implements OnInit {
-    private shipmentService = inject(ShipmentService);
+    private readonly shipmentService = inject(ShipmentService);
 
     shipments = signal<Shipment[]>([]);
     isLoading = signal(false);
