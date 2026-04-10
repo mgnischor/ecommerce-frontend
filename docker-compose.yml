@@ -6,7 +6,7 @@ services:
             dockerfile: Dockerfile
         container_name: ecommerce-frontend
         ports:
-            - '80:80'
+            - '8080:80'
         depends_on:
             ecommerce-backend:
                 condition: service_started
