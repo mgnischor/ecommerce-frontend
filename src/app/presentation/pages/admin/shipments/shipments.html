@@ -16,58 +16,74 @@
         </div>
 
         @if (isLoading()) {
-        <div class="loading-container">
-            <div class="loading-spinner"></div>
-            <p>Carregando...</p>
-        </div>
-        } @if (error()) {
-        <div class="error-message">{{ error() }}</div>
-        } @if (!isLoading() && !error()) { @if (shipments().length > 0) {
-        <div class="table-container">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Rastreamento</th>
-                        <th>Transportadora</th>
-                        <th>Status</th>
-                        <th>Data de Envio</th>
-                        <th>Previsão</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (shipment of shipments(); track shipment.id) {
-                    <tr>
-                        <td><strong>{{ shipment.trackingNumber }}</strong></td>
-                        <td>{{ shipment.carrier }}</td>
-                        <td>
-                            <span class="status-badge" [class]="getStatusClass(shipment.status)">
-                                {{ getStatusLabel(shipment.status) }}
-                            </span>
-                        </td>
-                        <td>{{ formatDate(shipment.shippedDate) }}</td>
-                        <td>{{ formatDate(shipment.estimatedDeliveryDate) }}</td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Carregando...</p>
+            </div>
+        }
+        @if (error()) {
+            <div class="error-message">{{ error() }}</div>
+        }
+        @if (!isLoading() && !error()) {
+            @if (shipments().length > 0) {
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Rastreamento</th>
+                                <th>Transportadora</th>
+                                <th>Status</th>
+                                <th>Data de Envio</th>
+                                <th>Previsão</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (shipment of shipments(); track shipment.id) {
+                                <tr>
+                                    <td>
+                                        <strong>{{ shipment.trackingNumber }}</strong>
+                                    </td>
+                                    <td>{{ shipment.carrier }}</td>
+                                    <td>
+                                        <span
+                                            class="status-badge"
+                                            [class]="getStatusClass(shipment.status)"
+                                        >
+                                            {{ getStatusLabel(shipment.status) }}
+                                        </span>
+                                    </td>
+                                    <td>{{ formatDate(shipment.shippedDate) }}</td>
+                                    <td>{{ formatDate(shipment.estimatedDeliveryDate) }}</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
 
-        @if (totalPages() > 1) {
-        <div class="pagination">
-            <button class="btn btn-page" [disabled]="currentPage() === 1" (click)="onPageChange(currentPage() - 1)">
-                Anterior
-            </button>
-            <span class="page-info">Página {{ currentPage() }} de {{ totalPages() }}</span>
-            <button
-                class="btn btn-page"
-                [disabled]="currentPage() === totalPages()"
-                (click)="onPageChange(currentPage() + 1)"
-            >
-                Próxima
-            </button>
-        </div>
-        } } @else {
-        <div class="empty-state"><p>Nenhum envio encontrado</p></div>
-        } }
+                @if (totalPages() > 1) {
+                    <div class="pagination">
+                        <button
+                            class="btn btn-page"
+                            [disabled]="currentPage() === 1"
+                            (click)="onPageChange(currentPage() - 1)"
+                        >
+                            Anterior
+                        </button>
+                        <span class="page-info"
+                            >Página {{ currentPage() }} de {{ totalPages() }}</span
+                        >
+                        <button
+                            class="btn btn-page"
+                            [disabled]="currentPage() === totalPages()"
+                            (click)="onPageChange(currentPage() + 1)"
+                        >
+                            Próxima
+                        </button>
+                    </div>
+                }
+            } @else {
+                <div class="empty-state"><p>Nenhum envio encontrado</p></div>
+            }
+        }
     </div>
 </div>
