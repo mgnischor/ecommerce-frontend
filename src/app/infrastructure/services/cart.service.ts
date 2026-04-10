@@ -21,12 +21,14 @@ export class CartService {
     // Computed values
     cartItems = this.items.asReadonly();
     itemCount = computed(() => this.items().reduce((total, item) => total + item.quantity, 0));
-    subtotal = computed(() => this.items().reduce((total, item) => total + item.price * item.quantity, 0));
+    subtotal = computed(() =>
+        this.items().reduce((total, item) => total + item.price * item.quantity, 0),
+    );
 
     addItem(item: Omit<CartItem, 'quantity'>, quantity = 1) {
         const currentItems = this.items();
         const existingItemIndex = currentItems.findIndex(
-            (i) => i.productId === item.productId && i.productVariantId === item.productVariantId
+            (i) => i.productId === item.productId && i.productVariantId === item.productVariantId,
         );
 
         if (existingItemIndex >= 0) {
@@ -66,7 +68,7 @@ export class CartService {
     removeItem(productId: string, productVariantId?: string) {
         const currentItems = this.items();
         const filteredItems = currentItems.filter(
-            (item) => !(item.productId === productId && item.productVariantId === productVariantId)
+            (item) => !(item.productId === productId && item.productVariantId === productVariantId),
         );
 
         this.items.set(filteredItems);
