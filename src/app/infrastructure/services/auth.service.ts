@@ -30,7 +30,7 @@ export class AuthService {
                         userId: response.userId,
                     });
                 }
-            })
+            }),
         );
     }
 
