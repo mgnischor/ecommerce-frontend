@@ -19,7 +19,11 @@
                 <label>Categoria:</label>
                 <select
                     [value]="selectedCategory() ?? ''"
-                    (change)="onCategoryChange($any($event.target).value ? +$any($event.target).value : null)"
+                    (change)="
+                        onCategoryChange(
+                            $any($event.target).value ? +$any($event.target).value : null
+                        )
+                    "
                     class="category-select"
                 >
                     <option value="">Todas as Categorias</option>
@@ -61,7 +65,11 @@
                             }
                             <a [routerLink]="['/products', product.id]">
                                 @if (product.imageUrl) {
-                                    <img [src]="product.imageUrl" [alt]="product.name" class="product-image" />
+                                    <img
+                                        [src]="product.imageUrl"
+                                        [alt]="product.name"
+                                        class="product-image"
+                                    />
                                 } @else {
                                     <div class="product-image-placeholder">
                                         <span>Sem imagem</span>
@@ -75,16 +83,24 @@
                                     <div class="product-footer">
                                         <div class="product-price">
                                             @if (product.isOnSale && product.salePrice) {
-                                                <span class="original-price">{{ formatPrice(product.price) }}</span>
-                                                <span class="sale-price">{{ formatPrice(product.salePrice) }}</span>
+                                                <span class="original-price">{{
+                                                    formatPrice(product.price)
+                                                }}</span>
+                                                <span class="sale-price">{{
+                                                    formatPrice(product.salePrice)
+                                                }}</span>
                                             } @else {
-                                                <span class="current-price">{{ formatPrice(product.price) }}</span>
+                                                <span class="current-price">{{
+                                                    formatPrice(product.price)
+                                                }}</span>
                                             }
                                         </div>
                                         @if (product.stockQuantity <= 0) {
                                             <span class="stock-badge out-of-stock">Esgotado</span>
                                         } @else if (product.stockQuantity < 10) {
-                                            <span class="stock-badge low-stock">Últimas unidades</span>
+                                            <span class="stock-badge low-stock"
+                                                >Últimas unidades</span
+                                            >
                                         }
                                     </div>
                                 </div>
@@ -127,7 +143,9 @@
                 <div class="empty-state">
                     <p>Nenhum produto encontrado</p>
                     @if (searchTerm() || selectedCategory() !== null) {
-                        <button class="btn btn-primary" (click)="clearFilters()">Ver Todos os Produtos</button>
+                        <button class="btn btn-primary" (click)="clearFilters()">
+                            Ver Todos os Produtos
+                        </button>
                     }
                 </div>
             }
