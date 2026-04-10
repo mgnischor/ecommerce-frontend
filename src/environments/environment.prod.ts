@@ -1,4 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://localhost:5049/api/v1',
+    // Relative URL — nginx proxies /api/* to the backend container
+    apiUrl: '/api/v1',
 };

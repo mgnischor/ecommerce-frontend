@@ -1,36 +1,36 @@
 services:
-  # ── Frontend (Angular + nginx) ───────────────────────────────────────────
-  ecommerce-frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: ecommerce-frontend
-    ports:
-      - "80:80"
-    depends_on:
-      ecommerce-backend:
-        condition: service_started
-    networks:
-      - ecommerce-net
-    restart: unless-stopped
+    # ── Frontend (Angular + nginx) ───────────────────────────────────────────
+    ecommerce-frontend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: ecommerce-frontend
+        ports:
+            - '80:80'
+        depends_on:
+            ecommerce-backend:
+                condition: service_started
+        networks:
+            - ecommerce-net
+        restart: unless-stopped
 
-  # ── Backend (ecommerce-backend) ──────────────────────────────────────────
-  ecommerce-backend:
-    build:
-      context: ../ecommerce-backend
-      dockerfile: Dockerfile
-    container_name: ecommerce-backend
-    ports:
-      - "5049:5049"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:5049
-      # Add database connection strings and other secrets here,
-      # or reference an .env file with env_file: .env
-    networks:
-      - ecommerce-net
-    restart: unless-stopped
+    # ── Backend (ecommerce-backend) ──────────────────────────────────────────
+    ecommerce-backend:
+        build:
+            context: ../ecommerce-backend
+            dockerfile: Dockerfile
+        container_name: ecommerce-backend
+        ports:
+            - '5049:5049'
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://+:5049
+            # Add database connection strings and other secrets here,
+            # or reference an .env file with env_file: .env
+        networks:
+            - ecommerce-net
+        restart: unless-stopped
 
 networks:
-  ecommerce-net:
-    driver: bridge
+    ecommerce-net:
+        driver: bridge
