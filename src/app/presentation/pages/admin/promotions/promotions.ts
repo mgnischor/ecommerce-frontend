@@ -1,18 +1,18 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { PromotionService } from '../../../../infrastructure/services';
 import { Promotion, PromotionType } from '../../../../domain/models';
 
 @Component({
     selector: 'app-admin-promotions',
-    imports: [CommonModule, FormsModule],
+    imports: [FormsModule],
     templateUrl: './promotions.html',
     styleUrl: './promotions.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminPromotions implements OnInit {
-    private promotionService = inject(PromotionService);
+    private readonly promotionService = inject(PromotionService);
 
     promotions = signal<Promotion[]>([]);
     isLoading = signal(false);
