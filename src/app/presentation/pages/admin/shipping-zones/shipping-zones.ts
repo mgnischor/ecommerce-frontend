@@ -1,18 +1,18 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { ShippingZoneService } from '../../../../infrastructure/services';
 import { ShippingZone } from '../../../../domain/models';
 
 @Component({
     selector: 'app-admin-shipping-zones',
-    imports: [CommonModule, FormsModule],
+    imports: [FormsModule],
     templateUrl: './shipping-zones.html',
     styleUrl: './shipping-zones.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminShippingZones implements OnInit {
-    private shippingZoneService = inject(ShippingZoneService);
+    private readonly shippingZoneService = inject(ShippingZoneService);
 
     zones = signal<ShippingZone[]>([]);
     isLoading = signal(false);
