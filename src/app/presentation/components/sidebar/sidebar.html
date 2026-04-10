@@ -1,6 +1,6 @@
 <aside class="app-sidebar">
     <div class="sidebar-content p-3">
-        <h5 class="sidebar-title mb-3">Navegação</h5>
+        <h5 class="sidebar-title mb-3">{{ 'sidebar.navigation' | translate }}</h5>
         <nav class="nav flex-column" aria-label="Main navigation">
             @for (item of items(); track item.path) {
                 <a
@@ -18,15 +18,15 @@
         <hr class="my-4" />
 
         <div class="sidebar-section">
-            <h6 class="sidebar-subtitle mb-3">Conta</h6>
+            <h6 class="sidebar-subtitle mb-3">{{ 'sidebar.accountSection' | translate }}</h6>
             <nav class="nav flex-column" aria-label="Account navigation">
                 <a class="nav-link d-flex align-items-center" routerLink="/login">
                     <i class="bi bi-box-arrow-in-right me-2"></i>
-                    Login
+                    {{ 'sidebar.login' | translate }}
                 </a>
                 <a class="nav-link d-flex align-items-center" routerLink="/register">
                     <i class="bi bi-person-plus me-2"></i>
-                    Registrar
+                    {{ 'sidebar.register' | translate }}
                 </a>
             </nav>
         </div>
@@ -34,7 +34,7 @@
         <hr class="my-4" />
 
         <div class="sidebar-section">
-            <h6 class="sidebar-subtitle mb-3">Administração</h6>
+            <h6 class="sidebar-subtitle mb-3">{{ 'sidebar.admin' | translate }}</h6>
             <nav class="nav flex-column" aria-label="Admin navigation">
                 @for (item of admin(); track item.path) {
                     <a

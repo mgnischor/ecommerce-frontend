@@ -1,12 +1,14 @@
 <div class="page page-checkout">
     <div class="container">
-        <h1 class="page-title">Finalizar Compra</h1>
+        <h1 class="page-title">{{ 'checkout.title' | translate }}</h1>
 
         @if (cartService.cartItems().length === 0) {
             <div class="empty-state">
-                <h2>Carrinho vazio</h2>
-                <p>Adicione produtos antes de finalizar a compra</p>
-                <a routerLink="/products" class="btn btn-primary">Ver Produtos</a>
+                <h2>{{ 'checkout.emptyCart' | translate }}</h2>
+                <p>{{ 'checkout.emptyCartSubtitle' | translate }}</p>
+                <a routerLink="/products" class="btn btn-primary">{{
+                    'common.viewProducts' | translate
+                }}</a>
             </div>
         } @else {
             <!-- Steps Indicator -->
@@ -17,7 +19,7 @@
                     [class.completed]="currentStep() !== 'address'"
                 >
                     <span class="step-number">1</span>
-                    <span class="step-label">Endereço</span>
+                    <span class="step-label">{{ 'checkout.stepAddress' | translate }}</span>
                 </div>
                 <div class="step-line"></div>
                 <div
@@ -26,12 +28,12 @@
                     [class.completed]="currentStep() === 'review'"
                 >
                     <span class="step-number">2</span>
-                    <span class="step-label">Pagamento</span>
+                    <span class="step-label">{{ 'checkout.stepPayment' | translate }}</span>
                 </div>
                 <div class="step-line"></div>
                 <div class="step" [class.active]="currentStep() === 'review'">
                     <span class="step-number">3</span>
-                    <span class="step-label">Revisão</span>
+                    <span class="step-label">{{ 'checkout.stepReview' | translate }}</span>
                 </div>
             </div>
 
@@ -44,68 +46,84 @@
                     <!-- Step 1: Address -->
                     @if (currentStep() === 'address') {
                         <div class="card">
-                            <h2>Endereço de Entrega</h2>
+                            <h2>{{ 'checkout.shippingAddress' | translate }}</h2>
                             <form [formGroup]="addressForm" (ngSubmit)="goToPayment()">
                                 <div class="form-group">
-                                    <label for="street">Rua / Endereço</label>
+                                    <label for="street">{{ 'checkout.street' | translate }}</label>
                                     <input
                                         type="text"
                                         id="street"
                                         formControlName="street"
-                                        placeholder="Rua, número, complemento"
+                                        [placeholder]="'checkout.streetPlaceholder' | translate"
                                     />
                                     @if (
                                         addressForm.get('street')?.invalid &&
                                         addressForm.get('street')?.touched
                                     ) {
-                                        <div class="field-error">Endereço é obrigatório</div>
+                                        <div class="field-error">
+                                            {{ 'checkout.streetRequired' | translate }}
+                                        </div>
                                     }
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label for="city">Cidade</label>
+                                        <label for="city">{{ 'checkout.city' | translate }}</label>
                                         <input type="text" id="city" formControlName="city" />
                                         @if (
                                             addressForm.get('city')?.invalid &&
                                             addressForm.get('city')?.touched
                                         ) {
-                                            <div class="field-error">Cidade é obrigatória</div>
+                                            <div class="field-error">
+                                                {{ 'checkout.cityRequired' | translate }}
+                                            </div>
                                         }
                                     </div>
                                     <div class="form-group">
-                                        <label for="state">Estado</label>
+                                        <label for="state">{{
+                                            'checkout.state' | translate
+                                        }}</label>
                                         <input type="text" id="state" formControlName="state" />
                                         @if (
                                             addressForm.get('state')?.invalid &&
                                             addressForm.get('state')?.touched
                                         ) {
-                                            <div class="field-error">Estado é obrigatório</div>
+                                            <div class="field-error">
+                                                {{ 'checkout.stateRequired' | translate }}
+                                            </div>
                                         }
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label for="postalCode">CEP</label>
+                                        <label for="postalCode">{{
+                                            'checkout.postalCode' | translate
+                                        }}</label>
                                         <input
                                             type="text"
                                             id="postalCode"
                                             formControlName="postalCode"
-                                            placeholder="00000-000"
+                                            [placeholder]="
+                                                'checkout.postalCodePlaceholder' | translate
+                                            "
                                         />
                                         @if (
                                             addressForm.get('postalCode')?.invalid &&
                                             addressForm.get('postalCode')?.touched
                                         ) {
-                                            <div class="field-error">CEP é obrigatório</div>
+                                            <div class="field-error">
+                                                {{ 'checkout.postalCodeRequired' | translate }}
+                                            </div>
                                         }
                                     </div>
                                     <div class="form-group">
-                                        <label for="country">País</label>
+                                        <label for="country">{{
+                                            'checkout.country' | translate
+                                        }}</label>
                                         <input type="text" id="country" formControlName="country" />
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary">
-                                    Continuar para Pagamento
+                                    {{ 'checkout.continueToPayment' | translate }}
                                 </button>
                             </form>
                         </div>
@@ -114,7 +132,7 @@
                     <!-- Step 2: Payment -->
                     @if (currentStep() === 'payment') {
                         <div class="card">
-                            <h2>Método de Pagamento</h2>
+                            <h2>{{ 'checkout.paymentMethod' | translate }}</h2>
                             <form [formGroup]="paymentForm" (ngSubmit)="goToReview()">
                                 <div class="payment-options">
                                     @for (method of paymentMethods; track method.value) {
@@ -129,7 +147,7 @@
                                                 formControlName="paymentMethod"
                                                 [value]="method.value"
                                             />
-                                            <span>{{ method.label }}</span>
+                                            <span>{{ method.labelKey | translate }}</span>
                                         </label>
                                     }
                                 </div>
@@ -139,10 +157,10 @@
                                         class="btn btn-secondary"
                                         (click)="goBack('address')"
                                     >
-                                        Voltar
+                                        {{ 'common.back' | translate }}
                                     </button>
                                     <button type="submit" class="btn btn-primary">
-                                        Revisar Pedido
+                                        {{ 'checkout.reviewOrder' | translate }}
                                     </button>
                                 </div>
                             </form>
@@ -152,10 +170,10 @@
                     <!-- Step 3: Review -->
                     @if (currentStep() === 'review') {
                         <div class="card">
-                            <h2>Revisão do Pedido</h2>
+                            <h2>{{ 'checkout.orderReview' | translate }}</h2>
 
                             <div class="review-section">
-                                <h3>Endereço de Entrega</h3>
+                                <h3>{{ 'checkout.shippingAddress' | translate }}</h3>
                                 <p>{{ addressForm.value.street }}</p>
                                 <p>
                                     {{ addressForm.value.city }}, {{ addressForm.value.state }} -
@@ -165,12 +183,12 @@
                             </div>
 
                             <div class="review-section">
-                                <h3>Pagamento</h3>
+                                <h3>{{ 'checkout.payment' | translate }}</h3>
                                 <p>{{ getPaymentLabel(paymentForm.value.paymentMethod!) }}</p>
                             </div>
 
                             <div class="review-section">
-                                <h3>Itens</h3>
+                                <h3>{{ 'checkout.orderItems' | translate }}</h3>
                                 @for (
                                     item of cartService.cartItems();
                                     track item.productId + (item.productVariantId || '')
@@ -183,7 +201,7 @@
                             </div>
 
                             <div class="review-total">
-                                <span>Total:</span>
+                                <span>{{ 'common.total' | translate }}</span>
                                 <span>{{ formatPrice(cartService.subtotal()) }}</span>
                             </div>
 
@@ -193,7 +211,7 @@
                                     class="btn btn-secondary"
                                     (click)="goBack('payment')"
                                 >
-                                    Voltar
+                                    {{ 'common.back' | translate }}
                                 </button>
                                 <button
                                     type="button"
@@ -202,9 +220,9 @@
                                     (click)="placeOrder()"
                                 >
                                     @if (isLoading()) {
-                                        Finalizando...
+                                        {{ 'checkout.submitting' | translate }}
                                     } @else {
-                                        Finalizar Pedido
+                                        {{ 'checkout.placeOrder' | translate }}
                                     }
                                 </button>
                             </div>
@@ -215,7 +233,7 @@
                 <!-- Order Summary Sidebar -->
                 <div class="order-summary">
                     <div class="card">
-                        <h3>Resumo</h3>
+                        <h3>{{ 'checkout.summary' | translate }}</h3>
                         @for (
                             item of cartService.cartItems();
                             track item.productId + (item.productVariantId || '')
@@ -226,7 +244,7 @@
                             </div>
                         }
                         <div class="summary-total">
-                            <span>Total</span>
+                            <span>{{ 'common.total' | translate }}</span>
                             <span>{{ formatPrice(cartService.subtotal()) }}</span>
                         </div>
                     </div>

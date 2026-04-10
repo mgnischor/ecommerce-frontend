@@ -1,39 +1,37 @@
 <div class="page page-login">
     <div class="login-container">
         <div class="login-card">
-            <h1>Entrar</h1>
-            <p class="subtitle">Faça login para acessar sua conta</p>
+            <h1>{{ 'login.title' | translate }}</h1>
+            <p class="subtitle">{{ 'login.subtitle' | translate }}</p>
 
             @if (errorMessage()) {
-                <div class="error-message">
-                    {{ errorMessage() }}
-                </div>
+                <div class="error-message">{{ errorMessage() }}</div>
             }
 
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="email">{{ 'login.email' | translate }}</label>
                     <input
                         type="email"
                         id="email"
                         formControlName="email"
                         [class.invalid]="emailControl?.invalid && emailControl?.touched"
-                        placeholder="seu@email.com"
+                        [placeholder]="'login.emailPlaceholder' | translate"
                     />
                     @if (emailControl?.invalid && emailControl?.touched) {
                         <div class="field-error">
                             @if (emailControl?.hasError('required')) {
-                                Email é obrigatório
+                                {{ 'login.emailRequired' | translate }}
                             }
                             @if (emailControl?.hasError('email')) {
-                                Email inválido
+                                {{ 'login.emailInvalid' | translate }}
                             }
                         </div>
                     }
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Senha</label>
+                    <label for="password">{{ 'login.password' | translate }}</label>
                     <input
                         type="password"
                         id="password"
@@ -44,10 +42,10 @@
                     @if (passwordControl?.invalid && passwordControl?.touched) {
                         <div class="field-error">
                             @if (passwordControl?.hasError('required')) {
-                                Senha é obrigatória
+                                {{ 'login.passwordRequired' | translate }}
                             }
                             @if (passwordControl?.hasError('minlength')) {
-                                Senha deve ter no mínimo 6 caracteres
+                                {{ 'login.passwordMinLength' | translate }}
                             }
                         </div>
                     }
@@ -55,15 +53,18 @@
 
                 <button type="submit" class="btn btn-primary btn-block" [disabled]="isLoading()">
                     @if (isLoading()) {
-                        Entrando...
+                        {{ 'login.submitting' | translate }}
                     } @else {
-                        Entrar
+                        {{ 'login.submit' | translate }}
                     }
                 </button>
             </form>
 
             <div class="footer-links">
-                <p>Não tem uma conta? <a routerLink="/register">Cadastre-se</a></p>
+                <p>
+                    {{ 'login.noAccount' | translate }}
+                    <a routerLink="/register">{{ 'login.signUp' | translate }}</a>
+                </p>
             </div>
         </div>
     </div>

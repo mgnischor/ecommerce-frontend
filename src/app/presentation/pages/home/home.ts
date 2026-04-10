@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@ang
 
 import { RouterLink } from '@angular/router';
 import { ProductService, PromotionService } from '../../../infrastructure/services';
+import { TranslateService, TranslatePipe } from '../../../infrastructure/i18n';
 import { Product, Promotion } from '../../../domain/models';
 
 /**
@@ -10,7 +11,7 @@ import { Product, Promotion } from '../../../domain/models';
  */
 @Component({
     selector: 'app-home',
-    imports: [RouterLink],
+    imports: [RouterLink, TranslatePipe],
     templateUrl: './home.html',
     styleUrl: './home.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,6 +19,7 @@ import { Product, Promotion } from '../../../domain/models';
 export class Home implements OnInit {
     private readonly productService = inject(ProductService);
     private readonly promotionService = inject(PromotionService);
+    readonly t = inject(TranslateService);
 
     featuredProducts = signal<Product[]>([]);
     onSaleProducts = signal<Product[]>([]);
@@ -39,7 +41,7 @@ export class Home implements OnInit {
                 this.featuredProducts.set(products);
             },
             error: () => {
-                this.error.set('Erro ao carregar produtos em destaque');
+                this.error.set(this.t.get('home.errorLoadingProducts'));
             },
         });
 
@@ -66,9 +68,6 @@ export class Home implements OnInit {
     }
 
     formatPrice(price: number): string {
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-        }).format(price);
+        return this.t.formatPrice(price);
     }
 }

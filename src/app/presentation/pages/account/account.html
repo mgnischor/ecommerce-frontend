@@ -1,11 +1,11 @@
 <div class="page page-account">
     <div class="container">
-        <h1 class="page-title">Minha Conta</h1>
+        <h1 class="page-title">{{ 'account.title' | translate }}</h1>
 
         @if (isLoading()) {
             <div class="loading-container">
                 <div class="loading-spinner"></div>
-                <p>Carregando...</p>
+                <p>{{ 'common.loading' | translate }}</p>
             </div>
         }
         @if (!isLoading() && user()) {
@@ -16,14 +16,14 @@
                     [class.active]="activeTab() === 'profile'"
                     (click)="switchTab('profile')"
                 >
-                    Perfil
+                    {{ 'account.profile' | translate }}
                 </button>
                 <button
                     class="tab"
                     [class.active]="activeTab() === 'notifications'"
                     (click)="switchTab('notifications')"
                 >
-                    Notificações
+                    {{ 'account.notifications' | translate }}
                     @if (notifications().length > 0) {
                         <span class="badge">{{ notifications().length }}</span>
                     }
@@ -43,52 +43,58 @@
                     <form [formGroup]="profileForm" (ngSubmit)="onSaveProfile()">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="firstName">Nome</label>
+                                <label for="firstName">{{ 'account.firstName' | translate }}</label>
                                 <input type="text" id="firstName" formControlName="firstName" />
                             </div>
                             <div class="form-group">
-                                <label for="lastName">Sobrenome</label>
+                                <label for="lastName">{{ 'account.lastName' | translate }}</label>
                                 <input type="text" id="lastName" formControlName="lastName" />
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email</label>
+                            <label for="email">{{ 'account.email' | translate }}</label>
                             <input type="email" id="email" formControlName="email" />
                         </div>
 
                         <div class="form-group">
-                            <label for="phoneNumber">Telefone</label>
+                            <label for="phoneNumber">{{ 'account.phone' | translate }}</label>
                             <input
                                 type="tel"
                                 id="phoneNumber"
                                 formControlName="phoneNumber"
-                                placeholder="(11) 99999-9999"
+                                [placeholder]="'account.phonePlaceholder' | translate"
                             />
                         </div>
 
                         <div class="form-actions">
                             <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
                                 @if (isSaving()) {
-                                    Salvando...
+                                    {{ 'account.saving' | translate }}
                                 } @else {
-                                    Salvar Alterações
+                                    {{ 'account.saveChanges' | translate }}
                                 }
                             </button>
                             <button type="button" class="btn btn-danger" (click)="logout()">
-                                Sair da Conta
+                                {{ 'account.logout' | translate }}
                             </button>
                         </div>
                     </form>
 
                     <div class="account-info">
-                        <h3>Informações da Conta</h3>
+                        <h3>{{ 'account.accountInfo' | translate }}</h3>
                         <dl>
-                            <dt>Nível de Acesso:</dt>
+                            <dt>{{ 'account.accessLevel' | translate }}</dt>
                             <dd>{{ user()!.accessLevel }}</dd>
-                            <dt>Conta Ativa:</dt>
-                            <dd>{{ user()!.isActive ? 'Sim' : 'Não' }}</dd>
-                            <dt>Membro desde:</dt>
+                            <dt>{{ 'account.activeAccount' | translate }}</dt>
+                            <dd>
+                                {{
+                                    user()!.isActive
+                                        ? ('common.yes' | translate)
+                                        : ('common.no' | translate)
+                                }}
+                            </dd>
+                            <dt>{{ 'account.memberSince' | translate }}</dt>
                             <dd>{{ formatDate(user()!.createdAt) }}</dd>
                         </dl>
                     </div>
@@ -101,7 +107,7 @@
                     @if (notifications().length > 0) {
                         <div class="notifications-header">
                             <button class="btn btn-secondary" (click)="markAllAsRead()">
-                                Marcar Todas como Lidas
+                                {{ 'account.markAllRead' | translate }}
                             </button>
                         </div>
                         <div class="notifications-list">
@@ -128,7 +134,7 @@
                         </div>
                     } @else {
                         <div class="empty-state">
-                            <p>Nenhuma notificação</p>
+                            <p>{{ 'account.noNotifications' | translate }}</p>
                         </div>
                     }
                 </div>

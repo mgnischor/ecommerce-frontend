@@ -1,85 +1,84 @@
 <div class="page page-register">
     <div class="register-container">
         <div class="register-card">
-            <h1>Criar Conta</h1>
-            <p class="subtitle">Preencha os dados para criar sua conta</p>
+            <h1>{{ 'register.title' | translate }}</h1>
+            <p class="subtitle">{{ 'register.subtitle' | translate }}</p>
 
             @if (errorMessage()) {
-                <div class="error-message">
-                    {{ errorMessage() }}
-                </div>
+                <div class="error-message">{{ errorMessage() }}</div>
             }
-
             @if (successMessage()) {
-                <div class="success-message">
-                    {{ successMessage() }}
-                </div>
+                <div class="success-message">{{ successMessage() }}</div>
             }
 
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="firstName">Nome</label>
+                        <label for="firstName">{{ 'register.firstName' | translate }}</label>
                         <input
                             type="text"
                             id="firstName"
                             formControlName="firstName"
                             [class.invalid]="firstNameControl?.invalid && firstNameControl?.touched"
-                            placeholder="João"
+                            [placeholder]="'register.firstNamePlaceholder' | translate"
                         />
                         @if (firstNameControl?.invalid && firstNameControl?.touched) {
-                            <div class="field-error">Nome é obrigatório</div>
+                            <div class="field-error">
+                                {{ 'register.firstNameRequired' | translate }}
+                            </div>
                         }
                     </div>
 
                     <div class="form-group">
-                        <label for="lastName">Sobrenome</label>
+                        <label for="lastName">{{ 'register.lastName' | translate }}</label>
                         <input
                             type="text"
                             id="lastName"
                             formControlName="lastName"
                             [class.invalid]="lastNameControl?.invalid && lastNameControl?.touched"
-                            placeholder="Silva"
+                            [placeholder]="'register.lastNamePlaceholder' | translate"
                         />
                         @if (lastNameControl?.invalid && lastNameControl?.touched) {
-                            <div class="field-error">Sobrenome é obrigatório</div>
+                            <div class="field-error">
+                                {{ 'register.lastNameRequired' | translate }}
+                            </div>
                         }
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="email">{{ 'register.email' | translate }}</label>
                     <input
                         type="email"
                         id="email"
                         formControlName="email"
                         [class.invalid]="emailControl?.invalid && emailControl?.touched"
-                        placeholder="seu@email.com"
+                        [placeholder]="'register.emailPlaceholder' | translate"
                     />
                     @if (emailControl?.invalid && emailControl?.touched) {
                         <div class="field-error">
                             @if (emailControl?.hasError('required')) {
-                                Email é obrigatório
+                                {{ 'register.emailRequired' | translate }}
                             }
                             @if (emailControl?.hasError('email')) {
-                                Email inválido
+                                {{ 'register.emailInvalid' | translate }}
                             }
                         </div>
                     }
                 </div>
 
                 <div class="form-group">
-                    <label for="phoneNumber">Telefone (opcional)</label>
+                    <label for="phoneNumber">{{ 'register.phone' | translate }}</label>
                     <input
                         type="tel"
                         id="phoneNumber"
                         formControlName="phoneNumber"
-                        placeholder="(11) 99999-9999"
+                        [placeholder]="'register.phonePlaceholder' | translate"
                     />
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Senha</label>
+                    <label for="password">{{ 'register.password' | translate }}</label>
                     <input
                         type="password"
                         id="password"
@@ -90,17 +89,19 @@
                     @if (passwordControl?.invalid && passwordControl?.touched) {
                         <div class="field-error">
                             @if (passwordControl?.hasError('required')) {
-                                Senha é obrigatória
+                                {{ 'register.passwordRequired' | translate }}
                             }
                             @if (passwordControl?.hasError('minlength')) {
-                                Senha deve ter no mínimo 6 caracteres
+                                {{ 'register.passwordMinLength' | translate }}
                             }
                         </div>
                     }
                 </div>
 
                 <div class="form-group">
-                    <label for="confirmPassword">Confirmar Senha</label>
+                    <label for="confirmPassword">{{
+                        'register.confirmPassword' | translate
+                    }}</label>
                     <input
                         type="password"
                         id="confirmPassword"
@@ -111,26 +112,31 @@
                         placeholder="••••••••"
                     />
                     @if (confirmPasswordControl?.invalid && confirmPasswordControl?.touched) {
-                        <div class="field-error">Confirmação de senha é obrigatória</div>
+                        <div class="field-error">
+                            {{ 'register.confirmPasswordRequired' | translate }}
+                        </div>
                     }
                     @if (
                         registerForm.hasError('passwordMismatch') && confirmPasswordControl?.touched
                     ) {
-                        <div class="field-error">As senhas não coincidem</div>
+                        <div class="field-error">{{ 'register.passwordMismatch' | translate }}</div>
                     }
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block" [disabled]="isLoading()">
                     @if (isLoading()) {
-                        Criando conta...
+                        {{ 'register.submitting' | translate }}
                     } @else {
-                        Criar Conta
+                        {{ 'register.submit' | translate }}
                     }
                 </button>
             </form>
 
             <div class="footer-links">
-                <p>Já tem uma conta? <a routerLink="/login">Faça login</a></p>
+                <p>
+                    {{ 'register.hasAccount' | translate }}
+                    <a routerLink="/login">{{ 'register.signIn' | translate }}</a>
+                </p>
             </div>
         </div>
     </div>

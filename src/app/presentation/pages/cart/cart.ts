@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../../infrastructure/services';
+import { TranslateService, TranslatePipe } from '../../../infrastructure/i18n';
 
 /**
  * Shopping cart page component.
@@ -9,13 +10,14 @@ import { CartService } from '../../../infrastructure/services';
  */
 @Component({
     selector: 'app-cart',
-    imports: [RouterLink],
+    imports: [RouterLink, TranslatePipe],
     templateUrl: './cart.html',
     styleUrl: './cart.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Cart {
     cartService = inject(CartService);
+    private readonly t = inject(TranslateService);
 
     updateQuantity(productId: string, productVariantId: string | undefined, quantity: number) {
         this.cartService.updateQuantity(productId, productVariantId, quantity);
@@ -26,15 +28,12 @@ export class Cart {
     }
 
     clearCart() {
-        if (confirm('Tem certeza que deseja limpar o carrinho?')) {
+        if (confirm(this.t.get('cart.confirmClear'))) {
             this.cartService.clearCart();
         }
     }
 
     formatPrice(price: number): string {
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-        }).format(price);
+        return this.t.formatPrice(price);
     }
 }

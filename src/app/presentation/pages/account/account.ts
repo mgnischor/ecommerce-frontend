@@ -3,6 +3,7 @@ import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@ang
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService, UserService, NotificationService } from '../../../infrastructure/services';
+import { TranslateService, TranslatePipe } from '../../../infrastructure/i18n';
 import { User, Notification } from '../../../domain/models';
 
 /**
@@ -11,7 +12,7 @@ import { User, Notification } from '../../../domain/models';
  */
 @Component({
     selector: 'app-account',
-    imports: [ReactiveFormsModule],
+    imports: [ReactiveFormsModule, TranslatePipe],
     templateUrl: './account.html',
     styleUrl: './account.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,6 +22,7 @@ export class Account implements OnInit {
     private readonly userService = inject(UserService);
     private readonly notificationService = inject(NotificationService);
     private readonly router = inject(Router);
+    private readonly t = inject(TranslateService);
 
     user = signal<User | null>(null);
     notifications = signal<Notification[]>([]);
@@ -62,7 +64,7 @@ export class Account implements OnInit {
                 this.isLoading.set(false);
             },
             error: () => {
-                this.error.set('Erro ao carregar dados do usuário');
+                this.error.set(this.t.get('account.errorLoadingUser'));
                 this.isLoading.set(false);
             },
         });
@@ -103,7 +105,7 @@ export class Account implements OnInit {
             .subscribe({
                 next: () => {
                     this.isSaving.set(false);
-                    this.successMessage.set('Perfil atualizado com sucesso!');
+                    this.successMessage.set(this.t.get('account.profileUpdated'));
                     this.user.update((u) =>
                         u
                             ? {
@@ -117,7 +119,7 @@ export class Account implements OnInit {
                 },
                 error: () => {
                     this.isSaving.set(false);
-                    this.error.set('Erro ao atualizar perfil');
+                    this.error.set(this.t.get('account.errorUpdatingProfile'));
                 },
             });
     }
@@ -157,8 +159,7 @@ export class Account implements OnInit {
     }
 
     formatDate(date: string | undefined): string {
-        if (!date) return '—';
-        return new Date(date).toLocaleDateString('pt-BR', {
+        return this.t.formatDate(date, {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric',

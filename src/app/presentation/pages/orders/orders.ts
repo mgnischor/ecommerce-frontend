@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@ang
 
 import { RouterLink } from '@angular/router';
 import { OrderService, AuthService } from '../../../infrastructure/services';
+import { TranslateService, TranslatePipe } from '../../../infrastructure/i18n';
 import { Order, OrderStatus } from '../../../domain/models';
 
 /**
@@ -10,7 +11,7 @@ import { Order, OrderStatus } from '../../../domain/models';
  */
 @Component({
     selector: 'app-orders',
-    imports: [RouterLink],
+    imports: [RouterLink, TranslatePipe],
     templateUrl: './orders.html',
     styleUrl: './orders.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,6 +19,7 @@ import { Order, OrderStatus } from '../../../domain/models';
 export class Orders implements OnInit {
     private readonly orderService = inject(OrderService);
     private readonly authService = inject(AuthService);
+    private readonly t = inject(TranslateService);
 
     orders = signal<Order[]>([]);
     selectedOrder = signal<Order | null>(null);
@@ -31,7 +33,7 @@ export class Orders implements OnInit {
     loadOrders() {
         const user = this.authService.currentUser();
         if (!user) {
-            this.error.set('Faça login para ver seus pedidos');
+            this.error.set(this.t.get('orders.loginRequired'));
             return;
         }
 
@@ -61,7 +63,7 @@ export class Orders implements OnInit {
     }
 
     cancelOrder(orderId: string) {
-        if (!confirm('Tem certeza que deseja cancelar este pedido?')) return;
+        if (!confirm(this.t.get('orders.confirmCancel'))) return;
 
         this.orderService.cancelOrder(orderId).subscribe({
             next: (updated) => {
@@ -69,21 +71,21 @@ export class Orders implements OnInit {
                 this.selectedOrder.set(updated);
             },
             error: () => {
-                this.error.set('Erro ao cancelar pedido');
+                this.error.set(this.t.get('orders.cancelError'));
             },
         });
     }
 
     getStatusLabel(status: OrderStatus): string {
         const labels: Record<number, string> = {
-            [OrderStatus.Pending]: 'Pendente',
-            [OrderStatus.Processing]: 'Processando',
-            [OrderStatus.Shipped]: 'Enviado',
-            [OrderStatus.Delivered]: 'Entregue',
-            [OrderStatus.Cancelled]: 'Cancelado',
-            [OrderStatus.Returned]: 'Devolvido',
+            [OrderStatus.Pending]: this.t.get('orders.statusPending'),
+            [OrderStatus.Processing]: this.t.get('orders.statusProcessing'),
+            [OrderStatus.Shipped]: this.t.get('orders.statusShipped'),
+            [OrderStatus.Delivered]: this.t.get('orders.statusDelivered'),
+            [OrderStatus.Cancelled]: this.t.get('orders.statusCancelled'),
+            [OrderStatus.Returned]: this.t.get('orders.statusReturned'),
         };
-        return labels[status] ?? 'Desconhecido';
+        return labels[status] ?? this.t.get('orders.statusUnknown');
     }
 
     getStatusClass(status: OrderStatus): string {
@@ -99,14 +101,10 @@ export class Orders implements OnInit {
     }
 
     formatPrice(price: number): string {
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-        }).format(price);
+        return this.t.formatPrice(price);
     }
 
     formatDate(date: string | undefined): string {
-        if (!date) return '—';
-        return new Date(date).toLocaleDateString('pt-BR');
+        return this.t.formatDate(date);
     }
 }

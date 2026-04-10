@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { TranslatePipe } from '../../../infrastructure/i18n';
 
 /**
  * 404 Not Found page component.
@@ -6,7 +7,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
  */
 @Component({
     selector: 'app-not-found',
-    imports: [],
+    imports: [TranslatePipe],
     templateUrl: './not-found.html',
     styleUrl: './not-found.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

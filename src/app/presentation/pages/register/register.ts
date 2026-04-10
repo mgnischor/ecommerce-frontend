@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../../infrastructure/services';
+import { TranslateService, TranslatePipe } from '../../../infrastructure/i18n';
 import { UserAccessLevel } from '../../../domain/models';
 
 /**
@@ -18,7 +19,7 @@ import { UserAccessLevel } from '../../../domain/models';
  */
 @Component({
     selector: 'app-register',
-    imports: [ReactiveFormsModule, RouterLink],
+    imports: [ReactiveFormsModule, RouterLink, TranslatePipe],
     templateUrl: './register.html',
     styleUrl: './register.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,6 +27,7 @@ import { UserAccessLevel } from '../../../domain/models';
 export class Register {
     private readonly userService = inject(UserService);
     private readonly router = inject(Router);
+    private readonly t = inject(TranslateService);
 
     isLoading = signal(false);
     errorMessage = signal<string | null>(null);
@@ -73,9 +75,7 @@ export class Register {
             .subscribe({
                 next: () => {
                     this.isLoading.set(false);
-                    this.successMessage.set(
-                        'Conta criada com sucesso! Redirecionando para login...',
-                    );
+                    this.successMessage.set(this.t.get('register.success'));
                     setTimeout(() => {
                         this.router.navigate(['/login']);
                     }, 2000);
@@ -83,9 +83,9 @@ export class Register {
                 error: (error) => {
                     this.isLoading.set(false);
                     if (error.status === 409) {
-                        this.errorMessage.set('Este email já está cadastrado');
+                        this.errorMessage.set(this.t.get('register.emailAlreadyExists'));
                     } else {
-                        this.errorMessage.set('Erro ao criar conta. Tente novamente');
+                        this.errorMessage.set(this.t.get('register.genericError'));
                     }
                 },
             });

@@ -3,6 +3,7 @@ import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/cor
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CartService, OrderService, AuthService } from '../../../infrastructure/services';
+import { TranslateService, TranslatePipe } from '../../../infrastructure/i18n';
 import { PaymentMethod } from '../../../domain/models';
 
 /**
@@ -11,7 +12,7 @@ import { PaymentMethod } from '../../../domain/models';
  */
 @Component({
     selector: 'app-checkout',
-    imports: [ReactiveFormsModule, RouterLink],
+    imports: [ReactiveFormsModule, RouterLink, TranslatePipe],
     templateUrl: './checkout.html',
     styleUrl: './checkout.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,17 +22,18 @@ export class Checkout {
     private readonly orderService = inject(OrderService);
     private readonly authService = inject(AuthService);
     private readonly router = inject(Router);
+    private readonly t = inject(TranslateService);
 
     isLoading = signal(false);
     error = signal<string | null>(null);
     currentStep = signal<'address' | 'payment' | 'review'>('address');
 
     paymentMethods = [
-        { value: PaymentMethod.CreditCard, label: 'Cartão de Crédito' },
-        { value: PaymentMethod.DebitCard, label: 'Cartão de Débito' },
-        { value: PaymentMethod.PayPal, label: 'PayPal' },
-        { value: PaymentMethod.BankTransfer, label: 'Transferência Bancária' },
-        { value: PaymentMethod.Cash, label: 'Dinheiro' },
+        { value: PaymentMethod.CreditCard, labelKey: 'checkout.creditCard' },
+        { value: PaymentMethod.DebitCard, labelKey: 'checkout.debitCard' },
+        { value: PaymentMethod.PayPal, labelKey: 'checkout.paypal' },
+        { value: PaymentMethod.BankTransfer, labelKey: 'checkout.bankTransfer' },
+        { value: PaymentMethod.Cash, labelKey: 'checkout.cash' },
     ];
 
     addressForm = new FormGroup({
@@ -72,7 +74,7 @@ export class Checkout {
         }
 
         if (this.cartService.cartItems().length === 0) {
-            this.error.set('Carrinho vazio');
+            this.error.set(this.t.get('checkout.emptyCartError'));
             return;
         }
 
@@ -107,19 +109,17 @@ export class Checkout {
                 },
                 error: () => {
                     this.isLoading.set(false);
-                    this.error.set('Erro ao realizar pedido. Tente novamente.');
+                    this.error.set(this.t.get('checkout.orderError'));
                 },
             });
     }
 
     formatPrice(price: number): string {
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-        }).format(price);
+        return this.t.formatPrice(price);
     }
 
     getPaymentLabel(method: PaymentMethod): string {
-        return this.paymentMethods.find((m) => m.value === method)?.label ?? '';
+        const found = this.paymentMethods.find((m) => m.value === method);
+        return found ? this.t.get(found.labelKey) : '';
     }
 }

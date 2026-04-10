@@ -1,6 +1,6 @@
 <div class="page page-product-list">
     <div class="container">
-        <h1 class="page-title">Produtos</h1>
+        <h1 class="page-title">{{ 'productList.title' | translate }}</h1>
 
         <!-- Search and Filters -->
         <div class="filters-section">
@@ -9,14 +9,16 @@
                     type="text"
                     [(ngModel)]="searchTerm"
                     (keyup.enter)="onSearch()"
-                    placeholder="Buscar produtos..."
+                    [placeholder]="'productList.searchPlaceholder' | translate"
                     class="search-input"
                 />
-                <button class="btn btn-primary" (click)="onSearch()">Buscar</button>
+                <button class="btn btn-primary" (click)="onSearch()">
+                    {{ 'productList.search' | translate }}
+                </button>
             </div>
 
             <div class="filter-group">
-                <label>Categoria:</label>
+                <label>{{ 'productList.category' | translate }}</label>
                 <select
                     [value]="selectedCategory() ?? ''"
                     (change)="
@@ -26,7 +28,7 @@
                     "
                     class="category-select"
                 >
-                    <option value="">Todas as Categorias</option>
+                    <option value="">{{ 'productList.allCategories' | translate }}</option>
                     @for (category of categories; track category.value) {
                         <option [value]="category.value">{{ category.label }}</option>
                     }
@@ -34,7 +36,9 @@
             </div>
 
             @if (searchTerm() || selectedCategory() !== null) {
-                <button class="btn btn-secondary" (click)="clearFilters()">Limpar Filtros</button>
+                <button class="btn btn-secondary" (click)="clearFilters()">
+                    {{ 'productList.clearFilters' | translate }}
+                </button>
             }
         </div>
 
@@ -42,7 +46,7 @@
         @if (isLoading()) {
             <div class="loading-container">
                 <div class="loading-spinner"></div>
-                <p>Carregando produtos...</p>
+                <p>{{ 'productList.loadingProducts' | translate }}</p>
             </div>
         }
 
@@ -50,7 +54,9 @@
         @if (error()) {
             <div class="error-container">
                 <p>{{ error() }}</p>
-                <button class="btn btn-primary" (click)="loadProducts()">Tentar Novamente</button>
+                <button class="btn btn-primary" (click)="loadProducts()">
+                    {{ 'common.tryAgain' | translate }}
+                </button>
             </div>
         }
 
@@ -61,7 +67,9 @@
                     @for (product of products(); track product.id) {
                         <div class="product-card">
                             @if (product.isOnSale) {
-                                <div class="sale-badge">PROMOÇÃO</div>
+                                <div class="sale-badge">
+                                    {{ 'productList.promotion' | translate }}
+                                </div>
                             }
                             <a [routerLink]="['/products', product.id]">
                                 @if (product.imageUrl) {
@@ -72,7 +80,7 @@
                                     />
                                 } @else {
                                     <div class="product-image-placeholder">
-                                        <span>Sem imagem</span>
+                                        <span>{{ 'common.noImage' | translate }}</span>
                                     </div>
                                 }
                                 <div class="product-info">
@@ -96,11 +104,13 @@
                                             }
                                         </div>
                                         @if (product.stockQuantity <= 0) {
-                                            <span class="stock-badge out-of-stock">Esgotado</span>
+                                            <span class="stock-badge out-of-stock">{{
+                                                'productList.outOfStock' | translate
+                                            }}</span>
                                         } @else if (product.stockQuantity < 10) {
-                                            <span class="stock-badge low-stock"
-                                                >Últimas unidades</span
-                                            >
+                                            <span class="stock-badge low-stock">{{
+                                                'productList.lastUnits' | translate
+                                            }}</span>
                                         }
                                     </div>
                                 </div>
@@ -117,7 +127,7 @@
                             [disabled]="currentPage() === 1"
                             (click)="onPageChange(currentPage() - 1)"
                         >
-                            Anterior
+                            {{ 'productList.previous' | translate }}
                         </button>
 
                         @for (page of pageNumbers; track page) {
@@ -135,16 +145,16 @@
                             [disabled]="currentPage() === totalPages()"
                             (click)="onPageChange(currentPage() + 1)"
                         >
-                            Próxima
+                            {{ 'productList.next' | translate }}
                         </button>
                     </div>
                 }
             } @else {
                 <div class="empty-state">
-                    <p>Nenhum produto encontrado</p>
+                    <p>{{ 'productList.noProducts' | translate }}</p>
                     @if (searchTerm() || selectedCategory() !== null) {
                         <button class="btn btn-primary" (click)="clearFilters()">
-                            Ver Todos os Produtos
+                            {{ 'productList.viewAllProducts' | translate }}
                         </button>
                     }
                 </div>

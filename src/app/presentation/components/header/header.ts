@@ -1,6 +1,14 @@
-import { Component, ChangeDetectionStrategy, output, signal, computed } from '@angular/core';
+import {
+    Component,
+    ChangeDetectionStrategy,
+    output,
+    signal,
+    computed,
+    inject,
+} from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslatePipe } from '../../../infrastructure/i18n';
 
 /**
  * Header component.
@@ -8,7 +16,7 @@ import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
  */
 @Component({
     selector: 'app-header',
-    imports: [RouterLink, RouterLinkActive, NgbCollapseModule],
+    imports: [RouterLink, RouterLinkActive, NgbCollapseModule, TranslatePipe],
     templateUrl: './header.html',
     styleUrl: './header.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

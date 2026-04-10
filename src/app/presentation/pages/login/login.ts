@@ -3,6 +3,7 @@ import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/cor
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../infrastructure/services';
+import { TranslateService, TranslatePipe } from '../../../infrastructure/i18n';
 
 /**
  * Login page component.
@@ -10,7 +11,7 @@ import { AuthService } from '../../../infrastructure/services';
  */
 @Component({
     selector: 'app-login',
-    imports: [ReactiveFormsModule, RouterLink],
+    imports: [ReactiveFormsModule, RouterLink, TranslatePipe],
     templateUrl: './login.html',
     styleUrl: './login.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,6 +19,7 @@ import { AuthService } from '../../../infrastructure/services';
 export class Login {
     private readonly authService = inject(AuthService);
     private readonly router = inject(Router);
+    private readonly t = inject(TranslateService);
 
     isLoading = signal(false);
     errorMessage = signal<string | null>(null);
@@ -51,11 +53,11 @@ export class Login {
                 error: (error) => {
                     this.isLoading.set(false);
                     if (error.status === 401) {
-                        this.errorMessage.set('Email ou senha inválidos');
+                        this.errorMessage.set(this.t.get('login.invalidCredentials'));
                     } else if (error.status === 429) {
-                        this.errorMessage.set('Muitas tentativas. Tente novamente mais tarde');
+                        this.errorMessage.set(this.t.get('login.tooManyAttempts'));
                     } else {
-                        this.errorMessage.set('Erro ao fazer login. Tente novamente');
+                        this.errorMessage.set(this.t.get('login.genericError'));
                     }
                 },
             });

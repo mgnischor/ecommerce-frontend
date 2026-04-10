@@ -1,26 +1,28 @@
 <div class="page page-orders">
     <div class="container">
-        <h1 class="page-title">Meus Pedidos</h1>
+        <h1 class="page-title">{{ 'orders.title' | translate }}</h1>
 
         @if (error()) {
             <div class="error-container">
                 <p>{{ error() }}</p>
-                <a routerLink="/login" class="btn btn-primary">Fazer Login</a>
+                <a routerLink="/login" class="btn btn-primary">{{ 'orders.login' | translate }}</a>
             </div>
         }
         @if (isLoading()) {
             <div class="loading-container">
                 <div class="loading-spinner"></div>
-                <p>Carregando pedidos...</p>
+                <p>{{ 'orders.loadingOrders' | translate }}</p>
             </div>
         }
         @if (!isLoading() && !error()) {
             @if (orders().length === 0) {
                 <div class="empty-state">
                     <div class="empty-icon">📦</div>
-                    <h2>Nenhum pedido encontrado</h2>
-                    <p>Você ainda não fez nenhum pedido</p>
-                    <a routerLink="/products" class="btn btn-primary">Começar a Comprar</a>
+                    <h2>{{ 'orders.noOrders' | translate }}</h2>
+                    <p>{{ 'orders.noOrdersSubtitle' | translate }}</p>
+                    <a routerLink="/products" class="btn btn-primary">{{
+                        'orders.startShopping' | translate
+                    }}</a>
                 </div>
             } @else {
                 <div class="orders-list">
@@ -29,7 +31,7 @@
                             <div class="order-header">
                                 <div class="order-number">
                                     <strong
-                                        >Pedido #{{
+                                        >{{ 'orders.orderNumber' | translate }} #{{
                                             order.orderNumber || order.id.slice(0, 8)
                                         }}</strong
                                     >
@@ -40,8 +42,14 @@
                             </div>
                             <div class="order-body">
                                 <div class="order-info">
-                                    <span>Data: {{ formatDate(order.createdAt) }}</span>
-                                    <span>Itens: {{ order.items?.length || 0 }}</span>
+                                    <span
+                                        >{{ 'orders.date' | translate }}
+                                        {{ formatDate(order.createdAt) }}</span
+                                    >
+                                    <span
+                                        >{{ 'orders.items' | translate }}
+                                        {{ order.items?.length || 0 }}</span
+                                    >
                                 </div>
                                 <div class="order-total">{{ formatPrice(order.total) }}</div>
                             </div>
@@ -57,7 +65,7 @@
                 <div class="modal-content" (click)="$event.stopPropagation()">
                     <div class="modal-header">
                         <h2>
-                            Pedido #{{
+                            {{ 'orders.orderNumber' | translate }} #{{
                                 selectedOrder()!.orderNumber || selectedOrder()!.id.slice(0, 8)
                             }}
                         </h2>
@@ -65,7 +73,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="detail-row">
-                            <span>Status:</span>
+                            <span>{{ 'orders.status' | translate }}</span>
                             <span
                                 class="status-badge"
                                 [class]="getStatusClass(selectedOrder()!.status)"
@@ -74,28 +82,28 @@
                             </span>
                         </div>
                         <div class="detail-row">
-                            <span>Data:</span>
+                            <span>{{ 'orders.date' | translate }}</span>
                             <span>{{ formatDate(selectedOrder()!.createdAt) }}</span>
                         </div>
                         <div class="detail-row">
-                            <span>Subtotal:</span>
+                            <span>{{ 'orders.subtotal' | translate }}</span>
                             <span>{{ formatPrice(selectedOrder()!.subtotal) }}</span>
                         </div>
                         <div class="detail-row">
-                            <span>Impostos:</span>
+                            <span>{{ 'orders.tax' | translate }}</span>
                             <span>{{ formatPrice(selectedOrder()!.tax) }}</span>
                         </div>
                         <div class="detail-row">
-                            <span>Frete:</span>
+                            <span>{{ 'orders.shipping' | translate }}</span>
                             <span>{{ formatPrice(selectedOrder()!.shippingCost) }}</span>
                         </div>
                         <div class="detail-row total">
-                            <span>Total:</span>
+                            <span>{{ 'common.total' | translate }}</span>
                             <span>{{ formatPrice(selectedOrder()!.total) }}</span>
                         </div>
 
                         @if (selectedOrder()!.items && selectedOrder()!.items!.length > 0) {
-                            <h3>Itens do Pedido</h3>
+                            <h3>{{ 'orders.orderItems' | translate }}</h3>
                             <div class="order-items">
                                 @for (item of selectedOrder()!.items; track item.id) {
                                     <div class="order-item">
@@ -103,7 +111,9 @@
                                             <strong>{{ item.productName }}</strong>
                                             <span class="item-sku">SKU: {{ item.sku }}</span>
                                         </div>
-                                        <div class="item-qty">Qtd: {{ item.quantity }}</div>
+                                        <div class="item-qty">
+                                            {{ 'orders.qty' | translate }} {{ item.quantity }}
+                                        </div>
                                         <div class="item-price">{{ formatPrice(item.total) }}</div>
                                     </div>
                                 }
@@ -114,7 +124,7 @@
                                 class="btn btn-danger"
                                 (click)="cancelOrder(selectedOrder()!.id)"
                             >
-                                Cancelar Pedido
+                                {{ 'orders.cancelOrder' | translate }}
                             </button>
                         }
                     </div>

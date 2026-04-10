@@ -7,6 +7,7 @@ import {
     CartService,
 } from '../../../infrastructure/services';
 import { Product, ProductVariant } from '../../../domain/models';
+import { TranslateService, TranslatePipe } from '../../../infrastructure/i18n';
 
 /**
  * Product detail page component.
@@ -14,7 +15,7 @@ import { Product, ProductVariant } from '../../../domain/models';
  */
 @Component({
     selector: 'app-product-detail',
-    imports: [RouterLink],
+    imports: [RouterLink, TranslatePipe],
     templateUrl: './product-detail.html',
     styleUrl: './product-detail.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,6 +26,7 @@ export class ProductDetail implements OnInit {
     private readonly productService = inject(ProductService);
     private readonly variantService = inject(ProductVariantService);
     private readonly cartService = inject(CartService);
+    private readonly t = inject(TranslateService);
 
     product = signal<Product | null>(null);
     variants = signal<ProductVariant[]>([]);
@@ -54,7 +56,7 @@ export class ProductDetail implements OnInit {
                 this.loadVariants(id);
             },
             error: () => {
-                this.error.set('Produto não encontrado');
+                this.error.set(this.t.get('productDetail.productNotFound'));
                 this.isLoading.set(false);
             },
         });
@@ -119,10 +121,7 @@ export class ProductDetail implements OnInit {
     }
 
     formatPrice(price: number): string {
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-        }).format(price);
+        return this.t.formatPrice(price);
     }
 
     get currentPrice(): number {

@@ -10,6 +10,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ProductService } from '../../../infrastructure/services';
+import { TranslateService, TranslatePipe } from '../../../infrastructure/i18n';
 import { Product, ProductCategory } from '../../../domain/models';
 
 /**
@@ -18,13 +19,14 @@ import { Product, ProductCategory } from '../../../domain/models';
  */
 @Component({
     selector: 'app-product-list',
-    imports: [FormsModule, RouterLink],
+    imports: [FormsModule, RouterLink, TranslatePipe],
     templateUrl: './product-list.html',
     styleUrl: './product-list.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductList implements OnInit {
     private readonly productService = inject(ProductService);
+    private readonly t = inject(TranslateService);
 
     products = signal<Product[]>([]);
     isLoading = signal(false);
@@ -64,7 +66,7 @@ export class ProductList implements OnInit {
                     this.isLoading.set(false);
                 },
                 error: () => {
-                    this.error.set('Erro ao buscar produtos');
+                    this.error.set(this.t.get('productList.errorSearching'));
                     this.isLoading.set(false);
                 },
             });
@@ -80,7 +82,7 @@ export class ProductList implements OnInit {
                     this.isLoading.set(false);
                 },
                 error: () => {
-                    this.error.set('Erro ao carregar produtos');
+                    this.error.set(this.t.get('productList.errorLoading'));
                     this.isLoading.set(false);
                 },
             });
@@ -95,7 +97,7 @@ export class ProductList implements OnInit {
                 this.isLoading.set(false);
             },
             error: () => {
-                this.error.set('Erro ao carregar produtos');
+                this.error.set(this.t.get('productList.errorLoading'));
                 this.isLoading.set(false);
             },
         });
@@ -128,10 +130,7 @@ export class ProductList implements OnInit {
     }
 
     formatPrice(price: number): string {
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-        }).format(price);
+        return this.t.formatPrice(price);
     }
 
     get pageNumbers(): number[] {
@@ -142,7 +141,7 @@ export class ProductList implements OnInit {
         // Show max 5 page numbers
         const maxPages = 5;
         let startPage = Math.max(1, current - Math.floor(maxPages / 2));
-        let endPage = Math.min(total, startPage + maxPages - 1);
+        const endPage = Math.min(total, startPage + maxPages - 1);
 
         if (endPage - startPage < maxPages - 1) {
             startPage = Math.max(1, endPage - maxPages + 1);

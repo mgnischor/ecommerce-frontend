@@ -10,7 +10,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <a class="navbar-brand fw-bold" routerLink="/">E-Commerce Store</a>
+            <a class="navbar-brand fw-bold" routerLink="/">{{ 'header.brand' | translate }}</a>
 
             <button
                 class="navbar-toggler"
@@ -32,7 +32,7 @@
                             routerLinkActive="active"
                             (click)="isMenuCollapsed.set(true)"
                         >
-                            <i class="bi bi-cart"></i> Cart
+                            <i class="bi bi-cart"></i> {{ 'header.cart' | translate }}
                         </a>
                     </li>
                     <li class="nav-item">
@@ -42,7 +42,7 @@
                             routerLinkActive="active"
                             (click)="isMenuCollapsed.set(true)"
                         >
-                            <i class="bi bi-person"></i> Account
+                            <i class="bi bi-person"></i> {{ 'header.account' | translate }}
                         </a>
                     </li>
                     <li class="nav-item">
@@ -52,7 +52,7 @@
                             routerLinkActive="active"
                             (click)="isMenuCollapsed.set(true)"
                         >
-                            Login
+                            {{ 'header.login' | translate }}
                         </a>
                     </li>
                 </ul>
