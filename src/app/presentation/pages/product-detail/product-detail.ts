@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductService, ProductVariantService, CartService } from '../../../infrastructure/services';
 import { Product, ProductVariant } from '../../../domain/models';
@@ -10,17 +10,17 @@ import { Product, ProductVariant } from '../../../domain/models';
  */
 @Component({
     selector: 'app-product-detail',
-    imports: [CommonModule, RouterLink],
+    imports: [RouterLink],
     templateUrl: './product-detail.html',
     styleUrl: './product-detail.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetail implements OnInit {
-    private route = inject(ActivatedRoute);
-    private router = inject(Router);
-    private productService = inject(ProductService);
-    private variantService = inject(ProductVariantService);
-    private cartService = inject(CartService);
+    private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
+    private readonly productService = inject(ProductService);
+    private readonly variantService = inject(ProductVariantService);
+    private readonly cartService = inject(CartService);
 
     product = signal<Product | null>(null);
     variants = signal<ProductVariant[]>([]);
