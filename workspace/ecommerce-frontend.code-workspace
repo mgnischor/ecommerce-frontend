@@ -1,9 +1,9 @@
 {
-	"folders": [
-		{
-			"path": ".."
-		}
-	],
+    "folders": [
+        {
+            "path": "..",
+        },
+    ],
 
     "settings": {
         "prettier.configPath": ".prettierrc",
@@ -25,7 +25,7 @@
         "files.autoGuessEncoding": true,
         "files.autoSave": "afterDelay",
         "files.autoSaveDelay": 1200,
-        "files.defaultLanguage": "csharp",
+        "files.defaultLanguage": "typescript",
         "files.enableTrash": true,
         "files.encoding": "utf8",
         "files.eol": "\n",
@@ -52,7 +52,7 @@
             "**/Network Trash Folder": true,
             "**/Temporary Items": true,
             "**/Thumbs.db:encryptable": true,
-            "**/Thumbs.db": true
+            "**/Thumbs.db": true,
         },
 
         "git.ignoreLegacyWarning": true,
@@ -64,16 +64,16 @@
         "[ignore]": {
             "editor.defaultFormatter": null,
             "editor.formatOnPaste": false,
-            "editor.formatOnSave": false
+            "editor.formatOnSave": false,
         },
 
         "[xml]": {
-            "editor.defaultFormatter": "redhat.vscode-xml"
+            "editor.defaultFormatter": "redhat.vscode-xml",
         },
 
         "[yaml]": {
             "editor.defaultFormatter": "redhat.vscode-yaml",
-            "editor.tabSize": 2
-        }
-    }
+            "editor.tabSize": 2,
+        },
+    },
 }
