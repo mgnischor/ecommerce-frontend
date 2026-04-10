@@ -20,7 +20,9 @@ export class AccountingService {
     }
 
     getJournalEntries(pageNumber = 1, pageSize = 10): Observable<JournalEntry[]> {
-        const params = new HttpParams().set('pageNumber', pageNumber.toString()).set('pageSize', pageSize.toString());
+        const params = new HttpParams()
+            .set('pageNumber', pageNumber.toString())
+            .set('pageSize', pageSize.toString());
         return this.http.get<JournalEntry[]>(`${this.baseUrl}/journal-entries`, { params });
     }
 
@@ -29,6 +31,8 @@ export class AccountingService {
     }
 
     getJournalEntriesByProductId(productId: string): Observable<JournalEntry[]> {
-        return this.http.get<JournalEntry[]>(`${this.baseUrl}/journal-entries/product/${productId}`);
+        return this.http.get<JournalEntry[]>(
+            `${this.baseUrl}/journal-entries/product/${productId}`,
+        );
     }
 }
