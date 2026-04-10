@@ -12,7 +12,9 @@ export class UserService {
     private readonly baseUrl = `${environment.apiUrl}/users`;
 
     getUsers(pageNumber = 1, pageSize = 10): Observable<PaginatedUsers> {
-        const params = new HttpParams().set('pageNumber', pageNumber.toString()).set('pageSize', pageSize.toString());
+        const params = new HttpParams()
+            .set('pageNumber', pageNumber.toString())
+            .set('pageSize', pageSize.toString());
 
         return this.http.get<PaginatedUsers>(this.baseUrl, { params });
     }
