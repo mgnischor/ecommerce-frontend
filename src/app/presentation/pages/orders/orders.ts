@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 import { OrderService, AuthService } from '../../../infrastructure/services';
 import { Order, OrderStatus } from '../../../domain/models';
@@ -10,14 +10,14 @@ import { Order, OrderStatus } from '../../../domain/models';
  */
 @Component({
     selector: 'app-orders',
-    imports: [CommonModule, RouterLink],
+    imports: [RouterLink],
     templateUrl: './orders.html',
     styleUrl: './orders.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Orders implements OnInit {
-    private orderService = inject(OrderService);
-    private authService = inject(AuthService);
+    private readonly orderService = inject(OrderService);
+    private readonly authService = inject(AuthService);
 
     orders = signal<Order[]>([]);
     selectedOrder = signal<Order | null>(null);
