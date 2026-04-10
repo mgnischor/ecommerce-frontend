@@ -43,7 +43,9 @@ export class Checkout {
     });
 
     paymentForm = new FormGroup({
-        paymentMethod: new FormControl<PaymentMethod>(PaymentMethod.CreditCard, [Validators.required]),
+        paymentMethod: new FormControl<PaymentMethod>(PaymentMethod.CreditCard, [
+            Validators.required,
+        ]),
     });
 
     goToPayment() {
