@@ -1,18 +1,18 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { StoreService } from '../../../../infrastructure/services';
 import { Store } from '../../../../domain/models';
 
 @Component({
     selector: 'app-admin-stores',
-    imports: [CommonModule, FormsModule],
+    imports: [FormsModule],
     templateUrl: './stores.html',
     styleUrl: './stores.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminStores implements OnInit {
-    private storeService = inject(StoreService);
+    private readonly storeService = inject(StoreService);
 
     stores = signal<Store[]>([]);
     isLoading = signal(false);
