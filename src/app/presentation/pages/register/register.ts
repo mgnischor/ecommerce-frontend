@@ -40,7 +40,7 @@ export class Register {
             password: new FormControl('', [Validators.required, Validators.minLength(6)]),
             confirmPassword: new FormControl('', [Validators.required]),
         },
-        { validators: this.passwordMatchValidator }
+        { validators: this.passwordMatchValidator },
     );
 
     passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
@@ -73,7 +73,9 @@ export class Register {
             .subscribe({
                 next: () => {
                     this.isLoading.set(false);
-                    this.successMessage.set('Conta criada com sucesso! Redirecionando para login...');
+                    this.successMessage.set(
+                        'Conta criada com sucesso! Redirecionando para login...',
+                    );
                     setTimeout(() => {
                         this.router.navigate(['/login']);
                     }, 2000);
