@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CartService, OrderService, AuthService } from '../../../infrastructure/services';
@@ -11,16 +11,16 @@ import { PaymentMethod } from '../../../domain/models';
  */
 @Component({
     selector: 'app-checkout',
-    imports: [CommonModule, ReactiveFormsModule, RouterLink],
+    imports: [ReactiveFormsModule, RouterLink],
     templateUrl: './checkout.html',
     styleUrl: './checkout.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Checkout {
     cartService = inject(CartService);
-    private orderService = inject(OrderService);
-    private authService = inject(AuthService);
-    private router = inject(Router);
+    private readonly orderService = inject(OrderService);
+    private readonly authService = inject(AuthService);
+    private readonly router = inject(Router);
 
     isLoading = signal(false);
     error = signal<string | null>(null);
