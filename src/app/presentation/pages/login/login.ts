@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../infrastructure/services';
@@ -10,14 +10,14 @@ import { AuthService } from '../../../infrastructure/services';
  */
 @Component({
     selector: 'app-login',
-    imports: [CommonModule, ReactiveFormsModule, RouterLink],
+    imports: [ReactiveFormsModule, RouterLink],
     templateUrl: './login.html',
     styleUrl: './login.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Login {
-    private authService = inject(AuthService);
-    private router = inject(Router);
+    private readonly authService = inject(AuthService);
+    private readonly router = inject(Router);
 
     isLoading = signal(false);
     errorMessage = signal<string | null>(null);
