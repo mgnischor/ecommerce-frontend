@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
     FormControl,
     FormGroup,
@@ -18,14 +18,14 @@ import { UserAccessLevel } from '../../../domain/models';
  */
 @Component({
     selector: 'app-register',
-    imports: [CommonModule, ReactiveFormsModule, RouterLink],
+    imports: [ReactiveFormsModule, RouterLink],
     templateUrl: './register.html',
     styleUrl: './register.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Register {
-    private userService = inject(UserService);
-    private router = inject(Router);
+    private readonly userService = inject(UserService);
+    private readonly router = inject(Router);
 
     isLoading = signal(false);
     errorMessage = signal<string | null>(null);
