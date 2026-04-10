@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ProductService } from '../../../infrastructure/services';
@@ -11,13 +11,13 @@ import { Product, ProductCategory } from '../../../domain/models';
  */
 @Component({
     selector: 'app-product-list',
-    imports: [CommonModule, FormsModule, RouterLink],
+    imports: [FormsModule, RouterLink],
     templateUrl: './product-list.html',
     styleUrl: './product-list.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductList implements OnInit {
-    private productService = inject(ProductService);
+    private readonly productService = inject(ProductService);
 
     products = signal<Product[]>([]);
     isLoading = signal(false);
