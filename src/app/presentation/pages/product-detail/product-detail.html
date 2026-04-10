@@ -69,7 +69,9 @@
                     <div class="stock-status">
                         @if (isInStock) {
                             @if (currentStock < 10) {
-                                <span class="stock-badge low-stock"> Apenas {{ currentStock }} em estoque </span>
+                                <span class="stock-badge low-stock">
+                                    Apenas {{ currentStock }} em estoque
+                                </span>
                             } @else {
                                 <span class="stock-badge in-stock">Em estoque</span>
                             }
@@ -87,7 +89,9 @@
                                     <button
                                         class="variant-option"
                                         [class.selected]="selectedVariant()?.id === variant.id"
-                                        [disabled]="!variant.isActive || variant.stockQuantity === 0"
+                                        [disabled]="
+                                            !variant.isActive || variant.stockQuantity === 0
+                                        "
                                         (click)="selectVariant(variant)"
                                     >
                                         {{ variant.name || variant.sku }}
@@ -105,7 +109,11 @@
                         <div class="quantity-section">
                             <label>Quantidade:</label>
                             <div class="quantity-controls">
-                                <button class="btn-quantity" (click)="decreaseQuantity()" [disabled]="quantity() <= 1">
+                                <button
+                                    class="btn-quantity"
+                                    (click)="decreaseQuantity()"
+                                    [disabled]="quantity() <= 1"
+                                >
                                     -
                                 </button>
                                 <span class="quantity-value">{{ quantity() }}</span>
@@ -120,7 +128,10 @@
                         </div>
 
                         <!-- Add to Cart Button -->
-                        <button class="btn btn-primary btn-large btn-add-cart" (click)="addToCart()">
+                        <button
+                            class="btn btn-primary btn-large btn-add-cart"
+                            (click)="addToCart()"
+                        >
                             Adicionar ao Carrinho
                         </button>
 
