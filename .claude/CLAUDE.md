@@ -6,19 +6,19 @@ Angular 21 e-commerce frontend for a robust multi-vendor marketplace. Supports s
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Angular 21 (standalone, zoneless) |
-| Language | TypeScript 5.9 (strict mode) |
-| UI library | Bootstrap 5.3 + ng-bootstrap 19 |
-| State | Angular Signals |
-| Forms | Angular Reactive Forms |
-| HTTP | Angular HttpClient + functional interceptors |
-| i18n | Custom `TranslateService` (en, es, pt-BR) |
-| Testing | Jasmine + Karma |
-| Linting | ESLint + angular-eslint |
-| Formatting | Prettier (printWidth 100, singleQuote) |
-| Package manager | **pnpm** |
+| Layer           | Technology                                   |
+| --------------- | -------------------------------------------- |
+| Framework       | Angular 21 (standalone, zoneless)            |
+| Language        | TypeScript 5.9 (strict mode)                 |
+| UI library      | Bootstrap 5.3 + ng-bootstrap 19              |
+| State           | Angular Signals                              |
+| Forms           | Angular Reactive Forms                       |
+| HTTP            | Angular HttpClient + functional interceptors |
+| i18n            | Custom `TranslateService` (en, es, pt-BR)    |
+| Testing         | Jasmine + Karma                              |
+| Linting         | ESLint + angular-eslint                      |
+| Formatting      | Prettier (printWidth 100, singleQuote)       |
+| Package manager | **pnpm**                                     |
 
 ## Architecture
 
@@ -45,6 +45,7 @@ presentation/   → UI layer
 ```
 
 ### Layer rules
+
 - `domain/` models must NOT import from Angular or other layers.
 - `infrastructure/services/` talk to the REST API; they return `Observable<T>`.
 - `presentation/` components inject services and use signals for local state.
@@ -53,6 +54,7 @@ presentation/   → UI layer
 ## Key Conventions
 
 ### Components
+
 - Class names have **no suffix**: `Home`, `Header`, `ProductList`, `AdminShipments` — not `HomeComponent`.
 - Never set `standalone: true` (it is the default in Angular 21).
 - Always set `changeDetection: ChangeDetectionStrategy.OnPush`.
@@ -63,50 +65,59 @@ presentation/   → UI layer
 - Do NOT use `@HostBinding` / `@HostListener` — use the `host` object in `@Component`.
 
 ### Templates
+
 - Use native control flow: `@if`, `@for`, `@switch` — never `*ngIf`, `*ngFor`, `*ngSwitch`.
 - Use the `async` pipe for observables in templates.
 - Use `TranslatePipe` for all user-facing strings: `{{ 'key' | translate }}`.
 - Use `NgOptimizedImage` for all static images (not for base64).
 
 ### Services
+
 - All services: `providedIn: 'root'`.
 - One service file per domain entity (e.g., `product.service.ts`, `order.service.ts`).
 - Services return `Observable<T>` — never subscribe inside a service.
 - Use `environment.apiUrl` as the base URL.
 
 ### i18n
+
 - Translation files: `public/i18n/{en,es,pt-BR}.json`.
 - Use `TranslatePipe` in templates: `{{ 'section.key' | translate }}`.
 - Use `TranslateService.get(key, params?)` in TypeScript code.
 - Use `TranslateService.formatPrice(price)` and `formatDate(date)` for locale-aware formatting.
 
 ### Routing
+
 - Storefront pages are **eagerly** loaded in `app.routes.ts`.
 - Admin pages are **lazily** loaded via `loadComponent`.
 - Admin routes are children of `{ path: 'admin', children: [...] }`.
 
 ### State (Signals)
+
 - Local component state → `signal<T>(initialValue)`.
 - Derived state → `computed(() => ...)`.
 - Update signals with `.set()` or `.update()` — never `.mutate()`.
 - Expose read-only signals to templates via `.asReadonly()` or `computed()`.
 
 ### Forms
+
 - Always use Reactive Forms (`FormGroup`, `FormControl`, `Validators`).
 - Call `form.markAllAsTouched()` before validation on submit.
 - Never use Template-driven forms.
 
 ### HTTP & Interceptors
+
 - `authInterceptor` automatically attaches `Authorization: Bearer <token>`.
 - `errorInterceptor` handles 401 → logout + redirect to `/login`.
 - Components subscribe to service observables and handle errors locally via `error` signal.
 
 ### Models
+
 - All interfaces and enums are in `src/app/domain/models/`.
 - Each domain entity has its own file (e.g., `product.model.ts`).
 - Everything is exported through `index.ts` barrel.
 
 ### Formatting & Linting
+
 - Prettier: `printWidth: 100`, `singleQuote: true`, Angular HTML parser for `.html` files.
 - Run `pnpm format` to auto-format and `pnpm lint:fix` to auto-fix lint issues.
 
@@ -126,6 +137,7 @@ pnpm format:check            # Prettier check
 ## Important Patterns
 
 ### Page component skeleton
+
 ```typescript
 @Component({
     selector: 'app-<name>',
@@ -155,6 +167,7 @@ export class <Name> implements OnInit {
 ```
 
 ### Admin page skeleton (lazy-loaded)
+
 ```typescript
 // src/app/presentation/pages/admin/<domain>/<domain>.ts
 export class Admin<Domain> { ... }
@@ -168,6 +181,7 @@ export class Admin<Domain> { ... }
 ```
 
 ### Adding a new translation key
+
 1. Add the key to `public/i18n/en.json` (and `es.json`, `pt-BR.json`).
 2. Use `{{ 'section.key' | translate }}` in the template.
 
