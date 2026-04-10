@@ -11,7 +11,9 @@ export class InventoryService {
     private readonly http = inject(HttpClient);
     private readonly baseUrl = `${environment.apiUrl}/inventory-transactions`;
 
-    createTransaction(request: RecordInventoryTransactionRequest): Observable<InventoryTransaction> {
+    createTransaction(
+        request: RecordInventoryTransactionRequest,
+    ): Observable<InventoryTransaction> {
         return this.http.post<InventoryTransaction>(this.baseUrl, request);
     }
 
@@ -23,7 +25,10 @@ export class InventoryService {
         return this.http.get<InventoryTransaction[]>(`${this.baseUrl}/product/${productId}`);
     }
 
-    getTransactionsByPeriod(startDate: string, endDate: string): Observable<InventoryTransaction[]> {
+    getTransactionsByPeriod(
+        startDate: string,
+        endDate: string,
+    ): Observable<InventoryTransaction[]> {
         return this.http.get<InventoryTransaction[]>(`${this.baseUrl}/period`, {
             params: { startDate, endDate },
         });
