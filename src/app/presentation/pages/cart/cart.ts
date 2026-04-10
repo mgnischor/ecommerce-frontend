@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../../infrastructure/services';
 
@@ -9,7 +9,7 @@ import { CartService } from '../../../infrastructure/services';
  */
 @Component({
     selector: 'app-cart',
-    imports: [CommonModule, RouterLink],
+    imports: [RouterLink],
     templateUrl: './cart.html',
     styleUrl: './cart.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
