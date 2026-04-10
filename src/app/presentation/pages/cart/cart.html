@@ -13,7 +13,10 @@
             <div class="cart-layout">
                 <!-- Cart Items -->
                 <div class="cart-items">
-                    @for (item of cartService.cartItems(); track item.productId + (item.productVariantId || '')) {
+                    @for (
+                        item of cartService.cartItems();
+                        track item.productId + (item.productVariantId || '')
+                    ) {
                         <div class="cart-item">
                             <div class="item-image">
                                 @if (item.imageUrl) {
@@ -37,7 +40,11 @@
                                     <button
                                         class="btn-quantity"
                                         (click)="
-                                            updateQuantity(item.productId, item.productVariantId, item.quantity - 1)
+                                            updateQuantity(
+                                                item.productId,
+                                                item.productVariantId,
+                                                item.quantity - 1
+                                            )
                                         "
                                     >
                                         -
@@ -58,7 +65,11 @@
                                     <button
                                         class="btn-quantity"
                                         (click)="
-                                            updateQuantity(item.productId, item.productVariantId, item.quantity + 1)
+                                            updateQuantity(
+                                                item.productId,
+                                                item.productVariantId,
+                                                item.quantity + 1
+                                            )
                                         "
                                     >
                                         +
@@ -68,7 +79,9 @@
 
                             <div class="item-total">
                                 <p class="total-label">Total:</p>
-                                <p class="total-price">{{ formatPrice(item.price * item.quantity) }}</p>
+                                <p class="total-price">
+                                    {{ formatPrice(item.price * item.quantity) }}
+                                </p>
                             </div>
 
                             <button
@@ -82,7 +95,9 @@
                     }
 
                     <div class="cart-actions">
-                        <button class="btn btn-secondary" (click)="clearCart()">Limpar Carrinho</button>
+                        <button class="btn btn-secondary" (click)="clearCart()">
+                            Limpar Carrinho
+                        </button>
                         <a routerLink="/products" class="btn btn-outline"> Continuar Comprando </a>
                     </div>
                 </div>
@@ -106,7 +121,9 @@
                         <span class="value">{{ formatPrice(cartService.subtotal()) }}</span>
                     </div>
 
-                    <a routerLink="/checkout" class="btn btn-primary btn-checkout"> Finalizar Compra </a>
+                    <a routerLink="/checkout" class="btn btn-primary btn-checkout">
+                        Finalizar Compra
+                    </a>
 
                     <div class="security-info">
                         <span class="icon">🔒</span>
