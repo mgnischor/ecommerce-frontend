@@ -1,18 +1,18 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { FinanceService } from '../../../../infrastructure/services';
 import { FinancialDashboard, FinancialTransaction } from '../../../../domain/models';
 
 @Component({
     selector: 'app-admin-finance',
-    imports: [CommonModule, FormsModule],
+    imports: [FormsModule],
     templateUrl: './finance.html',
     styleUrl: './finance.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminFinance implements OnInit {
-    private financeService = inject(FinanceService);
+    private readonly financeService = inject(FinanceService);
 
     dashboard = signal<FinancialDashboard | null>(null);
     transactions = signal<FinancialTransaction[]>([]);
