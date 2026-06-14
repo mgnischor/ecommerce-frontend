@@ -5,7 +5,7 @@ import {
     provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 
 import { routes } from '../application/app.routes';
 import { authInterceptor, errorInterceptor } from './interceptors';
@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
         provideBrowserGlobalErrorListeners(),
         provideZonelessChangeDetection(),
         provideRouter(routes),
-        provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
+        provideHttpClient(withXhr(), withInterceptors([authInterceptor, errorInterceptor])),
         {
             provide: APP_INITIALIZER,
             useFactory: (translate: TranslateService) => () => translate.init(),
