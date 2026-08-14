@@ -1,22 +1,29 @@
-import { ShipmentStatus, ShippingMethod } from './enums';
+import { ShipmentStatus } from './enums';
 
 export interface Shipment {
     id: string;
     orderId: string;
+    shippingAddressId: string;
     trackingNumber: string;
     carrier: string;
-    shippingMethod: ShippingMethod;
+    serviceType: string;
     status: ShipmentStatus;
-    shippedDate?: string;
-    estimatedDeliveryDate?: string;
-    actualDeliveryDate?: string;
-    shippingAddress?: {
-        street: string;
-        city: string;
-        state: string;
-        postalCode: string;
-        country: string;
-    };
+    shippingCost: number;
+    weight: number;
+    length?: number;
+    width?: number;
+    height?: number;
+    expectedDeliveryDate?: string;
+    deliveredAt?: string;
+    shippedAt?: string;
+    trackingUrl?: string;
+    notes?: string;
+    isInsured: boolean;
+    insuranceAmount?: number;
+    requiresSignature: boolean;
+    receivedBy?: string;
+    isDeleted: boolean;
+    createdBy?: string;
     createdAt?: string;
     updatedAt?: string;
 }
