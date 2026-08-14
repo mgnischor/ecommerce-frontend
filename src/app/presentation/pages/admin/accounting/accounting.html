@@ -1,0 +1,171 @@
+<div class="page page-admin">
+    <div class="container">
+        <h1 class="page-title">Contabilidade</h1>
+
+        @if (error()) {
+            <div class="error-message">{{ error() }}</div>
+        }
+
+        <div class="tabs">
+            <button
+                class="tab"
+                [class.active]="activeTab() === 'accounts'"
+                (click)="switchTab('accounts')"
+            >
+                Plano de Contas
+            </button>
+            <button
+                class="tab"
+                [class.active]="activeTab() === 'journal'"
+                (click)="switchTab('journal')"
+            >
+                Lançamentos
+            </button>
+        </div>
+
+        @if (isLoading()) {
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Carregando...</p>
+            </div>
+        }
+
+        @if (!isLoading()) {
+            @if (activeTab() === 'accounts') {
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nome</th>
+                                <th>Tipo</th>
+                                <th>Analítica</th>
+                                <th>Saldo</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (account of accounts(); track account.id) {
+                                <tr>
+                                    <td><strong>{{ account.accountCode }}</strong></td>
+                                    <td>{{ account.accountName }}</td>
+                                    <td>{{ account.accountType }}</td>
+                                    <td>{{ account.isAnalytic ? 'Sim' : 'Não' }}</td>
+                                    <td>{{ formatCurrency(account.balance) }}</td>
+                                    <td>
+                                        <span
+                                            class="status-badge"
+                                            [class]="
+                                                account.isActive ? 'status-active' : 'status-inactive'
+                                            "
+                                        >
+                                            {{ account.isActive ? 'Ativo' : 'Inativo' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            } @else {
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Data</th>
+                                <th>Documento</th>
+                                <th>Total</th>
+                                <th>Postado</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (entry of journalEntries(); track entry.id) {
+                                <tr>
+                                    <td><strong>{{ entry.entryNumber }}</strong></td>
+                                    <td>{{ formatDate(entry.entryDate) }}</td>
+                                    <td>{{ entry.documentNumber }}</td>
+                                    <td>{{ formatCurrency(entry.totalAmount) }}</td>
+                                    <td>
+                                        <span
+                                            class="status-badge"
+                                            [class]="entry.isPosted ? 'status-active' : 'status-pending'"
+                                        >
+                                            {{ entry.isPosted ? 'Postado' : 'Rascunho' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button
+                                            class="btn btn-primary btn-sm"
+                                            (click)="viewEntry(entry)"
+                                        >
+                                            Ver
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                @if (totalPages() > 1) {
+                    <div class="pagination">
+                        <button
+                            class="btn btn-page"
+                            [disabled]="currentPage() === 1"
+                            (click)="onPageChange(currentPage() - 1)"
+                        >
+                            Anterior
+                        </button>
+                        <span class="page-info"
+                            >Página {{ currentPage() }} de {{ totalPages() }}</span
+                        >
+                        <button
+                            class="btn btn-page"
+                            [disabled]="currentPage() === totalPages()"
+                            (click)="onPageChange(currentPage() + 1)"
+                        >
+                            Próxima
+                        </button>
+                    </div>
+                }
+            }
+        }
+
+        @if (selectedEntry()) {
+            <div class="modal-overlay" (click)="closeDetail()">
+                <div class="modal-content" (click)="$event.stopPropagation()">
+                    <div class="modal-header">
+                        <h2>Lançamento {{ selectedEntry()!.entryNumber }}</h2>
+                        <button class="btn-close" (click)="closeDetail()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Conta</th>
+                                        <th>Código</th>
+                                        <th>Tipo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (line of selectedEntry()!.entries; track line.id) {
+                                        <tr>
+                                            <td>{{ line.accountName }}</td>
+                                            <td>{{ line.accountCode }}</td>
+                                            <td>{{ line.entryType }}</td>
+                                            <td>{{ formatCurrency(line.amount) }}</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
