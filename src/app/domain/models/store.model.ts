@@ -23,6 +23,8 @@ export interface Store {
     supportsDelivery: boolean;
     isActive: boolean;
     displayOrder: number;
+    isDeleted: boolean;
+    createdBy?: string;
     createdAt: string;
     updatedAt: string;
 }
