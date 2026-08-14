@@ -1,0 +1,162 @@
+<div class="page page-admin">
+    <div class="container">
+        <h1 class="page-title">Gerenciar Notas Fiscais</h1>
+
+        @if (successMessage()) {
+            <div class="success-message">{{ successMessage() }}</div>
+        }
+        @if (error()) {
+            <div class="error-message">{{ error() }}</div>
+        }
+
+        <div class="toolbar">
+            <div class="search-box">
+                <input
+                    type="text"
+                    [(ngModel)]="searchNumber"
+                    (keyup.enter)="search()"
+                    placeholder="Número da nota..."
+                    class="search-input"
+                />
+                <button class="btn btn-primary" (click)="search()">Buscar</button>
+            </div>
+        </div>
+
+        @if (isLoading()) {
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Carregando...</p>
+            </div>
+        }
+        @if (!isLoading() && invoices().length > 0) {
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Pedido</th>
+                            <th>Total</th>
+                            <th>Pago</th>
+                            <th>Vencimento</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (invoice of invoices(); track invoice.id) {
+                            <tr>
+                                <td><strong>{{ invoice.invoiceNumber }}</strong></td>
+                                <td>{{ invoice.orderId | slice: 0 : 8 }}...</td>
+                                <td>{{ formatCurrency(invoice.total) }}</td>
+                                <td>{{ formatCurrency(invoice.paidAmount) }}</td>
+                                <td>{{ formatDate(invoice.dueDate) }}</td>
+                                <td>
+                                    <span
+                                        class="status-badge"
+                                        [class]="invoice.isPaid ? 'status-active' : 'status-pending'"
+                                    >
+                                        {{ invoice.isPaid ? 'Paga' : 'Pendente' }}
+                                    </span>
+                                </td>
+                                <td class="actions-cell">
+                                    @if (!invoice.isPaid) {
+                                        <button
+                                            class="btn btn-success btn-sm"
+                                            (click)="openPayModal(invoice)"
+                                        >
+                                            Pagar
+                                        </button>
+                                    }
+                                    <button
+                                        class="btn btn-secondary btn-sm"
+                                        (click)="openCreditNoteModal(invoice)"
+                                    >
+                                        Nota de Crédito
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        } @else if (!isLoading() && !error()) {
+            <div class="empty-state">
+                <p>Busque uma nota fiscal pelo número para visualizar os dados</p>
+            </div>
+        }
+
+        @if (showPayModal()) {
+            <div class="modal-overlay" (click)="closePayModal()">
+                <div class="modal-content" (click)="$event.stopPropagation()">
+                    <div class="modal-header">
+                        <h2>Registrar Pagamento</h2>
+                        <button class="btn-close" (click)="closePayModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Valor Pago</label>
+                                <input
+                                    type="number"
+                                    class="search-input"
+                                    min="0.01"
+                                    step="0.01"
+                                    [ngModel]="payForm().paidAmount"
+                                    (ngModelChange)="updateFormField('pay', 'paidAmount', +$event)"
+                                />
+                            </div>
+                        </div>
+                        <div
+                            class="actions-cell"
+                            style="justify-content: flex-end; margin-top: 1rem"
+                        >
+                            <button class="btn btn-secondary btn-sm" (click)="closePayModal()">
+                                Cancelar
+                            </button>
+                            <button class="btn btn-primary btn-sm" (click)="payInvoice()">
+                                Pagar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (showCreditNoteModal()) {
+            <div class="modal-overlay" (click)="closeCreditNoteModal()">
+                <div class="modal-content" (click)="$event.stopPropagation()">
+                    <div class="modal-header">
+                        <h2>Emitir Nota de Crédito</h2>
+                        <button class="btn-close" (click)="closeCreditNoteModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Valor</label>
+                                <input
+                                    type="number"
+                                    class="search-input"
+                                    min="0.01"
+                                    step="0.01"
+                                    [ngModel]="creditNoteForm().amount"
+                                    (ngModelChange)="updateFormField('credit', 'amount', +$event)"
+                                />
+                            </div>
+                        </div>
+                        <div
+                            class="actions-cell"
+                            style="justify-content: flex-end; margin-top: 1rem"
+                        >
+                            <button class="btn btn-secondary btn-sm" (click)="closeCreditNoteModal()">
+                                Cancelar
+                            </button>
+                            <button class="btn btn-primary btn-sm" (click)="issueCreditNote()">
+                                Emitir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
