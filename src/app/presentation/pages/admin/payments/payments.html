@@ -1,0 +1,136 @@
+<div class="page page-admin">
+    <div class="container">
+        <h1 class="page-title">Gerenciar Pagamentos</h1>
+
+        @if (successMessage()) {
+            <div class="success-message">{{ successMessage() }}</div>
+        }
+        @if (error()) {
+            <div class="error-message">{{ error() }}</div>
+        }
+
+        <div class="toolbar">
+            <div class="search-box">
+                <input
+                    type="text"
+                    [(ngModel)]="orderId"
+                    (keyup.enter)="searchByOrder()"
+                    placeholder="ID do Pedido..."
+                    class="search-input"
+                />
+                <button class="btn btn-primary" (click)="searchByOrder()">Buscar</button>
+            </div>
+            <button class="btn btn-success" (click)="openProcessModal()">Processar Pagamento</button>
+        </div>
+
+        @if (isLoading()) {
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Carregando...</p>
+            </div>
+        }
+        @if (!isLoading() && payments().length > 0) {
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Pedido</th>
+                            <th>Transação</th>
+                            <th>Método</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th>Data</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (payment of payments(); track payment.paymentId) {
+                            <tr>
+                                <td>
+                                    <strong>{{ payment.orderId | slice: 0 : 8 }}...</strong>
+                                </td>
+                                <td>{{ payment.transactionId }}</td>
+                                <td>{{ getMethodLabel(payment.paymentMethod) }}</td>
+                                <td>{{ formatCurrency(payment.amount) }}</td>
+                                <td>
+                                    <span
+                                        class="status-badge"
+                                        [class]="getStatusClass(payment.status)"
+                                    >
+                                        {{ getStatusLabel(payment.status) }}
+                                    </span>
+                                </td>
+                                <td>{{ formatDate(payment.processedAt) }}</td>
+                                <td class="actions-cell">
+                                    <button
+                                        class="btn btn-danger btn-sm"
+                                        (click)="refundPayment(payment.paymentId)"
+                                    >
+                                        Reembolsar
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        } @else if (!isLoading() && !error()) {
+            <div class="empty-state">
+                <p>Busque um pedido para visualizar o pagamento</p>
+            </div>
+        }
+
+        @if (showProcessModal()) {
+            <div class="modal-overlay" (click)="closeProcessModal()">
+                <div class="modal-content" (click)="$event.stopPropagation()">
+                    <div class="modal-header">
+                        <h2>Processar Pagamento</h2>
+                        <button class="btn-close" (click)="closeProcessModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>ID do Pedido</label>
+                                <input
+                                    type="text"
+                                    class="search-input"
+                                    [ngModel]="processForm().orderId"
+                                    (ngModelChange)="updateFormField('orderId', $event)"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Método de Pagamento</label>
+                                <select
+                                    class="search-input"
+                                    [ngModel]="processForm().paymentMethod"
+                                    (ngModelChange)="updateFormField('paymentMethod', +$event)"
+                                >
+                                    <option [value]="1">Cartão de Crédito</option>
+                                    <option [value]="2">Cartão de Débito</option>
+                                    <option [value]="3">PayPal</option>
+                                    <option [value]="4">Transferência</option>
+                                    <option [value]="5">Dinheiro na Entrega</option>
+                                    <option [value]="6">Pix</option>
+                                    <option [value]="7">Boleto</option>
+                                    <option [value]="8">Criptomoeda</option>
+                                    <option [value]="9">Crédito na Loja</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div
+                            class="actions-cell"
+                            style="justify-content: flex-end; margin-top: 1rem"
+                        >
+                            <button class="btn btn-secondary btn-sm" (click)="closeProcessModal()">
+                                Cancelar
+                            </button>
+                            <button class="btn btn-primary btn-sm" (click)="processPayment()">
+                                Processar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
