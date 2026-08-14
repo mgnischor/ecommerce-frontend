@@ -2,7 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { LoginRequest, LoginResponse } from '../../domain/models';
+import { LoginRequest, LoginResponse, UserAccessLevel } from '../../domain/models';
 
 @Injectable({
     providedIn: 'root',
@@ -13,7 +13,9 @@ export class AuthService {
     private readonly tokenKey = 'auth_token';
 
     isAuthenticated = signal(false);
-    currentUser = signal<{ email: string; userId: string } | null>(null);
+    currentUser = signal<{ email: string; userId: string; accessLevel: UserAccessLevel } | null>(
+        null,
+    );
 
     constructor() {
         this.checkAuthStatus();
@@ -24,12 +26,11 @@ export class AuthService {
             tap((response) => {
                 this.setToken(response.token);
                 this.isAuthenticated.set(true);
-                if (response.email && response.userId) {
-                    this.currentUser.set({
-                        email: response.email,
-                        userId: response.userId,
-                    });
-                }
+                this.currentUser.set({
+                    email: response.email,
+                    userId: response.userId,
+                    accessLevel: this.mapAccessLevel(response.accessLevel),
+                });
             }),
         );
     }
@@ -45,6 +46,31 @@ export class AuthService {
             return localStorage.getItem(this.tokenKey);
         }
         return null;
+    }
+
+    hasRole(...roles: UserAccessLevel[]): boolean {
+        const user = this.currentUser();
+        if (!user) return false;
+        return roles.includes(user.accessLevel);
+    }
+
+    private mapAccessLevel(value: string): UserAccessLevel {
+        switch (value?.toLowerCase()) {
+            case 'guest':
+                return UserAccessLevel.Guest;
+            case 'customer':
+                return UserAccessLevel.Customer;
+            case 'company':
+                return UserAccessLevel.Company;
+            case 'admin':
+                return UserAccessLevel.Admin;
+            case 'manager':
+                return UserAccessLevel.Manager;
+            case 'developer':
+                return UserAccessLevel.Developer;
+            default:
+                return UserAccessLevel.Guest;
+        }
     }
 
     private setToken(token: string): void {
