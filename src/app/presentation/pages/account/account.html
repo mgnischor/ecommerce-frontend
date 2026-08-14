@@ -41,15 +41,9 @@
                     }
 
                     <form [formGroup]="profileForm" (ngSubmit)="onSaveProfile()">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="firstName">{{ 'account.firstName' | translate }}</label>
-                                <input type="text" id="firstName" formControlName="firstName" />
-                            </div>
-                            <div class="form-group">
-                                <label for="lastName">{{ 'account.lastName' | translate }}</label>
-                                <input type="text" id="lastName" formControlName="lastName" />
-                            </div>
+                        <div class="form-group">
+                            <label for="username">{{ 'account.username' | translate }}</label>
+                            <input type="text" id="username" formControlName="username" />
                         </div>
 
                         <div class="form-group">
@@ -58,13 +52,19 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="phoneNumber">{{ 'account.phone' | translate }}</label>
-                            <input
-                                type="tel"
-                                id="phoneNumber"
-                                formControlName="phoneNumber"
-                                [placeholder]="'account.phonePlaceholder' | translate"
-                            />
+                            <label for="address">{{ 'account.address' | translate }}</label>
+                            <input type="text" id="address" formControlName="address" />
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">{{ 'account.city' | translate }}</label>
+                                <input type="text" id="city" formControlName="city" />
+                            </div>
+                            <div class="form-group">
+                                <label for="country">{{ 'account.country' | translate }}</label>
+                                <input type="text" id="country" formControlName="country" />
+                            </div>
                         </div>
 
                         <div class="form-actions">
@@ -85,7 +85,7 @@
                         <h3>{{ 'account.accountInfo' | translate }}</h3>
                         <dl>
                             <dt>{{ 'account.accessLevel' | translate }}</dt>
-                            <dd>{{ user()!.accessLevel }}</dd>
+                            <dd>{{ getAccessLevelLabel(user()!.accessLevel) }}</dd>
                             <dt>{{ 'account.activeAccount' | translate }}</dt>
                             <dd>
                                 {{
