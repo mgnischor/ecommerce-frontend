@@ -60,20 +60,14 @@
                                     </td>
                                     <td>{{ promo.name }}</td>
                                     <td>{{ getTypeLabel(promo.type) }}</td>
-                                    <td>
-                                        @if (promo.type === 0) {
-                                            {{ promo.discountValue }}%
-                                        } @else {
-                                            {{ formatCurrency(promo.discountValue) }}
-                                        }
-                                    </td>
+                                    <td>{{ getDiscountLabel(promo) }}</td>
                                     <td>
                                         {{ formatDate(promo.startDate) }} -
                                         {{ formatDate(promo.endDate) }}
                                     </td>
                                     <td>
                                         {{ promo.usageCount
-                                        }}{{ promo.usageLimit ? ' / ' + promo.usageLimit : '' }}
+                                        }}{{ promo.maxUsageCount ? ' / ' + promo.maxUsageCount : '' }}
                                     </td>
                                     <td>
                                         <span
@@ -146,24 +140,36 @@
                                     <option [value]="1">Valor Fixo</option>
                                     <option [value]="2">Compre 1, Leve 2</option>
                                     <option [value]="3">Frete Grátis</option>
+                                    <option [value]="4">Pacote</option>
+                                    <option [value]="5">Queima Relâmpago</option>
+                                    <option [value]="6">Liquidação</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Valor do Desconto</label>
+                                <label>Desconto (%)</label>
                                 <input
                                     type="number"
                                     class="search-input"
-                                    [ngModel]="formData().discountValue"
-                                    (ngModelChange)="updateFormField('discountValue', $event)"
+                                    [ngModel]="formData().discountPercentage"
+                                    (ngModelChange)="updateFormField('discountPercentage', $event)"
                                 />
                             </div>
                             <div class="form-group">
-                                <label>Compra Mínima</label>
+                                <label>Desconto (Valor Fixo)</label>
                                 <input
                                     type="number"
                                     class="search-input"
-                                    [ngModel]="formData().minimumPurchase"
-                                    (ngModelChange)="updateFormField('minimumPurchase', $event)"
+                                    [ngModel]="formData().discountAmount"
+                                    (ngModelChange)="updateFormField('discountAmount', $event)"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Pedido Mínimo</label>
+                                <input
+                                    type="number"
+                                    class="search-input"
+                                    [ngModel]="formData().minimumOrderAmount"
+                                    (ngModelChange)="updateFormField('minimumOrderAmount', $event)"
                                 />
                             </div>
                             <div class="form-group">
@@ -171,8 +177,8 @@
                                 <input
                                     type="number"
                                     class="search-input"
-                                    [ngModel]="formData().maximumDiscount"
-                                    (ngModelChange)="updateFormField('maximumDiscount', $event)"
+                                    [ngModel]="formData().maximumDiscountAmount"
+                                    (ngModelChange)="updateFormField('maximumDiscountAmount', $event)"
                                 />
                             </div>
                             <div class="form-group">
@@ -198,8 +204,8 @@
                                 <input
                                     type="number"
                                     class="search-input"
-                                    [ngModel]="formData().usageLimit"
-                                    (ngModelChange)="updateFormField('usageLimit', $event)"
+                                    [ngModel]="formData().maxUsageCount"
+                                    (ngModelChange)="updateFormField('maxUsageCount', $event)"
                                 />
                             </div>
                             <div class="form-group form-check-group">
