@@ -1,0 +1,219 @@
+<div class="page page-admin">
+    <div class="container">
+        <h1 class="page-title">Gerenciar Cartões Presente</h1>
+
+        @if (successMessage()) {
+            <div class="success-message">{{ successMessage() }}</div>
+        }
+        @if (error()) {
+            <div class="error-message">{{ error() }}</div>
+        }
+
+        <div class="toolbar">
+            <div class="search-box">
+                <input
+                    type="text"
+                    [(ngModel)]="searchNumber"
+                    (keyup.enter)="search()"
+                    placeholder="Número do cartão..."
+                    class="search-input"
+                />
+                <button class="btn btn-primary" (click)="search()">Buscar</button>
+            </div>
+            <button class="btn btn-success" (click)="openCreateModal()">Novo Cartão</button>
+        </div>
+
+        @if (isLoading()) {
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Carregando...</p>
+            </div>
+        }
+        @if (!isLoading() && cards().length > 0) {
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Saldo</th>
+                            <th>Status</th>
+                            <th>Emitido em</th>
+                            <th>Expira em</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (card of cards(); track card.id) {
+                            <tr>
+                                <td><strong>{{ card.cardNumber }}</strong></td>
+                                <td>{{ formatCurrency(card.balance) }}</td>
+                                <td>
+                                    <span
+                                        class="status-badge"
+                                        [class]="
+                                            card.isActive && !card.isRevoked
+                                                ? 'status-active'
+                                                : 'status-inactive'
+                                        "
+                                    >
+                                        {{
+                                            card.isRevoked
+                                                ? 'Revogado'
+                                                : card.isActive
+                                                  ? 'Ativo'
+                                                  : 'Inativo'
+                                        }}
+                                    </span>
+                                </td>
+                                <td>{{ formatDate(card.issuedAt) }}</td>
+                                <td>{{ formatDate(card.expiresAt) }}</td>
+                                <td class="actions-cell">
+                                    <button
+                                        class="btn btn-primary btn-sm"
+                                        (click)="openRedeemModal(card)"
+                                    >
+                                        Resgatar
+                                    </button>
+                                    <button
+                                        class="btn btn-secondary btn-sm"
+                                        (click)="openReloadModal(card)"
+                                    >
+                                        Recarregar
+                                    </button>
+                                    <button
+                                        class="btn btn-danger btn-sm"
+                                        (click)="deleteCard(card.id)"
+                                    >
+                                        Excluir
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        } @else if (!isLoading() && !error()) {
+            <div class="empty-state">
+                <p>Busque um cartão pelo número para visualizar os dados</p>
+            </div>
+        }
+
+        @if (showCreateModal()) {
+            <div class="modal-overlay" (click)="closeCreateModal()">
+                <div class="modal-content" (click)="$event.stopPropagation()">
+                    <div class="modal-header">
+                        <h2>Novo Cartão Presente</h2>
+                        <button class="btn-close" (click)="closeCreateModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Número do Cartão</label>
+                                <input
+                                    type="text"
+                                    class="search-input"
+                                    [ngModel]="createForm().cardNumber"
+                                    (ngModelChange)="updateFormField('create', 'cardNumber', $event)"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Saldo Inicial</label>
+                                <input
+                                    type="number"
+                                    class="search-input"
+                                    min="0.01"
+                                    step="0.01"
+                                    [ngModel]="createForm().balance"
+                                    (ngModelChange)="updateFormField('create', 'balance', +$event)"
+                                />
+                            </div>
+                        </div>
+                        <div
+                            class="actions-cell"
+                            style="justify-content: flex-end; margin-top: 1rem"
+                        >
+                            <button class="btn btn-secondary btn-sm" (click)="closeCreateModal()">
+                                Cancelar
+                            </button>
+                            <button class="btn btn-primary btn-sm" (click)="createCard()">
+                                Criar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (showRedeemModal()) {
+            <div class="modal-overlay" (click)="closeRedeemModal()">
+                <div class="modal-content" (click)="$event.stopPropagation()">
+                    <div class="modal-header">
+                        <h2>Resgatar Saldo</h2>
+                        <button class="btn-close" (click)="closeRedeemModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Valor do Resgate</label>
+                                <input
+                                    type="number"
+                                    class="search-input"
+                                    min="0.01"
+                                    step="0.01"
+                                    [ngModel]="redeemForm().redeemAmount"
+                                    (ngModelChange)="updateFormField('redeem', 'redeemAmount', +$event)"
+                                />
+                            </div>
+                        </div>
+                        <div
+                            class="actions-cell"
+                            style="justify-content: flex-end; margin-top: 1rem"
+                        >
+                            <button class="btn btn-secondary btn-sm" (click)="closeRedeemModal()">
+                                Cancelar
+                            </button>
+                            <button class="btn btn-primary btn-sm" (click)="redeem()">Resgatar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (showReloadModal()) {
+            <div class="modal-overlay" (click)="closeReloadModal()">
+                <div class="modal-content" (click)="$event.stopPropagation()">
+                    <div class="modal-header">
+                        <h2>Recarregar Cartão</h2>
+                        <button class="btn-close" (click)="closeReloadModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Novo Saldo</label>
+                                <input
+                                    type="number"
+                                    class="search-input"
+                                    min="0.01"
+                                    step="0.01"
+                                    [ngModel]="reloadForm().newBalance"
+                                    (ngModelChange)="updateFormField('reload', 'newBalance', +$event)"
+                                />
+                            </div>
+                        </div>
+                        <div
+                            class="actions-cell"
+                            style="justify-content: flex-end; margin-top: 1rem"
+                        >
+                            <button class="btn btn-secondary btn-sm" (click)="closeReloadModal()">
+                                Cancelar
+                            </button>
+                            <button class="btn btn-primary btn-sm" (click)="reload()">
+                                Salvar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
