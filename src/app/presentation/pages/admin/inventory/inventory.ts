@@ -27,12 +27,14 @@ export class AdminInventory implements OnInit {
     showCreateModal = signal(false);
     formData = signal({
         productId: '',
-        productVariantId: '',
+        productSku: '',
+        productName: '',
         transactionType: InventoryTransactionType.Purchase,
         quantity: 1,
+        unitCost: 0,
         fromLocation: '',
         toLocation: '',
-        referenceNumber: '',
+        documentNumber: '',
         notes: '',
     });
 
@@ -90,12 +92,14 @@ export class AdminInventory implements OnInit {
     openCreateModal() {
         this.formData.set({
             productId: '',
-            productVariantId: '',
+            productSku: '',
+            productName: '',
             transactionType: InventoryTransactionType.Purchase,
             quantity: 1,
+            unitCost: 0,
             fromLocation: '',
             toLocation: '',
-            referenceNumber: '',
+            documentNumber: '',
             notes: '',
         });
         this.showCreateModal.set(true);
@@ -110,12 +114,14 @@ export class AdminInventory implements OnInit {
         this.inventoryService
             .createTransaction({
                 productId: data.productId,
-                productVariantId: data.productVariantId || undefined,
+                productSku: data.productSku,
+                productName: data.productName,
                 transactionType: data.transactionType,
                 quantity: data.quantity,
+                unitCost: data.unitCost,
                 fromLocation: data.fromLocation || undefined,
                 toLocation: data.toLocation,
-                referenceNumber: data.referenceNumber || undefined,
+                documentNumber: data.documentNumber || undefined,
                 notes: data.notes || undefined,
             })
             .subscribe({
@@ -137,9 +143,14 @@ export class AdminInventory implements OnInit {
         const labels: Record<number, string> = {
             [InventoryTransactionType.Purchase]: 'Compra',
             [InventoryTransactionType.Sale]: 'Venda',
+            [InventoryTransactionType.SaleReturn]: 'Devolução de Venda',
+            [InventoryTransactionType.PurchaseReturn]: 'Devolução de Compra',
             [InventoryTransactionType.Adjustment]: 'Ajuste',
-            [InventoryTransactionType.Return]: 'Devolução',
             [InventoryTransactionType.Transfer]: 'Transferência',
+            [InventoryTransactionType.Loss]: 'Perda',
+            [InventoryTransactionType.Reservation]: 'Reserva',
+            [InventoryTransactionType.ReservationRelease]: 'Liberação de Reserva',
+            [InventoryTransactionType.Fulfillment]: 'Atendimento',
         };
         return labels[type] ?? 'Desconhecido';
     }
@@ -148,9 +159,14 @@ export class AdminInventory implements OnInit {
         const classes: Record<number, string> = {
             [InventoryTransactionType.Purchase]: 'status-active',
             [InventoryTransactionType.Sale]: 'status-processed',
+            [InventoryTransactionType.SaleReturn]: 'status-returned',
+            [InventoryTransactionType.PurchaseReturn]: 'status-returned',
             [InventoryTransactionType.Adjustment]: 'status-pending',
-            [InventoryTransactionType.Return]: 'status-returned',
             [InventoryTransactionType.Transfer]: 'status-transit',
+            [InventoryTransactionType.Loss]: 'status-failed',
+            [InventoryTransactionType.Reservation]: 'status-pending',
+            [InventoryTransactionType.ReservationRelease]: 'status-pending',
+            [InventoryTransactionType.Fulfillment]: 'status-delivered',
         };
         return classes[type] ?? '';
     }
@@ -158,5 +174,10 @@ export class AdminInventory implements OnInit {
     formatDate(date: string | undefined): string {
         if (!date) return '—';
         return new Date(date).toLocaleDateString('pt-BR');
+    }
+
+    formatCurrency(value: number | undefined): string {
+        if (value == null) return '—';
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
     }
 }
