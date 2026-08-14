@@ -17,6 +17,8 @@ export interface ShippingZone {
     taxRate?: number;
     priority: number;
     isActive: boolean;
+    isDeleted: boolean;
+    createdBy?: string;
     createdAt: string;
     updatedAt: string;
 }
