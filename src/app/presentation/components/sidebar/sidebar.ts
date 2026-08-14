@@ -43,6 +43,20 @@ export class Sidebar {
             label: this.t.get('sidebar.shippingZones'),
             icon: 'bi-geo-alt',
         },
+        { path: '/admin/payments', label: this.t.get('sidebar.payments'), icon: 'bi-credit-card' },
+        { path: '/admin/customers', label: this.t.get('sidebar.customers'), icon: 'bi-people' },
+        {
+            path: '/admin/gift-cards',
+            label: this.t.get('sidebar.giftCards'),
+            icon: 'bi-gift',
+        },
+        { path: '/admin/rewards', label: this.t.get('sidebar.rewards'), icon: 'bi-star' },
+        { path: '/admin/invoices', label: this.t.get('sidebar.invoices'), icon: 'bi-receipt' },
+        {
+            path: '/admin/accounting',
+            label: this.t.get('sidebar.accounting'),
+            icon: 'bi-journal-text',
+        },
     ]);
     readonly admin = computed(() => this.adminItems());
 }
