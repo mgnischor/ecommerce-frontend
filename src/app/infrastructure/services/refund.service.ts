@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
     Refund,
@@ -8,6 +8,7 @@ import {
     CreateRefundRequest,
     RejectRefundRequest,
 } from '../../domain/models';
+import { parsePagedResponse } from './pagination.util';
 
 @Injectable({
     providedIn: 'root',
@@ -21,7 +22,9 @@ export class RefundService {
             .set('pageNumber', pageNumber.toString())
             .set('pageSize', pageSize.toString());
 
-        return this.http.get<PaginatedRefunds>(this.baseUrl, { params });
+        return this.http
+            .get<Refund[]>(this.baseUrl, { params, observe: 'response' })
+            .pipe(map((response) => parsePagedResponse(response, pageNumber, pageSize)));
     }
 
     getRefundById(id: string): Observable<Refund> {
@@ -53,6 +56,6 @@ export class RefundService {
     }
 
     rejectRefund(id: string, request: RejectRefundRequest): Observable<void> {
-        return this.http.patch<void>(`${this.baseUrl}/${id}/reject`, request);
+        return this.http.patch<void>(`${this.baseUrl}/${id}/reject`, request.reason);
     }
 }
