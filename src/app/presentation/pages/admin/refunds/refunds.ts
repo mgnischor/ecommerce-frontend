@@ -81,7 +81,7 @@ export class AdminRefunds implements OnInit {
         const id = this.selectedRefundId();
         if (!id || !this.rejectionReason()) return;
 
-        this.refundService.rejectRefund(id, { rejectionReason: this.rejectionReason() }).subscribe({
+        this.refundService.rejectRefund(id, { reason: this.rejectionReason() }).subscribe({
             next: () => {
                 this.successMessage.set('Reembolso rejeitado');
                 this.closeRejectModal();
@@ -99,10 +99,12 @@ export class AdminRefunds implements OnInit {
 
     getStatusLabel(status: RefundStatus): string {
         const labels: Record<number, string> = {
-            [RefundStatus.Pending]: 'Pendente',
+            [RefundStatus.Requested]: 'Solicitado',
+            [RefundStatus.UnderReview]: 'Em Análise',
             [RefundStatus.Approved]: 'Aprovado',
             [RefundStatus.Rejected]: 'Rejeitado',
-            [RefundStatus.Processed]: 'Processado',
+            [RefundStatus.Processing]: 'Processando',
+            [RefundStatus.Completed]: 'Concluído',
             [RefundStatus.Cancelled]: 'Cancelado',
         };
         return labels[status] ?? 'Desconhecido';
@@ -110,10 +112,12 @@ export class AdminRefunds implements OnInit {
 
     getStatusClass(status: RefundStatus): string {
         const classes: Record<number, string> = {
-            [RefundStatus.Pending]: 'status-pending',
+            [RefundStatus.Requested]: 'status-pending',
+            [RefundStatus.UnderReview]: 'status-pending',
             [RefundStatus.Approved]: 'status-approved',
             [RefundStatus.Rejected]: 'status-rejected',
-            [RefundStatus.Processed]: 'status-processed',
+            [RefundStatus.Processing]: 'status-processed',
+            [RefundStatus.Completed]: 'status-delivered',
             [RefundStatus.Cancelled]: 'status-cancelled',
         };
         return classes[status] ?? '';
