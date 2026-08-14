@@ -102,7 +102,7 @@ export class ProductDetail implements OnInit {
         if (!product) return;
 
         const variant = this.selectedVariant();
-        const price = variant?.price || product.salePrice || product.price;
+        const price = variant?.price || product.discountPrice || product.price;
 
         this.cartService.addItem(
             {
@@ -129,14 +129,14 @@ export class ProductDetail implements OnInit {
         if (!product) return 0;
 
         const variant = this.selectedVariant();
-        return variant?.price || product.salePrice || product.price;
+        return variant?.price || product.discountPrice || product.price;
     }
 
     get originalPrice(): number {
         const product = this.product();
         if (!product) return 0;
 
-        return product.isOnSale ? product.price : 0;
+        return product.isOnSale && product.discountPrice ? product.price : 0;
     }
 
     get currentStock(): number {
