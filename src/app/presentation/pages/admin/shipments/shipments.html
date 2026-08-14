@@ -52,8 +52,8 @@
                                             {{ getStatusLabel(shipment.status) }}
                                         </span>
                                     </td>
-                                    <td>{{ formatDate(shipment.shippedDate) }}</td>
-                                    <td>{{ formatDate(shipment.estimatedDeliveryDate) }}</td>
+                                    <td>{{ formatDate(shipment.shippedAt) }}</td>
+                                    <td>{{ formatDate(shipment.expectedDeliveryDate) }}</td>
                                 </tr>
                             }
                         </tbody>
