@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { AuthService, UserService, NotificationService } from '../../../infrastructure/services';
 import { TranslateService, TranslatePipe } from '../../../infrastructure/i18n';
-import { User, Notification } from '../../../domain/models';
+import { User, Notification, UserAccessLevel } from '../../../domain/models';
 
 /**
  * User account page component.
@@ -33,10 +33,11 @@ export class Account implements OnInit {
     activeTab = signal<'profile' | 'notifications'>('profile');
 
     profileForm = new FormGroup({
-        firstName: new FormControl('', [Validators.required]),
-        lastName: new FormControl('', [Validators.required]),
-        email: new FormControl({ value: '', disabled: true }),
-        phoneNumber: new FormControl(''),
+        username: new FormControl('', [Validators.required]),
+        email: new FormControl('', [Validators.required, Validators.email]),
+        address: new FormControl(''),
+        city: new FormControl(''),
+        country: new FormControl(''),
     });
 
     ngOnInit() {
@@ -55,10 +56,11 @@ export class Account implements OnInit {
             next: (user) => {
                 this.user.set(user);
                 this.profileForm.patchValue({
-                    firstName: user.firstName,
-                    lastName: user.lastName,
+                    username: user.username,
                     email: user.email,
-                    phoneNumber: user.phoneNumber || '',
+                    address: user.address || '',
+                    city: user.city || '',
+                    country: user.country || '',
                 });
                 this.loadNotifications(currentUser.userId);
                 this.isLoading.set(false);
@@ -94,13 +96,16 @@ export class Account implements OnInit {
         this.successMessage.set(null);
         this.error.set(null);
 
-        const { firstName, lastName, phoneNumber } = this.profileForm.value;
+        const { username, email, address, city, country } = this.profileForm.value;
 
         this.userService
             .updateUser(currentUser.id, {
-                firstName: firstName!,
-                lastName: lastName!,
-                phoneNumber: phoneNumber || undefined,
+                ...currentUser,
+                username: username!,
+                email: email!,
+                address: address || undefined,
+                city: city || undefined,
+                country: country || undefined,
             })
             .subscribe({
                 next: () => {
@@ -110,9 +115,11 @@ export class Account implements OnInit {
                         u
                             ? {
                                   ...u,
-                                  firstName: firstName!,
-                                  lastName: lastName!,
-                                  phoneNumber: phoneNumber || undefined,
+                                  username: username!,
+                                  email: email!,
+                                  address: address || undefined,
+                                  city: city || undefined,
+                                  country: country || undefined,
                               }
                             : u,
                     );
@@ -156,6 +163,18 @@ export class Account implements OnInit {
     logout() {
         this.authService.logout();
         this.router.navigate(['/login']);
+    }
+
+    getAccessLevelLabel(level: UserAccessLevel): string {
+        const labels: Record<number, string> = {
+            [UserAccessLevel.Guest]: this.t.get('account.accessGuest'),
+            [UserAccessLevel.Customer]: this.t.get('account.accessCustomer'),
+            [UserAccessLevel.Company]: this.t.get('account.accessCompany'),
+            [UserAccessLevel.Admin]: this.t.get('account.accessAdmin'),
+            [UserAccessLevel.Manager]: this.t.get('account.accessManager'),
+            [UserAccessLevel.Developer]: this.t.get('account.accessDeveloper'),
+        };
+        return labels[level] ?? String(level);
     }
 
     formatDate(date: string | undefined): string {
