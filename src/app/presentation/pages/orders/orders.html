@@ -51,7 +51,7 @@
                                         {{ order.items?.length || 0 }}</span
                                     >
                                 </div>
-                                <div class="order-total">{{ formatPrice(order.total) }}</div>
+                                <div class="order-total">{{ formatPrice(order.totalAmount) }}</div>
                             </div>
                         </div>
                     }
@@ -87,19 +87,23 @@
                         </div>
                         <div class="detail-row">
                             <span>{{ 'orders.subtotal' | translate }}</span>
-                            <span>{{ formatPrice(selectedOrder()!.subtotal) }}</span>
+                            <span>{{ formatPrice(selectedOrder()!.subTotal) }}</span>
                         </div>
                         <div class="detail-row">
                             <span>{{ 'orders.tax' | translate }}</span>
-                            <span>{{ formatPrice(selectedOrder()!.tax) }}</span>
+                            <span>{{ formatPrice(selectedOrder()!.taxAmount) }}</span>
                         </div>
                         <div class="detail-row">
                             <span>{{ 'orders.shipping' | translate }}</span>
                             <span>{{ formatPrice(selectedOrder()!.shippingCost) }}</span>
                         </div>
+                        <div class="detail-row">
+                            <span>{{ 'orders.discount' | translate }}</span>
+                            <span>{{ formatPrice(selectedOrder()!.discountAmount) }}</span>
+                        </div>
                         <div class="detail-row total">
                             <span>{{ 'common.total' | translate }}</span>
-                            <span>{{ formatPrice(selectedOrder()!.total) }}</span>
+                            <span>{{ formatPrice(selectedOrder()!.totalAmount) }}</span>
                         </div>
 
                         @if (selectedOrder()!.items && selectedOrder()!.items!.length > 0) {
@@ -109,12 +113,12 @@
                                     <div class="order-item">
                                         <div class="item-info">
                                             <strong>{{ item.productName }}</strong>
-                                            <span class="item-sku">SKU: {{ item.sku }}</span>
+                                            <span class="item-sku">SKU: {{ item.productSku }}</span>
                                         </div>
                                         <div class="item-qty">
                                             {{ 'orders.qty' | translate }} {{ item.quantity }}
                                         </div>
-                                        <div class="item-price">{{ formatPrice(item.total) }}</div>
+                                        <div class="item-price">{{ formatPrice(item.totalPrice) }}</div>
                                     </div>
                                 }
                             </div>
