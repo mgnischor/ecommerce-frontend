@@ -27,15 +27,16 @@ export class AdminPromotions implements OnInit {
         code: '',
         name: '',
         description: '',
-        type: PromotionType.Percentage,
-        discountValue: 0,
-        minimumPurchase: undefined,
-        maximumDiscount: undefined,
+        type: PromotionType.PercentageDiscount,
+        discountPercentage: undefined,
+        discountAmount: undefined,
+        minimumOrderAmount: undefined,
+        maximumDiscountAmount: undefined,
         startDate: '',
         endDate: '',
         isActive: true,
         isFeatured: false,
-        usageLimit: undefined,
+        maxUsageCount: undefined,
     });
 
     ngOnInit() {
@@ -93,8 +94,9 @@ export class AdminPromotions implements OnInit {
             code: '',
             name: '',
             description: '',
-            type: PromotionType.Percentage,
-            discountValue: 0,
+            type: PromotionType.PercentageDiscount,
+            discountPercentage: undefined,
+            discountAmount: undefined,
             startDate: '',
             endDate: '',
             isActive: true,
@@ -160,12 +162,25 @@ export class AdminPromotions implements OnInit {
 
     getTypeLabel(type: PromotionType): string {
         const labels: Record<number, string> = {
-            [PromotionType.Percentage]: 'Percentual',
-            [PromotionType.FixedAmount]: 'Valor Fixo',
-            [PromotionType.BuyOneGetOne]: 'Compre 1, Leve 2',
+            [PromotionType.PercentageDiscount]: 'Percentual',
+            [PromotionType.FixedAmountDiscount]: 'Valor Fixo',
+            [PromotionType.BuyXGetYFree]: 'Compre 1, Leve 2',
             [PromotionType.FreeShipping]: 'Frete Grátis',
+            [PromotionType.Bundle]: 'Pacote',
+            [PromotionType.FlashSale]: 'Queima Relâmpago',
+            [PromotionType.Clearance]: 'Liquidação',
         };
         return labels[type] ?? 'Desconhecido';
+    }
+
+    getDiscountLabel(promo: Promotion): string {
+        if (promo.discountPercentage != null) {
+            return `${promo.discountPercentage}%`;
+        }
+        if (promo.discountAmount != null) {
+            return this.formatCurrency(promo.discountAmount);
+        }
+        return '—';
     }
 
     formatDate(date: string | undefined): string {
