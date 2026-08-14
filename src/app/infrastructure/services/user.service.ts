@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { User, PaginatedUsers } from '../../domain/models';
+import { User, PaginatedUsers, CreateUserRequest } from '../../domain/models';
 
 @Injectable({
     providedIn: 'root',
@@ -23,7 +23,7 @@ export class UserService {
         return this.http.get<User>(`${this.baseUrl}/${id}`);
     }
 
-    createUser(user: Partial<User>): Observable<User> {
+    createUser(user: CreateUserRequest): Observable<User> {
         return this.http.post<User>(this.baseUrl, user);
     }
 
