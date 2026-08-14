@@ -2,7 +2,12 @@ import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/cor
 
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { CartService, OrderService, AuthService } from '../../../infrastructure/services';
+import {
+    CartService,
+    OrderService,
+    AuthService,
+    PaymentService,
+} from '../../../infrastructure/services';
 import { TranslateService, TranslatePipe } from '../../../infrastructure/i18n';
 import { PaymentMethod } from '../../../domain/models';
 
@@ -20,6 +25,7 @@ import { PaymentMethod } from '../../../domain/models';
 export class Checkout {
     cartService = inject(CartService);
     private readonly orderService = inject(OrderService);
+    private readonly paymentService = inject(PaymentService);
     private readonly authService = inject(AuthService);
     private readonly router = inject(Router);
     private readonly t = inject(TranslateService);
@@ -33,7 +39,9 @@ export class Checkout {
         { value: PaymentMethod.DebitCard, labelKey: 'checkout.debitCard' },
         { value: PaymentMethod.PayPal, labelKey: 'checkout.paypal' },
         { value: PaymentMethod.BankTransfer, labelKey: 'checkout.bankTransfer' },
-        { value: PaymentMethod.Cash, labelKey: 'checkout.cash' },
+        { value: PaymentMethod.CashOnDelivery, labelKey: 'checkout.cashOnDelivery' },
+        { value: PaymentMethod.Pix, labelKey: 'checkout.pix' },
+        { value: PaymentMethod.Boleto, labelKey: 'checkout.boleto' },
     ];
 
     addressForm = new FormGroup({
@@ -81,37 +89,63 @@ export class Checkout {
         this.isLoading.set(true);
         this.error.set(null);
 
-        const address = this.addressForm.value;
         const items = this.cartService.cartItems().map((item) => ({
             productId: item.productId,
-            productVariantId: item.productVariantId,
+            productName: item.name,
+            productSku: item.sku,
             quantity: item.quantity,
+            unitPrice: item.price,
+            discountAmount: 0,
+            taxAmount: 0,
         }));
 
         this.orderService
             .createOrder({
                 customerId: user.userId,
-                paymentMethod: this.paymentForm.value.paymentMethod!,
+                orderNumber: this.generateOrderNumber(),
+                shippingCost: 0,
+                taxAmount: 0,
+                discountAmount: 0,
                 items,
-                shippingAddress: {
-                    street: address.street!,
-                    city: address.city!,
-                    state: address.state!,
-                    postalCode: address.postalCode!,
-                    country: address.country!,
-                },
             })
             .subscribe({
-                next: () => {
-                    this.isLoading.set(false);
-                    this.cartService.clearCart();
-                    this.router.navigate(['/orders']);
+                next: (order) => {
+                    if (globalThis.window !== undefined) {
+                        localStorage.setItem('last_order_id', order.id);
+                    }
+                    this.paymentService
+                        .processPayment({
+                            orderId: order.id,
+                            paymentMethod: this.paymentForm.value.paymentMethod!,
+                            currency: 'USD',
+                        })
+                        .subscribe({
+                            next: () => {
+                                this.isLoading.set(false);
+                                this.cartService.clearCart();
+                                this.router.navigate(['/orders']);
+                            },
+                            error: () => {
+                                this.isLoading.set(false);
+                                this.cartService.clearCart();
+                                this.router.navigate(['/orders']);
+                            },
+                        });
                 },
                 error: () => {
                     this.isLoading.set(false);
                     this.error.set(this.t.get('checkout.orderError'));
                 },
             });
+    }
+
+    private generateOrderNumber(): string {
+        const now = new Date();
+        const date = now.toISOString().slice(0, 10).replace(/-/g, '');
+        const rand = Math.floor(Math.random() * 10000)
+            .toString()
+            .padStart(4, '0');
+        return `ORD-${date}-${rand}`;
     }
 
     formatPrice(price: number): string {
