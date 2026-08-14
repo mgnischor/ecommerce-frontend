@@ -45,7 +45,8 @@
                                 <th>Quantidade</th>
                                 <th>Origem</th>
                                 <th>Destino</th>
-                                <th>Referência</th>
+                                <th>Custo Unitário</th>
+                                <th>Nº Transação</th>
                                 <th>Data</th>
                             </tr>
                         </thead>
@@ -53,7 +54,8 @@
                             @for (tx of transactions(); track tx.id) {
                                 <tr>
                                     <td>
-                                        <strong>{{ tx.productId | slice: 0 : 8 }}...</strong>
+                                        <strong>{{ tx.productName }}</strong>
+                                        <span class="item-sku">SKU: {{ tx.productSku }}</span>
                                     </td>
                                     <td>
                                         <span
@@ -66,8 +68,9 @@
                                     <td>{{ tx.quantity }}</td>
                                     <td>{{ tx.fromLocation ?? '—' }}</td>
                                     <td>{{ tx.toLocation ?? '—' }}</td>
-                                    <td>{{ tx.referenceNumber ?? '—' }}</td>
-                                    <td>{{ formatDate(tx.createdAt) }}</td>
+                                    <td>{{ formatCurrency(tx.unitCost) }}</td>
+                                    <td>{{ tx.transactionNumber }}</td>
+                                    <td>{{ formatDate(tx.transactionDate) }}</td>
                                 </tr>
                             }
                         </tbody>
@@ -96,12 +99,21 @@
                                 />
                             </div>
                             <div class="form-group">
-                                <label>ID da Variante (opcional)</label>
+                                <label>SKU do Produto</label>
                                 <input
                                     type="text"
                                     class="search-input"
-                                    [ngModel]="formData().productVariantId"
-                                    (ngModelChange)="updateFormField('productVariantId', $event)"
+                                    [ngModel]="formData().productSku"
+                                    (ngModelChange)="updateFormField('productSku', $event)"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Nome do Produto</label>
+                                <input
+                                    type="text"
+                                    class="search-input"
+                                    [ngModel]="formData().productName"
+                                    (ngModelChange)="updateFormField('productName', $event)"
                                 />
                             </div>
                             <div class="form-group">
@@ -111,11 +123,16 @@
                                     [ngModel]="formData().transactionType"
                                     (ngModelChange)="updateFormField('transactionType', +$event)"
                                 >
-                                    <option [value]="0">Compra</option>
-                                    <option [value]="1">Venda</option>
-                                    <option [value]="2">Ajuste</option>
-                                    <option [value]="3">Devolução</option>
-                                    <option [value]="4">Transferência</option>
+                                    <option [value]="1">Compra</option>
+                                    <option [value]="2">Venda</option>
+                                    <option [value]="3">Devolução de Venda</option>
+                                    <option [value]="4">Devolução de Compra</option>
+                                    <option [value]="5">Ajuste</option>
+                                    <option [value]="6">Transferência</option>
+                                    <option [value]="7">Perda</option>
+                                    <option [value]="8">Reserva</option>
+                                    <option [value]="9">Liberação de Reserva</option>
+                                    <option [value]="10">Atendimento</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -126,6 +143,17 @@
                                     min="1"
                                     [ngModel]="formData().quantity"
                                     (ngModelChange)="updateFormField('quantity', $event)"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Custo Unitário</label>
+                                <input
+                                    type="number"
+                                    class="search-input"
+                                    min="0"
+                                    step="0.01"
+                                    [ngModel]="formData().unitCost"
+                                    (ngModelChange)="updateFormField('unitCost', $event)"
                                 />
                             </div>
                             <div class="form-group">
@@ -147,12 +175,12 @@
                                 />
                             </div>
                             <div class="form-group">
-                                <label>Nº de Referência</label>
+                                <label>Nº do Documento</label>
                                 <input
                                     type="text"
                                     class="search-input"
-                                    [ngModel]="formData().referenceNumber"
-                                    (ngModelChange)="updateFormField('referenceNumber', $event)"
+                                    [ngModel]="formData().documentNumber"
+                                    (ngModelChange)="updateFormField('documentNumber', $event)"
                                 />
                             </div>
                             <div class="form-group full-width">
