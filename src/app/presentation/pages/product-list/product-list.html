@@ -90,12 +90,12 @@
                                     }
                                     <div class="product-footer">
                                         <div class="product-price">
-                                            @if (product.isOnSale && product.salePrice) {
+                                            @if (product.isOnSale && product.discountPrice) {
                                                 <span class="original-price">{{
                                                     formatPrice(product.price)
                                                 }}</span>
                                                 <span class="sale-price">{{
-                                                    formatPrice(product.salePrice)
+                                                    formatPrice(product.discountPrice)
                                                 }}</span>
                                             } @else {
                                                 <span class="current-price">{{
