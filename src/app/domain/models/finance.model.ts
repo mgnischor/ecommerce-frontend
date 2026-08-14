@@ -49,7 +49,7 @@ export interface AccountsReceivable {
     current_0_30: number;
     aging_31_60: number;
     aging_61_90: number;
-    aging_Over90: number;
+    aging_over90: number;
     count: number;
 }
 
@@ -58,7 +58,7 @@ export interface AccountsPayable {
     current_0_30: number;
     aging_31_60: number;
     aging_61_90: number;
-    aging_Over90: number;
+    aging_over90: number;
     count: number;
 }
 
