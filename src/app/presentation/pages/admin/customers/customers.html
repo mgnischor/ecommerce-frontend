@@ -1,0 +1,86 @@
+<div class="page page-admin">
+    <div class="container">
+        <h1 class="page-title">Gerenciar Clientes</h1>
+
+        @if (error()) {
+            <div class="error-message">{{ error() }}</div>
+        }
+
+        <div class="toolbar">
+            <div class="search-box">
+                <select
+                    class="search-input"
+                    style="max-width: 200px"
+                    [ngModel]="searchType()"
+                    (ngModelChange)="switchSearchType($event)"
+                >
+                    <option value="customerId">Por ID do Cliente</option>
+                    <option value="userId">Por ID do Usuário</option>
+                </select>
+                <input
+                    type="text"
+                    [(ngModel)]="searchValue"
+                    (keyup.enter)="search()"
+                    placeholder="ID..."
+                    class="search-input"
+                />
+                <button class="btn btn-primary" (click)="search()">Buscar</button>
+            </div>
+        </div>
+
+        @if (isLoading()) {
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p>Carregando...</p>
+            </div>
+        }
+
+        @if (!isLoading() && customer()) {
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <p class="card-label">ID do Cliente</p>
+                    <p class="card-value primary">{{ customer()!.id.slice(0, 8) }}...</p>
+                </div>
+                <div class="dashboard-card">
+                    <p class="card-label">Total Gasto</p>
+                    <p class="card-value positive">{{ formatCurrency(customer()!.totalSpending) }}</p>
+                </div>
+                <div class="dashboard-card">
+                    <p class="card-label">Pedidos</p>
+                    <p class="card-value">{{ customer()!.totalOrders }}</p>
+                </div>
+                <div class="dashboard-card">
+                    <p class="card-label">Última Compra</p>
+                    <p class="card-value primary">{{ formatDate(customer()!.lastOrderDate) }}</p>
+                </div>
+            </div>
+
+            @if (segment()) {
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Segmento</th>
+                                <th>Valor Vitalício</th>
+                                <th>Frequência de Pedidos</th>
+                                <th>Valor Médio do Pedido</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>{{ segment()!.segment }}</strong></td>
+                                <td>{{ formatCurrency(segment()!.lifetimeValue) }}</td>
+                                <td>{{ segment()!.orderFrequency }}</td>
+                                <td>{{ formatCurrency(segment()!.averageOrderValue) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            }
+        } @else if (!isLoading() && !error()) {
+            <div class="empty-state">
+                <p>Busque um cliente pelo ID para visualizar os dados</p>
+            </div>
+        }
+    </div>
+</div>
