@@ -84,6 +84,48 @@ export const routes: Routes = [
                         (m) => m.AdminShippingZones,
                     ),
             },
+            {
+                path: 'payments',
+                loadComponent: () =>
+                    import('../presentation/pages/admin/payments/payments').then(
+                        (m) => m.AdminPayments,
+                    ),
+            },
+            {
+                path: 'customers',
+                loadComponent: () =>
+                    import('../presentation/pages/admin/customers/customers').then(
+                        (m) => m.AdminCustomers,
+                    ),
+            },
+            {
+                path: 'gift-cards',
+                loadComponent: () =>
+                    import('../presentation/pages/admin/gift-cards/gift-cards').then(
+                        (m) => m.AdminGiftCards,
+                    ),
+            },
+            {
+                path: 'rewards',
+                loadComponent: () =>
+                    import('../presentation/pages/admin/rewards/rewards').then(
+                        (m) => m.AdminRewards,
+                    ),
+            },
+            {
+                path: 'invoices',
+                loadComponent: () =>
+                    import('../presentation/pages/admin/invoices/invoices').then(
+                        (m) => m.AdminInvoices,
+                    ),
+            },
+            {
+                path: 'accounting',
+                loadComponent: () =>
+                    import('../presentation/pages/admin/accounting/accounting').then(
+                        (m) => m.AdminAccounting,
+                    ),
+            },
         ],
     },
     { path: '**', component: NotFound },
