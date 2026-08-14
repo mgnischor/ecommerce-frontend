@@ -98,7 +98,7 @@
                                         class="variant-option"
                                         [class.selected]="selectedVariant()?.id === variant.id"
                                         [disabled]="
-                                            !variant.isActive || variant.stockQuantity === 0
+                                            !variant.isAvailable || variant.stockQuantity === 0
                                         "
                                         (click)="selectVariant(variant)"
                                     >
@@ -169,9 +169,9 @@
                                 <dt>{{ 'productDetail.weight' | translate }}</dt>
                                 <dd>{{ product()!.weight }} kg</dd>
                             }
-                            @if (product()!.dimensions) {
-                                <dt>{{ 'productDetail.dimensions' | translate }}</dt>
-                                <dd>{{ product()!.dimensions }}</dd>
+                            @if (product()!.brand) {
+                                <dt>{{ 'productDetail.brand' | translate }}</dt>
+                                <dd>{{ product()!.brand }}</dd>
                             }
                         </dl>
                     </div>
