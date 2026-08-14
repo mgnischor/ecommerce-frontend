@@ -79,22 +79,32 @@ export class AdminShipments implements OnInit {
 
     getStatusLabel(status: ShipmentStatus): string {
         const labels: Record<number, string> = {
-            [ShipmentStatus.Pending]: 'Pendente',
+            [ShipmentStatus.Preparing]: 'Preparando',
+            [ShipmentStatus.ReadyForPickup]: 'Pronto p/ Retirada',
+            [ShipmentStatus.PickedUp]: 'Coletado',
             [ShipmentStatus.InTransit]: 'Em Trânsito',
+            [ShipmentStatus.OutForDelivery]: 'Saiu p/ Entrega',
             [ShipmentStatus.Delivered]: 'Entregue',
-            [ShipmentStatus.Cancelled]: 'Cancelado',
+            [ShipmentStatus.FailedDelivery]: 'Falha na Entrega',
+            [ShipmentStatus.Returning]: 'Devolvendo',
             [ShipmentStatus.Returned]: 'Devolvido',
+            [ShipmentStatus.Cancelled]: 'Cancelado',
         };
         return labels[status] ?? 'Desconhecido';
     }
 
     getStatusClass(status: ShipmentStatus): string {
         const classes: Record<number, string> = {
-            [ShipmentStatus.Pending]: 'status-pending',
+            [ShipmentStatus.Preparing]: 'status-pending',
+            [ShipmentStatus.ReadyForPickup]: 'status-pending',
+            [ShipmentStatus.PickedUp]: 'status-transit',
             [ShipmentStatus.InTransit]: 'status-transit',
+            [ShipmentStatus.OutForDelivery]: 'status-transit',
             [ShipmentStatus.Delivered]: 'status-delivered',
-            [ShipmentStatus.Cancelled]: 'status-cancelled',
+            [ShipmentStatus.FailedDelivery]: 'status-failed',
+            [ShipmentStatus.Returning]: 'status-returned',
             [ShipmentStatus.Returned]: 'status-returned',
+            [ShipmentStatus.Cancelled]: 'status-cancelled',
         };
         return classes[status] ?? '';
     }
