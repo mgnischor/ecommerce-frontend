@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Order, CreateOrderRequest, UpdateOrderStatusRequest } from '../../domain/models';
+import { Order, CreateOrderRequest, OrderStatus } from '../../domain/models';
 
 @Injectable({
     providedIn: 'root',
@@ -19,8 +19,8 @@ export class OrderService {
         return this.http.get<Order>(`${this.baseUrl}/${id}`);
     }
 
-    updateOrderStatus(id: string, request: UpdateOrderStatusRequest): Observable<Order> {
-        return this.http.patch<Order>(`${this.baseUrl}/${id}/status`, request);
+    updateOrderStatus(id: string, status: OrderStatus): Observable<Order> {
+        return this.http.patch<Order>(`${this.baseUrl}/${id}/status`, status);
     }
 
     cancelOrder(id: string): Observable<Order> {
