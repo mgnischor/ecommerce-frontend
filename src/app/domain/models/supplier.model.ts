@@ -27,6 +27,8 @@ export interface Supplier {
     notes?: string;
     isActive: boolean;
     isPreferred: boolean;
+    isDeleted: boolean;
+    createdBy?: string;
     createdAt: string;
     updatedAt: string;
 }
