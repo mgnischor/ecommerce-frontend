@@ -34,11 +34,11 @@ export class AdminVendors implements OnInit {
 
     showFormModal = signal(false);
     formData = signal<Partial<Vendor>>({
-        name: '',
+        businessName: '',
+        storeName: '',
         email: '',
         phoneNumber: '',
         description: '',
-        websiteUrl: '',
         isFeatured: false,
     });
 
@@ -105,11 +105,11 @@ export class AdminVendors implements OnInit {
 
     openCreateModal() {
         this.formData.set({
-            name: '',
+            businessName: '',
+            storeName: '',
             email: '',
             phoneNumber: '',
             description: '',
-            websiteUrl: '',
             isFeatured: false,
         });
         this.showFormModal.set(true);
@@ -142,18 +142,22 @@ export class AdminVendors implements OnInit {
 
     getStatusLabel(status: VendorStatus): string {
         const labels: Record<number, string> = {
+            [VendorStatus.Pending]: 'Pendente',
             [VendorStatus.Active]: 'Ativo',
-            [VendorStatus.Inactive]: 'Inativo',
             [VendorStatus.Suspended]: 'Suspenso',
+            [VendorStatus.Inactive]: 'Inativo',
+            [VendorStatus.Rejected]: 'Rejeitado',
         };
         return labels[status] ?? 'Desconhecido';
     }
 
     getStatusClass(status: VendorStatus): string {
         const classes: Record<number, string> = {
+            [VendorStatus.Pending]: 'status-pending',
             [VendorStatus.Active]: 'status-active',
-            [VendorStatus.Inactive]: 'status-inactive',
             [VendorStatus.Suspended]: 'status-cancelled',
+            [VendorStatus.Inactive]: 'status-inactive',
+            [VendorStatus.Rejected]: 'status-rejected',
         };
         return classes[status] ?? '';
     }
