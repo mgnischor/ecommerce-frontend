@@ -55,10 +55,10 @@
                             @for (vendor of vendors(); track vendor.id) {
                                 <tr>
                                     <td>
-                                        <strong>{{ vendor.name }}</strong>
+                                        <strong>{{ vendor.storeName || vendor.businessName }}</strong>
                                     </td>
                                     <td>{{ vendor.email }}</td>
-                                    <td>{{ vendor.phoneNumber ?? '—' }}</td>
+                                    <td>{{ vendor.phoneNumber || '—' }}</td>
                                     <td>
                                         <span
                                             class="status-badge"
@@ -113,12 +113,21 @@
                     <div class="modal-body">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Nome</label>
+                                <label>Nome Fantasia</label>
                                 <input
                                     type="text"
                                     class="search-input"
-                                    [ngModel]="formData().name"
-                                    (ngModelChange)="updateFormField('name', $event)"
+                                    [ngModel]="formData().storeName"
+                                    (ngModelChange)="updateFormField('storeName', $event)"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Razão Social</label>
+                                <input
+                                    type="text"
+                                    class="search-input"
+                                    [ngModel]="formData().businessName"
+                                    (ngModelChange)="updateFormField('businessName', $event)"
                                 />
                             </div>
                             <div class="form-group">
@@ -139,13 +148,13 @@
                                     (ngModelChange)="updateFormField('phoneNumber', $event)"
                                 />
                             </div>
-                            <div class="form-group">
-                                <label>Website</label>
+                            <div class="form-group full-width">
+                                <label>Endereço</label>
                                 <input
-                                    type="url"
+                                    type="text"
                                     class="search-input"
-                                    [ngModel]="formData().websiteUrl"
-                                    (ngModelChange)="updateFormField('websiteUrl', $event)"
+                                    [ngModel]="formData().address"
+                                    (ngModelChange)="updateFormField('address', $event)"
                                 />
                             </div>
                             <div class="form-group full-width">
