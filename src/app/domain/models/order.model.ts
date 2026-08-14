@@ -1,17 +1,30 @@
-import { OrderStatus, PaymentMethod } from './enums';
+import { OrderStatus, PaymentMethod, ShippingMethod } from './enums';
 
 export interface Order {
     id: string;
-    orderNumber?: string;
+    orderNumber: string;
     customerId: string;
+    createdBy: string;
+    updatedBy?: string;
     status: OrderStatus;
-    paymentMethod: PaymentMethod;
-    subtotal: number;
-    tax: number;
+    subTotal: number;
+    taxAmount: number;
     shippingCost: number;
-    total: number;
-    shippingAddress?: Address;
-    billingAddress?: Address;
+    discountAmount: number;
+    totalAmount: number;
+    paymentMethod: PaymentMethod;
+    shippingMethod: ShippingMethod;
+    shippingAddressId?: string;
+    billingAddressId?: string;
+    couponCode?: string;
+    customerNotes?: string;
+    adminNotes?: string;
+    trackingNumber?: string;
+    expectedDeliveryDate?: string;
+    deliveredAt?: string;
+    cancelledAt?: string;
+    cancellationReason?: string;
+    isDeleted: boolean;
     items?: OrderItem[];
     createdAt?: string;
     updatedAt?: string;
@@ -21,36 +34,33 @@ export interface OrderItem {
     id: string;
     orderId: string;
     productId: string;
-    productVariantId?: string;
     productName: string;
-    sku: string;
+    productSku: string;
     quantity: number;
     unitPrice: number;
-    total: number;
-}
-
-export interface Address {
-    street: string;
-    city: string;
-    state: string;
-    postalCode: string;
-    country: string;
+    discountAmount: number;
+    taxAmount: number;
+    totalPrice: number;
+    productImageUrl?: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export interface CreateOrderRequest {
     customerId: string;
-    paymentMethod: PaymentMethod;
+    orderNumber: string;
+    shippingCost: number;
+    taxAmount: number;
+    discountAmount: number;
     items: CreateOrderItem[];
-    shippingAddress: Address;
-    billingAddress?: Address;
 }
 
 export interface CreateOrderItem {
     productId: string;
-    productVariantId?: string;
+    productName: string;
+    productSku: string;
     quantity: number;
-}
-
-export interface UpdateOrderStatusRequest {
-    status: OrderStatus;
+    unitPrice: number;
+    discountAmount: number;
+    taxAmount: number;
 }
