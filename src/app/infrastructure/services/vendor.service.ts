@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Vendor, PaginatedVendors } from '../../domain/models';
+import { parsePagedResponse } from './pagination.util';
 
 @Injectable({
     providedIn: 'root',
@@ -16,7 +17,9 @@ export class VendorService {
             .set('pageNumber', pageNumber.toString())
             .set('pageSize', pageSize.toString());
 
-        return this.http.get<PaginatedVendors>(this.baseUrl, { params });
+        return this.http
+            .get<Vendor[]>(this.baseUrl, { params, observe: 'response' })
+            .pipe(map((response) => parsePagedResponse(response, pageNumber, pageSize)));
     }
 
     getVendorById(id: string): Observable<Vendor> {
