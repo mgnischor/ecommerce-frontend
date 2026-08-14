@@ -12,38 +12,25 @@
             }
 
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="firstName">{{ 'register.firstName' | translate }}</label>
-                        <input
-                            type="text"
-                            id="firstName"
-                            formControlName="firstName"
-                            [class.invalid]="firstNameControl?.invalid && firstNameControl?.touched"
-                            [placeholder]="'register.firstNamePlaceholder' | translate"
-                        />
-                        @if (firstNameControl?.invalid && firstNameControl?.touched) {
-                            <div class="field-error">
-                                {{ 'register.firstNameRequired' | translate }}
-                            </div>
-                        }
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lastName">{{ 'register.lastName' | translate }}</label>
-                        <input
-                            type="text"
-                            id="lastName"
-                            formControlName="lastName"
-                            [class.invalid]="lastNameControl?.invalid && lastNameControl?.touched"
-                            [placeholder]="'register.lastNamePlaceholder' | translate"
-                        />
-                        @if (lastNameControl?.invalid && lastNameControl?.touched) {
-                            <div class="field-error">
-                                {{ 'register.lastNameRequired' | translate }}
-                            </div>
-                        }
-                    </div>
+                <div class="form-group">
+                    <label for="username">{{ 'register.username' | translate }}</label>
+                    <input
+                        type="text"
+                        id="username"
+                        formControlName="username"
+                        [class.invalid]="usernameControl?.invalid && usernameControl?.touched"
+                        [placeholder]="'register.usernamePlaceholder' | translate"
+                    />
+                    @if (usernameControl?.invalid && usernameControl?.touched) {
+                        <div class="field-error">
+                            @if (usernameControl?.hasError('required')) {
+                                {{ 'register.usernameRequired' | translate }}
+                            }
+                            @if (usernameControl?.hasError('minlength')) {
+                                {{ 'register.usernameMinLength' | translate }}
+                            }
+                        </div>
+                    }
                 </div>
 
                 <div class="form-group">
@@ -65,16 +52,6 @@
                             }
                         </div>
                     }
-                </div>
-
-                <div class="form-group">
-                    <label for="phoneNumber">{{ 'register.phone' | translate }}</label>
-                    <input
-                        type="tel"
-                        id="phoneNumber"
-                        formControlName="phoneNumber"
-                        [placeholder]="'register.phonePlaceholder' | translate"
-                    />
                 </div>
 
                 <div class="form-group">
