@@ -16,6 +16,10 @@ import { UserAccessLevel } from '../../../domain/models';
 /**
  * Registration page component.
  * Handles new user registration and account creation.
+ *
+ * Note: the backend exposes user creation via POST /users which expects
+ * a UserEntity payload (username, email, password). This endpoint requires
+ * an authenticated session; self-registration is not publicly available.
  */
 @Component({
     selector: 'app-register',
@@ -35,11 +39,12 @@ export class Register {
 
     registerForm = new FormGroup(
         {
-            firstName: new FormControl('', [Validators.required]),
-            lastName: new FormControl('', [Validators.required]),
+            username: new FormControl('', [Validators.required, Validators.minLength(3)]),
             email: new FormControl('', [Validators.required, Validators.email]),
-            phoneNumber: new FormControl(''),
-            password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+            password: new FormControl('', [
+                Validators.required,
+                Validators.minLength(8),
+            ]),
             confirmPassword: new FormControl('', [Validators.required]),
         },
         { validators: this.passwordMatchValidator },
@@ -61,14 +66,13 @@ export class Register {
         this.errorMessage.set(null);
         this.successMessage.set(null);
 
-        const { firstName, lastName, email, phoneNumber } = this.registerForm.value;
+        const { username, email, password } = this.registerForm.value;
 
         this.userService
             .createUser({
-                firstName: firstName!,
-                lastName: lastName!,
+                username: username!,
                 email: email!,
-                phoneNumber: phoneNumber || undefined,
+                password: password!,
                 accessLevel: UserAccessLevel.Customer,
                 isActive: true,
             })
@@ -84,6 +88,8 @@ export class Register {
                     this.isLoading.set(false);
                     if (error.status === 409) {
                         this.errorMessage.set(this.t.get('register.emailAlreadyExists'));
+                    } else if (error.status === 401) {
+                        this.errorMessage.set(this.t.get('register.authRequired'));
                     } else {
                         this.errorMessage.set(this.t.get('register.genericError'));
                     }
@@ -91,20 +97,12 @@ export class Register {
             });
     }
 
-    get firstNameControl() {
-        return this.registerForm.get('firstName');
-    }
-
-    get lastNameControl() {
-        return this.registerForm.get('lastName');
+    get usernameControl() {
+        return this.registerForm.get('username');
     }
 
     get emailControl() {
         return this.registerForm.get('email');
-    }
-
-    get phoneControl() {
-        return this.registerForm.get('phoneNumber');
     }
 
     get passwordControl() {
